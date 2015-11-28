@@ -4,15 +4,15 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app   = require('../app');
 var debug = require('debug')('pets_pro:server');
-var http = require('http');
+var http  = require('http');
+var cfg   = require('../config');
 
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || cfg.port);
 app.set('port', port);
 
 /**
