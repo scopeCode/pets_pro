@@ -5,7 +5,7 @@
 var path = require('path');
 
 var config = {
-    // debug 为 true 时，用于本地调试
+
     debug: true,
     site_static_host        :           '',// 静态文件存储域名
     host                    :           'localhost',
