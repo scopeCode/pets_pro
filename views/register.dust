@@ -1,0 +1,61 @@
+<!--    引入主模版文件 -->
+{>"layouts/master"/}
+
+<!--    标题的设定  -->
+{<title}萌宠日记--用户注册{/title}
+
+<!--    网页主要内容的设定 -->
+{<bodyContent}
+    <div id="fsvs-body">
+      <div class="slide" id="fsvs-initial-setup">
+        <div class="slide1">
+          <div class="container">
+            <div class="top">
+              <DIV class="logo"> </DIV>
+              <div class="pull-right">
+                <div class="btn btn-login" onclick="javascript:(window.location.href='/user/v_login');">登录</div>
+                <DIV class="btn btn-register">注册</DIV>
+              </div>
+            </div>
+            <div class="login-form">
+              <div class="login-text"> <img src="/img/login_text.png"> </div>
+              <div class="form-input">
+                <input class="form-control input-lg" placeholder="手机号">
+                <input class="form-control input-lg" placeholder="密码">
+                <input class="form-control input-lg" placeholder="再次输入密码">
+              </div>
+              <div class="btn btn-primary mt20 btn-block btn-lg"> 注册 </div>
+             </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide" id="basic-html-setup">
+        <DIV class="slide2">
+          <div class="container">
+            <div class="slide-text"> <img src="/img/slide2_text.png"> </div>
+          </div>
+        </DIV>
+      </div>
+      <div class="slide">
+        <div class="slide3">
+          <div class="container">
+            <div class="slide-text"> <img src="/img/slide3_text.png"> </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide">
+        <div class="slide4">
+          <div class="container">
+            <div class="slide-text"> <img src="/img/slide4_text.png"> </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide">
+        <div class="slide5">
+          <div class="container">
+            <div class="slide-text"> <img src="/img/slide5_text.png"> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{/bodyContent}

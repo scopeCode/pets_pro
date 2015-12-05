@@ -9,13 +9,15 @@ var compression   =     require('compression');
 var app           =     express();
 
 var cfg           =     require('./config');
+var routes        =     require("./router");
 
 app.engine("dust",dustjs.dust({ cache: false }));
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'html');
+app.set('view engine', 'dust');
 
-app.use(favicon(path.join(__dirname, 'public', '/img/favicon.ico')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(favicon(path.join(__dirname, 'public', 'logo.png')));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -30,4 +32,12 @@ app.use(session({
     }
 }));
 
+// set static, dynamic helpers   最后的时候进行调整,前端静态的加载
+/*_.extend(app.locals, {
+    config: config,
+    Loader: Loader,
+    assets: assets
+});*/
+
+routes(app);
 module.exports = app;

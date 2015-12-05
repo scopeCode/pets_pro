@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html class="fsvs demo" lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>{+title /}</title>
+    <!-- CSS样式加载区域-->
+    <link rel="stylesheet" href="/css/login-style.css" type="text/css"></link>
+    <link rel="stylesheet" href="/css/login-default.css" type="text/css"></link>
+    <!-- JS加载区域-->
+    <script src="/js/vendor/jquery.min.js"></script>
+    <script src="/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/js/jquery.swipe-events.js"></script>
+    <script src="/js/prismjs.js"></script>
+    <script src="/js/fsvs.js"></script>
+    <script src="/js/main.js"></script>
+</head>
+<body>
+    {+bodyContent /}
+    {>"layouts/footer"/}
+</body>
+</html>

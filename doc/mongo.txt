@@ -1,0 +1,64 @@
+
+创建公共方法
+
+还是common目录，我们在新建一个公共方法 —— dbHelper.js文件，来操作这些Schema，
+因为后面还会涉及此问题，所以我们写成一个公共的方法，dbHelper文件内容如下：
+
+    var mongoose = require('mongoose'),
+        Schema = mongoose.Schema,
+        models = require('./models');
+
+    for(var m in models) {
+        mongoose.model(m, new Schema(models[m]));
+    }
+    module.exports = {
+        getModel: function (type) {
+            return _getModel(type);
+        }
+    };
+    var _getModel = function (type) {
+        return mongoose.model(type);
+    };
+
+如上所示我们通过getModel可获取集合的Model模型就可以对数据库有实质性的操作了
+
+关于Model，简单介绍：由Schema构造生成的模型，具有数据库操作的行为。
+
+
+
+var mongoose = require("mongoose");
+console.log("31");
+var tschema = new mongoose.Schema({
+	  name  : { type:String },
+	  age   : { type:Number, default:18 },
+	  email: { type: String}
+});
+console.log("32");
+var db = mongoose.connect("mongodb://127.0.0.1:27017/test");
+console.log("33");
+var tmodel = db.model("tddoc", tschema);
+console.log("34");
+var TestEntity = new tmodel({
+  name : "Lenka",
+  age  : 36,
+  email: "lenka@qq.com"
+});
+console.log("35");
+TestEntity.save(function(error,doc){
+	if(error){
+    	console.log(error);
+    }else{
+        console.log(doc);
+    }
+});
+
+
+简单回顾：
+
+1. Schema：数据库集合的模型骨架，或者是数据属性模型传统意义的表结构。
+
+2. Model ：通过Schema构造而成，除了具有Schema定义的数据库骨架以外，还可以具体的操作数据库。
+
+3. Entity：通过Model创建的实体，它也可以操作数据库。
+
+在下节课程里，我们将对数据库进行实战性的操作了，也就是增删改查，继续加油吧！
