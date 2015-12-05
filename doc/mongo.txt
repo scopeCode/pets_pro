@@ -1,4 +1,4 @@
-
+﻿mongod --dbpath=D:\mongo\data --logpath=D:\mongo\log\mongodb.log --logappend --directoryperdb --bind_ip  127.0.0.1
 创建公共方法
 
 还是common目录，我们在新建一个公共方法 —— dbHelper.js文件，来操作这些Schema，
