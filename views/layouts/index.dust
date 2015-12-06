@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>{+title /}</title>
+    <link rel="shortcut icon" href="#">
+    <meta name="keywords" content="萌宠、可爱">
+    <meta name="description" content="萌宠日记，记录它的一辈子">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link href="/css/flat-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/custom.css">
+    <script src="/js/vendor/jquery.min.js"></script>
+    <script src="/js/flat-ui.min.js"></script>
+</head>
+<body>
+{+bodyContent /}
+{>"layouts/footer"/}
+<div class="load" id="divLoad" style="display: none;"><i></i>请稍候...</div>
+</body>
+</html>

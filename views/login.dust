@@ -1,10 +1,5 @@
-<!--    引入主模版文件 -->
 {>"layouts/master"/}
-
-<!--    标题的设定  -->
 {<title}萌宠日记--用户登录{/title}
-
-<!--    网页主要内容的设定 -->
 {<bodyContent}
     <div id="fsvs-body">
       <div class="slide" id="fsvs-initial-setup">
@@ -20,11 +15,11 @@
             <div class="login-form">
               <div class="login-text"> <img src="/img/login_text.png"> </div>
               <div class="form-input">
-                <input class="form-control input-lg" placeholder="手机号">
-                <input class="form-control input-lg" placeholder="密码">
+                <input class="form-control input-lg" placeholder="手机号"  type="text"       id="inputUserName">
+                <input class="form-control input-lg" placeholder="密码"    type="password"   id="inputPassword">
               </div>
-              <div class="btn btn-primary mt20 btn-block btn-lg"> 登录 </div>
-              <a href="javascript:;;" class="forget-pwd">忘记密码?</a> </div>
+              <div class="btn btn-primary mt20 btn-block btn-lg"  id="divBtnSubmit"> 登录 </div>
+              <a href="javascript:;;" class="forget-pwd"  id="aBtnForgetPassword">忘记密码?</a> </div>
           </div>
         </div>
       </div>

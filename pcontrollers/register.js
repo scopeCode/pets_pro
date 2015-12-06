@@ -4,7 +4,8 @@
  */
 var EventProxy      =   require('eventProxy');
 var userProxy       =   require('../proxy/user');
-var utils            =   require('utility');
+var utils           =   require('utility');
+var commonResponse  =   require('../common/commonResponse');
 /**
  * show index page
  * @param  {object}   req  the request object
@@ -37,7 +38,7 @@ exports.create  =   function(req,res,next){
     var repwd       =   req.body.repwd;
 
     ep.on('prop_err', function (msg) {
-        res.json({"result":0,"data":{},"msg":msg});
+        res.json(commonResponse.fail(msg));
     });
 
     // 验证信息的正确性
@@ -61,7 +62,7 @@ exports.create  =   function(req,res,next){
             if(err){
                 return next(err);
             }
-            res.json({"result":1,"data":{},"msg":''});
+            res.json(commonResponse.success());
         });
 
     });
@@ -71,7 +72,7 @@ exports.create  =   function(req,res,next){
             return next(err);
         }
         if(user){
-            res.json({"result":0,"data":{},"msg":'该用户已经存在.'});
+            ep.emit('prop_err', '该用户已经存在.');
         }else{
 
             var md5Str   =   utils.md5(pwd,'base64');

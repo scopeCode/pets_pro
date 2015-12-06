@@ -12,7 +12,7 @@
  */
 exports.show = function (req, res, next) {
     try{
-        res.render('login');
+        res.render('index');
     }catch(ex){
         next(ex);
     }
