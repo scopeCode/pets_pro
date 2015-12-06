@@ -2,7 +2,9 @@
  * 和注册相关的路由设定
  * Created by WG on 2015/12/5.
  */
-
+var EventProxy      =   require('eventProxy');
+var userProxy       =   require('../proxy/user');
+var utils            =   require('utility');
 /**
  * show index page
  * @param  {object}   req  the request object
@@ -16,4 +18,90 @@ exports.show = function (req, res, next) {
     }catch(ex){
         next(ex);
     }
+};
+
+/**
+ * 创建一个用户
+ * @param  {object}   req  the request object
+ * @param  {object}   res  the response object
+ * @param  {Function} next the next handler
+ * @return {null}
+ */
+exports.create  =   function(req,res,next){
+
+    var ep  =   new EventProxy();
+    ep.fail(next);
+
+    var userName    =   req.body.userName;
+    var pwd         =   req.body.pwd;
+    var repwd       =   req.body.repwd;
+
+    ep.on('prop_err', function (msg) {
+        res.json({"result":0,"data":{},"msg":msg});
+    });
+
+    // 验证信息的正确性
+    if ([userName, pwd, repwd].some(function (item) { return item === ''; })) {
+        ep.emit('prop_err', '信息不完整。');
+        return;
+    }
+    if (userName.length < 5) {  //需要验证 是否是手机号
+        ep.emit('prop_err', '用户名至少需要5个字符。');
+        return;
+    }
+    if (pwd !== repwd) {
+        return ep.emit('prop_err', '两次密码输入不一致。');
+    }
+    // END 验证信息的正确性
+
+    ep.on('createUserInfo',function(user){
+        var userId      =   user._id;
+        var nick        =   '用户'  + user.USER_NAME.substr(7);
+        userProxy.createUserInfo(userId,nick,function(err){
+            if(err){
+                return next(err);
+            }
+            res.json({"result":1,"data":{},"msg":''});
+        });
+
+    });
+
+    userProxy.getUserByUserName(userName,function(err,user){
+        if(err){
+            return next(err);
+        }
+        if(user){
+            res.json({"result":0,"data":{},"msg":'该用户已经存在.'});
+        }else{
+
+            var md5Str   =   utils.md5(pwd,'base64');
+            userProxy.createUser(userName,md5Str,function(err,user){
+                if(err){
+                    return next(err);
+                }
+                ep.emit('createUserInfo',user);
+            })
+        }
+    });
+
+};
+
+/**
+ * 验证用户是否存在
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.userIsExists    =   function(req,res,next){
+    var userName    =   req.body.userName;
+    userProxy.getUserByUserName(userName,function(err,user){
+        if(err){
+           return next(err);
+        }
+        if(user){
+            res.json({"result":1,"data":{},"msg":''});
+        }else{
+            res.json({"result":0,"data":{},"msg":'该用户已经存在.'});
+        }
+    });
 };

@@ -14,8 +14,8 @@ module.exports = function (app) {
     //[PC端核心业务处理]-----------------------------------------------------------------\\
 
     //[登录处理]-----------------------------------------------------------------\\
-    app.route("/user/v_login").get(login.show);
+    app.route('/user/v_login').get(login.show);
     //[注册处理]-----------------------------------------------------------------\\
-    app.route("/user/v_register").get(register.show);
-
+    app.route('/user/v_register').get(register.show);
+    app.route('/user/create').post(register.create);
 };

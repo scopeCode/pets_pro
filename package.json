@@ -25,6 +25,7 @@
     "mongoose": "^4.2.8",
     "pm2": "^0.15.10",
     "serve-favicon": "~2.3.0",
-    "should": "^7.1.1"
+    "should": "^7.1.1",
+    "utility": "^1.6.0"
   }
 }
