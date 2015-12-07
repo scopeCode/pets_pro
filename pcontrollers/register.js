@@ -41,17 +41,19 @@ exports.create  =   function(req,res,next){
         res.json(commonResponse.fail(msg));
     });
 
+    var  mobileRule     =   /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+
     // 验证信息的正确性
     if ([userName, pwd, repwd].some(function (item) { return item === ''; })) {
-        ep.emit('prop_err', '信息不完整。');
+        ep.emit('prop_err', '信息不完整.');
         return;
     }
-    if (userName.length < 5) {  //需要验证 是否是手机号
-        ep.emit('prop_err', '用户名至少需要5个字符。');
+    if (mobileRule.test(userName)) {  //需要验证 是否是手机号
+        ep.emit('prop_err', '用户名格式不正确.');
         return;
     }
     if (pwd !== repwd) {
-        return ep.emit('prop_err', '两次密码输入不一致。');
+        return ep.emit('prop_err', '两次密码输入不一致.');
     }
     // END 验证信息的正确性
 

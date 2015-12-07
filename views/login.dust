@@ -16,10 +16,11 @@
               <div class="login-text"> <img src="/img/login_text.png"> </div>
               <div class="form-input">
                 <input class="form-control input-lg" placeholder="手机号"  type="text"       id="inputUserName">
-                <input class="form-control input-lg" placeholder="密码"    type="password"   id="inputPassword">
+                <input class="form-control input-lg" placeholder="密码"    type="password"   id="inputPwd">
               </div>
-              <div class="btn btn-primary mt20 btn-block btn-lg"  id="divBtnSubmit"> 登录 </div>
-              <a href="javascript:;;" class="forget-pwd"  id="aBtnForgetPassword">忘记密码?</a> </div>
+              <a class="btn btn-primary mt20 btn-block btn-lg"  id="divBtnSubmit"> 登录 </a>
+              <a href="javascript:;;" class="forget-pwd"  id="aBtnForgetPassword">忘记密码?</a>
+            </div>
           </div>
         </div>
       </div>
@@ -53,3 +54,4 @@
       </div>
     </div>
 {/bodyContent}
+<script src="/javascritps/login.js"></script>

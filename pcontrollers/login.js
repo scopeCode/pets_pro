@@ -55,8 +55,7 @@ exports.login   =   function(req,res,next){
         if(user){
             var md5Str  =   utils.md5(pwd,'base64');
             if(user.USER_PWD    ==  md5Str){
-                //session 的处理
-
+                req.session.user    =   {'userName':user.USER_NAME};
                 res.json(commonResponse.success());
             }else{
                 ep.emit('prop_err', '密码输入有误.');

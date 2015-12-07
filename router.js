@@ -5,11 +5,12 @@
 var index               = require("./pcontrollers/index");
 var login               = require("./pcontrollers/login");
 var register            = require("./pcontrollers/register");
+var auth                = require("./pmiddlewares/auth");
 
 module.exports = function (app) {
 
     //[PC端主站处理]-------------------------------------------------------------------\\
-    app.route("/").get(index.show);//.all(login.authentication)
+    app.route("/").all(auth.loginRequired).get(index.show);//.all(login.authentication)
 
     //[PC端核心业务处理]-----------------------------------------------------------------\\
 
