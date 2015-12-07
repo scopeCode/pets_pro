@@ -1,12 +1,382 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title></title>
-</head>
-<body>
+{>"layouts/index"/}
+{<title}萌宠日记{/title}
+{<bodyContent}
+    <div class="top">
+      <nav class="navbar navbar-inverse ">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+            <a class="navbar-brand" href="#">Dairy</a> </div>
 
-</body>
-</html>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="index.html">首页 </a></li>
+              <li><a href="trending.html">发现</a></li>
+              <li><a href="#">收件箱</a></li>
+              <li><a href="#">通知</a></li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+              <div class="form-group form-group-sm">
+                <input type="text" class="form-control " placeholder="搜索 萌宠日记">
+              </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="#" data-toggle="modal" data-target="#release-tool-btn">发布日志</a></li>
+              <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">个人中心 <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#"><span class="fui-heart mrm"></span>喜欢</a></li>
+                  <li><a href="#"><span class="fui-plus mrm"></span>关注</a></li>
+                  <li><a href="#"><span class="fui-gear mrm"></span>设置</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#"><img src="img/img_normal.png" width="36px" height="36px" style="margin-right:5px;">仰望明天</a></li>
+                  <li><a href="#"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>日志</a></li>
+                  <li><a href="#"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>粉丝</a></li>
+                  <li><a href="#"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>编辑外观</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+      </nav>
+    </div>
+
+    <!-- Button trigger modal -->
+
+    <!-- 手机端发布按钮 -->
+    <div class="release-tool-btn"   data-toggle="modal" data-target="#release-tool-btn"><span class="fui-new"></span></div>
+    <!--手机端发布按钮结束 -->
+    <div class="container content">
+      <div class="row">
+        <div class="col-md-7 col-md-offset-1">
+          <div class="content_list">
+            <ul>
+              <li class="release-tool">
+                <div class="media">
+                  <div class="media-left"> <a href="#"> <img src="img/img_user.png" width="64px" height="64px"> </a> </div>
+                  <div class="media-body">
+                    <div class="list_content ">
+                      <div class="col-xs-3"  data-toggle="modal" data-target="#release-text">
+                        <div class="text-center"> <img src="img/ic_text.png" >
+                          <p class="mbn"><small>文字</small></p>
+                        </div>
+                      </div>
+                      <div class="col-xs-3"  data-toggle="modal" data-target="#release-photo">
+                        <div class="text-center"> <img src="img/ic_photo.png">
+                          <p class="mbn"><small>图片</small></p>
+                        </div>
+                      </div>
+                      <div class="col-xs-3"  data-toggle="modal" data-target="#release-link">
+                        <div class="text-center"> <img src="img/ic_link.png" >
+                          <p class="mbn"><small>链接</small></p>
+                        </div>
+                      </div>
+                      <div class="col-xs-3"  data-toggle="modal" data-target="#release-camera">
+                        <div class="text-center"> <img src="img/ic_camera.png" >
+                          <p class="mbn"><small>视频</small></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="media">
+                  <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="64px" height="64px"> </a> </div>
+                  <div class="media-body">
+                    <div class="list_content ">
+                      <div class="content_top"> <img src="img/img_user.png" class="content_img" width="36px" height="36px"> 仰望明天
+                        <div class="pull-right text-muted">2015/11/12</div>
+                      </div>
+                      <div class="content_body"> <img src="img/01.jpg" style="width:100%">
+                        <p>For more cool UX stuff follow us on Behance:
+                          http://bit.ly/UXstudioBehance</p>
+                        <p class="mbm"><a href="#" class="mrm text-muted">#宠物</a><a href="#" class="mrm text-muted">#狗</a></p>
+                      </div>
+                      <div class="content_bottom"> <a class="text-muted" href="#">20热度</a>
+                        <div class="bottom_tool"> <a class="fui-upload mrm" href="#" title="转发"></a> <a class="fui-heart active" href="#" title="喜欢"></a> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="media">
+                  <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="64px" height="64px"> </a> </div>
+                  <div class="media-body">
+                    <div class="list_content ">
+                      <div class="content_top"> <img src="img/img_user.png" class="content_img" width="36px" height="36px"> 仰望明天
+                        <div class="pull-right text-muted">2015/11/12</div>
+                      </div>
+                      <div class="content_body">
+                        <h6> 标题要大,标题内容显示区域直接进行显示，随便长度 </h6>
+                        <img src="img/02.jpg" style="width:100%">
+                        <p>For more cool UX stuff follow us on Behance:
+                          http://bit.ly/UXstudioBehance</p>
+                        <p class="mbm"><a href="#" class="mrm text-muted">#宠物</a><a href="#" class="mrm text-muted">#狗</a></p>
+                      </div>
+                      <div class="content_bottom"> <a class="text-muted" href="#">20热度</a>
+                        <div class="bottom_tool"> <a class="fui-upload mrm" href="#" title="转发"></a> <a class="fui-heart " href="#" title="喜欢"></a> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-3" >
+          <div class="content-right">
+            <p class="mbn">热门博客</p>
+            <div class="recommend－list">
+              <ul>
+                <li>
+                  <div class="media">
+                    <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
+                    <div class="media-body">
+                      <h4>仰望明天</h4>
+                      <p>个人描述</p>
+                    </div>
+                    <div class="media-right"> <a href="#" class="btn-box" title="关注"><span class="fui-plus"></span></a> </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="media">
+                    <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
+                    <div class="media-body">
+                      <h4>仰望明天</h4>
+                      <p>个人描述</p>
+                    </div>
+                    <div class="media-right"> <a href="#" class="btn-box" title="关注"><span class="fui-plus"></span></a> </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="media">
+                    <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
+                    <div class="media-body">
+                      <h4>仰望明天</h4>
+                      <p>个人描述</p>
+                    </div>
+                    <div class="media-right"> <a href="#" class="btn-box" title="关注"><span class="fui-plus"></span></a> </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="media">
+                    <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
+                    <div class="media-body">
+                      <h4>仰望明天</h4>
+                      <p>个人描述</p>
+                    </div>
+                    <div class="media-right"> <a href="#" class="btn-box" title="关注"><span class="fui-plus"></span></a> </div>
+                  </div>
+                </li>
+                <li class="bbn"> <a href="#" class="">查看更多达人</a> </li>
+              </ul>
+            </div>
+            <div class="mtl top-list">
+              <p class="mbn">本日最高</p>
+              <ul>
+                <li >
+                  <div class="media">
+                    <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
+                    <div class="media-body">
+                      <h4>仰望明天</h4>
+                      <p>个人描述</p>
+                    </div>
+                    <div class="media-right"> <a href="#" class="btn-box" title="关注"><span class="fui-plus"></span></a> </div>
+                  </div>
+                </li>
+                <li >
+                  <div class="media">
+                    <div class="media-body" >
+                      <div class="list_content " >
+                        <div class="content_body" > <img src="img/01.jpg" style="width:100%">
+                          <p>For more cool UX stuff follow us on Behance:
+                            http://bit.ly/UXstudioBehance</p>
+                          <p class="mbm"><a href="#" class="mrm text-muted">#宠物</a><a href="#" class="mrm text-muted">#狗</a></p>
+                        </div>
+                        <div class="content_bottom"> <a class="text-muted" href="#">20热度</a>
+                          <div class="bottom_tool"> <a class="fui-upload mrm" href="#" title="转发"></a> <a class="fui-heart active" href="#" title="喜欢"></a> </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="release-text" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h46 class="modal-title" id="myModalLabel">
+            发布文字日志
+            </h6>
+          </div>
+          <div class="modal-body">
+            <input type="text" class="form-control fs24" placeholder="标题">
+            <textarea class="form-control" rows="2" placeholder="在这里填写文字"></textarea>
+            <div class="bootstrap-tagsinput"><span class="tag label label-info">标签1<span data-role="remove"></span></span> <span class="tag label label-info"> 标签2<span data-role="remove"></span></span> <span class="tag label label-info"> 标签3<span data-role="remove"></span></span>
+              <input type="text" placeholder="#标签" style="width: 3em !important;">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <div class="btn-group dropdown">
+              <button type="button" class="btn btn-primary ">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="#">现在发布<span class="fui-check-circle pull-right"></span></a> </li>
+                <li><a href="#">保存为草稿</a></li>
+                <li><a href="#">发私密日志</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="release-photo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h46 class="modal-title" id="myModalLabel">
+            发布图片日志
+            </h6>
+          </div>
+          <div class="modal-body">
+            <div class="upload-img brd"> <a class="upload-box" href="javascript:;">
+              <input type="file" class="img-upload">
+              <span class="fui-photo"></span>
+              <p>上传照片</p>
+              </a> </div>
+            <div class="upload-img"> <a class="upload-box" href="javascript:;"> <span class="fui-image"></span>
+              <p>从网络添加图片</p>
+              </a> </div>
+            <input class="form-control input-lg" placeholder="粘贴网址" style="height:200px;">
+            <div class="upload-img upload-sm" ><a class="upload-box" href="javascript:;">
+              <input type="file" class="img-upload">
+              <span class="fui-photo mrm"></span>添加另外一张 </a> </div>
+            <div class="upload-img upload-sm" ><a class="upload-box" href="javascript:;"> <span class="fui-image mrm"></span>添加另外一张</a> </div>
+            <div class="delete"> <span class="fui-cross-circle"></span> </div>
+            <img src="img/01.jpg" style="width:100%">
+            <textarea class="form-control" rows="2" placeholder="愿意的话可以添加说明"></textarea>
+            <div class="bootstrap-tagsinput"><span class="tag label label-info">标签1<span data-role="remove"></span></span> <span class="tag label label-info"> 标签2<span data-role="remove"></span></span> <span class="tag label label-info"> 标签3<span data-role="remove"></span></span>
+              <input type="text" placeholder="#标签" style="width: 3em !important;">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <div class="btn-group dropdown">
+              <button type="button" class="btn btn-primary ">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="#">现在发布<span class="fui-check-circle pull-right"></span></a> </li>
+                <li><a href="#">保存为草稿</a></li>
+                <li><a href="#">发私密日志</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="release-link" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h46 class="modal-title" id="myModalLabel">
+            引用链接
+            </h6>
+          </div>
+          <div class="modal-body" >
+            <input class="form-control input-lg" placeholder="粘贴网址" style="height:100px;">
+            <textarea class="form-control" rows="2" placeholder="愿意的话可以添加说明"></textarea>
+            <div class="bootstrap-tagsinput"><span class="tag label label-info">标签1<span data-role="remove"></span></span> <span class="tag label label-info"> 标签2<span data-role="remove"></span></span> <span class="tag label label-info"> 标签3<span data-role="remove"></span></span>
+              <input type="text" placeholder="#标签" style="width: 3em !important; background:#fff;">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <div class="btn-group dropdown">
+              <button type="button" class="btn btn-primary ">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="#">现在发布<span class="fui-check-circle pull-right"></span></a> </li>
+                <li><a href="#">保存为草稿</a></li>
+                <li><a href="#">发私密日志</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="release-camera" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h46 class="modal-title" id="myModalLabel">
+            发布视频日志
+            </h6>
+          </div>
+          <div class="modal-body" style="width:100%; float:left; margin-bottom:15px;">
+            <div class="upload-img brd"> <a class="upload-box" href="javascript:;">
+              <input type="file" class="img-upload">
+              <span class="fui-video"></span>
+              <p>上传视频</p>
+              </a> </div>
+            <div class="upload-img"> <a class="upload-box" href="javascript:;"> <span class="fui-window"></span>
+              <p>从网络添加视频</p>
+              </a> </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <div class="btn-group dropdown">
+              <button type="button" class="btn btn-primary ">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="#">现在发布<span class="fui-check-circle pull-right"></span></a> </li>
+                <li><a href="#">保存为草稿</a></li>
+                <li><a href="#">发私密日志</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="release-tool-btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="media">
+          <div class="media-body">
+            <div class="list_content ">
+              <div class="col-xs-3" data-toggle="modal" data-target="#release-text">
+                <div class="text-center"> <img src="img/ic_text.png">
+                  <p class="mbn"><small>文字</small></p>
+                </div>
+              </div>
+              <div class="col-xs-3" data-toggle="modal" data-target="#release-photo">
+                <div class="text-center"> <img src="img/ic_photo.png">
+                  <p class="mbn"><small>图片</small></p>
+                </div>
+              </div>
+              <div class="col-xs-3" data-toggle="modal" data-target="#release-link">
+                <div class="text-center"> <img src="img/ic_link.png">
+                  <p class="mbn"><small>链接</small></p>
+                </div>
+              </div>
+              <div class="col-xs-3" data-toggle="modal" data-target="#release-camera">
+                <div class="text-center"> <img src="img/ic_camera.png">
+                  <p class="mbn"><small>视频</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+{/bodyContent}

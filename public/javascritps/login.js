@@ -21,15 +21,11 @@ var loginIndex   =   (function(){
             $("#divBtnSubmit").bind("click",function(){
                 var userName    =   $.trim($("#inputUserName").val());
                 var pwd         =   $.trim($("#inputPwd").val());
-                var repwd       =   $.trim($("#inputRePwd").val());
 
-                if(optIndex.validate(userName,pwd,repwd)){
+                if(optIndex.validate(userName,pwd)){
 
                     try{
 
-                        /*
-                         * Ajax请求调用后台接口进行优惠券列表信息读取
-                         * */
                         var cfg = {
                             url		    :	"create",
                             data		:	[],
@@ -52,12 +48,12 @@ var loginIndex   =   (function(){
                             success     :   function(json){
                                 try{
                                     if(json.result) {
-                                        message.msg('注册成功.');
+                                        message.msg('登录成功.');
                                         window.setTimeout(function(){
                                             window.location.href    =   'v_login';
                                         },2000);
                                     }else{
-                                        message.msg('注册失败,' +   json.msg);
+                                        message.msg('登录失败,' +   json.msg);
                                     }
                                 }catch(ex){
                                     log(ex);
@@ -92,14 +88,6 @@ var loginIndex   =   (function(){
             }
             if(''   == pwd){
                 message.msg('请填写密码.');
-                return false;
-            }
-            if(''   == repwd){
-                message.msg('请填写确认密码.');
-                return false;
-            }
-            if(pwd  !=  repwd){
-                message.msg('两次密码不一样.');
                 return false;
             }
             return true;

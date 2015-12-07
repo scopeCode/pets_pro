@@ -18,4 +18,5 @@ module.exports = function (app) {
     app.route('/user/v_register').get(register.show);
     app.route('/user/create').post(register.create);
     app.route('/user/v_index').get(index.show);
+    app.route('/user/login').post(login.login);
 };
