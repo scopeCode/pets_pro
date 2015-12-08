@@ -23,6 +23,24 @@ exports.show = function (req, res, next) {
 };
 
 /**
+ * user  logout
+ * @param  {object}   req  the request object
+ * @param  {object}   res  the response object
+ * @param  {Function} next the next handler
+ * @return {null}
+ */
+exports.logout = function (req, res, next) {
+    try{
+         if(req.session && req.session.user){
+             req.session.user   =   null;
+         }
+        res.redirect('/user/v_login');
+    }catch(ex){
+        next(ex);
+    }
+};
+
+/**
  * 用户登录系统的act
  * @param req
  * @param res

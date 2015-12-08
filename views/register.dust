@@ -1,4 +1,4 @@
-{>"layouts/master"/}
+{>"layouts/user"/}
 {<title}萌宠日记--用户注册{/title}
 {<bodyContent}
     <div id="fsvs-body">

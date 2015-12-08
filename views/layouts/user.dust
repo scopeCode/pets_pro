@@ -17,7 +17,6 @@
 </head>
 <body>
     {+bodyContent /}
-    {>"layouts/footer"/}
-    <div class="load" id="divLoad" style="display: none;"><i></i>请稍候...</div>
+    {>"layouts/common"/}
 </body>
 </html>

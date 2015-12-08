@@ -5,19 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>{+title /}</title>
     <link rel="shortcut icon" href="#">
+    <title>{+title /}</title>
     <meta name="keywords" content="萌宠、可爱">
     <meta name="description" content="萌宠日记，记录它的一辈子">
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <link href="/css/flat-ui.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/custom.css">
+    <link href="/css/bootstrap.css" rel="stylesheet" >
+    <link href="/css/flat-ui.css"   rel="stylesheet">
+    <link href="/css/custom.css"    rel="stylesheet">
     <script src="/js/vendor/jquery.min.js"></script>
     <script src="/js/flat-ui.min.js"></script>
 </head>
 <body>
-{+bodyContent /}
-{>"layouts/footer"/}
-<div class="load" id="divLoad" style="display: none;"><i></i>请稍候...</div>
+
+<div class="top">
+    <nav class="navbar navbar-inverse ">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a class="navbar-brand" href="#">Dairy</a> </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/">首页 </a></li>
+                    <li><a href="/v_show">发现</a></li>
+                    <li><a href="/v_box">收件箱</a></li>
+                    <li><a href="/v_note">通知</a></li>
+                </ul>
+
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group form-group-sm">
+                        <input type="text" class="form-control " placeholder="搜索 萌宠日记">
+                    </div>
+                </form>
+
+                <ul class="nav navbar-nav navbar-right">
+
+                    <li><a href="javascript:;;" data-toggle="modal" data-target="#release-tool-btn" id="aBtnPublish">发布日志</a></li>
+
+                    <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">个人中心 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><span class="fui-heart mrm"></span>喜欢</a></li>
+                            <li><a href="#"><span class="fui-plus mrm"></span>关注</a></li>
+                            <li><a href="#"><span class="fui-gear mrm"></span>设置</a></li>
+                            <li role="separator" class="divider"></li>
+
+                            <li>
+                                <a href="javascript:;;"><img src="img/img_normal.png" width="36px" height="36px" style="margin-right:5px;">仰望明天</a>
+                            </li>
+
+                            <!--
+                            <li><a href="#"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>日志</a></li>
+                            <li><a href="#"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>粉丝</a></li>
+                            <li><a href="#"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>编辑外观</a></li> -->
+
+                            <li><a href="user/logout"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+</div>
+
+<!-- 手机端发布按钮 -->
+<div class="release-tool-btn"   data-toggle="modal" data-target="#release-tool-btn"><span class="fui-new"></span></div>
+<!--手机端发布按钮结束 -->
+
+<div class="container content">
+    <div class="row">
+        {+bodyContentLeft   /}
+        {+bodyContentRight  /}
+    </div>
+</div>
+
+{>"layouts/common"/}
 </body>
 </html>
