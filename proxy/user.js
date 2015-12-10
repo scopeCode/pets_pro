@@ -2,7 +2,6 @@
  * 关于用户操作的数据库处理
  * Created by scj-mo on 2015/12/6.
  */
-var eventProxy  =   require('eventProxy');
 var models      =   require('../pmodels');
 var User        =   models.User;
 var UserInfo    =   models.UserInfo;
@@ -42,4 +41,13 @@ exports.createUserInfo          =   function(userId,nick,callback){
     userInfo.NICK       =   nick;
 
     userInfo.save(callback);
+};
+
+/**
+ * 根据userId 返回用户的信息
+ * @param userId
+ * @param callback
+ */
+exports.getUserInfoById         =   function(userId,callback){
+    UserInfo.findOne({'USER_ID': userId}, callback);
 };

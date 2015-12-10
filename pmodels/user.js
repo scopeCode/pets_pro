@@ -10,7 +10,6 @@ var UserSchema  = new Schema({
     USER_PWD        :   {type   :   String                              },      //用户密码
     REGISTER_IP     :   {type   :   String                              },      //注册IP
     REGISTER_TIME   :   {type   :   Date    ,default    :   Date.now    },      //创建时间
-    REGISTER_EMAIL  :   {type   :   String  ,default    :   ''          },      //注册邮箱 ，后期可是进行补填写
     /*2015-12-08  新增加字段*/
     STATUS          :   {type   :   Boolean ,default    :   true        },      //用户的状态 true 正常 false 禁用 不可登录系统，不可评论
 

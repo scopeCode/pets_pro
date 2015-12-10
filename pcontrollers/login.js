@@ -68,15 +68,33 @@ exports.login   =   function(req,res,next){
     }
     // END 验证信息的正确性
 
+    ep.on('loginResultOpt',function(user,userInfo){
+        var md5Str  =   utils.md5(pwd,'base64');
+        if(user.USER_PWD    ==  md5Str){
+
+            user.USER_PWD = '';
+
+            req.session.user    =   {'user':user,'userInfo':userInfo};
+            res.json(commonResponse.success());
+        }else{
+            ep.emit('prop_err', '密码输入有误.');
+        }
+    });
+
+    //TODO  需要优化下，对用户的状态进行判断  如果状态不对则 session 为空，不允许登录
     userProxy.getUserByUserName(userName,function(err,user){
         if(err){return next(err);}
+
         if(user){
-            var md5Str  =   utils.md5(pwd,'base64');
-            if(user.USER_PWD    ==  md5Str){
-                req.session.user    =   {'userName':user.USER_NAME};
-                res.json(commonResponse.success());
-            }else{
-                ep.emit('prop_err', '密码输入有误.');
+
+            if(!user.STATUS){
+                ep.emit('prop_err', '该用户已被管理员屏蔽.');
+            }
+            else{
+                    userProxy.getUserInfoById(user._id,function(err,userInfo){
+                        if(err){return next(err);}
+                        ep.emit('loginResultOpt',user,userInfo);
+                    });
             }
         }else{
             ep.emit('prop_err', '该用户不存在.');

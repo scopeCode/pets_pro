@@ -20,5 +20,15 @@ mongoose.connect(config.mongodb, {
 require('./user');
 require('./userInfo');
 
+require('./article');
+require('./articleUser');
+require('./articleFile');
+
+//用户基本信息的model
 exports.User            =   mongoose.model('User');
 exports.UserInfo        =   mongoose.model('UserInfo');
+
+//文章的基本信息的model
+exports.Article            =   mongoose.model('Article');
+exports.ArticleUser        =   mongoose.model('ArticleUser');
+exports.ArticleFile        =   mongoose.model('ArticleFile');

@@ -48,7 +48,7 @@ exports.create  =   function(req,res,next){
         ep.emit('prop_err', '信息不完整.');
         return;
     }
-    if (mobileRule.test(userName)) {  //需要验证 是否是手机号
+    if (!mobileRule.test(userName)) {  //需要验证 是否是手机号
         ep.emit('prop_err', '用户名格式不正确.');
         return;
     }

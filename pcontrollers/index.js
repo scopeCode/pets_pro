@@ -12,7 +12,7 @@
  */
 exports.show = function (req, res, next) {
     try{
-        res.render('index');
+        res.render('index', {'user':req.session.user.user,'userInfo':req.session.user.userInfo});
     }catch(ex){
         next(ex);
     }
