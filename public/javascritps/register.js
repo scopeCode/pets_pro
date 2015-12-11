@@ -17,6 +17,15 @@ var registerIndex   =   (function(){
             optIndex.bindEvent();
         },
         bindEvent   :   function(){
+
+            //按钮绑定回车事件
+            $('body').bind('keydown',function(event){
+                if(event.keyCode == '13'){
+                    event.preventDefault();
+                    $("#divBtnSubmit").click();
+                }
+            });
+
             //注册按钮点击事件
             $("#divBtnSubmit").bind("click",function(){
                 var userName    =   $.trim($("#inputUserName").val());

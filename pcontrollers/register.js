@@ -4,6 +4,7 @@
  */
 var EventProxy      =   require('eventProxy');
 var userProxy       =   require('../proxy/user');
+var loggerProxy     =   require('../proxy/logger');
 var utils           =   require('utility');
 var commonResponse  =   require('../common/commonResponse');
 /**
@@ -60,10 +61,22 @@ exports.create  =   function(req,res,next){
     ep.on('createUserInfo',function(user){
         var userId      =   user._id;
         var nick        =   '用户'  + user.USER_NAME.substr(7);
-        userProxy.createUserInfo(userId,nick,function(err){
+        userProxy.createUserInfo(userId,nick,function(err,userInfo){
             if(err){
                 return next(err);
             }
+
+            //记录日志
+            var loggerContent   =  {};
+            loggerContent.user      =   user;
+            loggerContent.userInfo  =   userInfo;
+
+            loggerProxy.createLogger('pets.user.register', JSON.stringify(loggerContent) ,function(err){
+                if(err){
+                    return next(err);
+                }
+            });
+
             res.json(commonResponse.success());
         });
 

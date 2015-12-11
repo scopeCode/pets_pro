@@ -8,17 +8,45 @@ exports.Article            =   models.Article;
 exports.ArticleUser        =   models.ArticleUser;
 exports.ArticleFile        =   models.ArticleFile;
 
-
-
-exports.createArticle          =   function(title,content,type){
-
+/**
+ * 创建文章表
+ * @param title
+ * @param content
+ * @param type
+ * @param callback
+ */
+exports.createArticle          =   function(title,content,type,callback){
+    var  article       =   new Article();
+    article.TITLE      =    title;
+    article.CONTENT    =    content;
+    article.TYPE       =    type;
+    article.save(callback);
 };
 
-exports.createArticleUser      =   function(articleId,userId,type){
-
+/**
+ * 创建文章对应用户表
+ * @param articleId
+ * @param userId
+ * @param type
+ * @param callback
+ */
+exports.createArticleUser      =   function(articleId,userId,type,callback){
+    var  articleUser            =   new ArticleUser();
+    articleUser.ARTICLE_ID      =    articleId;
+    articleUser.USER_ID         =    userId;
+    articleUser.TYPE            =    type;
+    articleUser.save(callback);
 };
 
-
-exports.createArticleFile      =   function(articleId,FILE_HASH){
-
+/**
+ * 创建文章对应文件表
+ * @param articleId
+ * @param fileHash
+ * @param callback
+ */
+exports.createArticleFile      =   function(articleId,fileHash,callback){
+    var  articleFile              =   new ArticleFile();
+    articleFile.ARTICLE_ID        =    articleId;
+    articleFile.FILE_HASH         =    fileHash;
+    articleFile.save(callback);
 };
