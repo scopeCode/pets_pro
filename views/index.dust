@@ -92,7 +92,7 @@
     </div>
 </div>
 {/bodyContentRight}
-
-<script src="/javascritps/userIndex.js"></script>
 {>"layouts/dialog"/}
 {>"layouts/common"/}
+
+<script src="/javascritps/userIndex.js"></script>

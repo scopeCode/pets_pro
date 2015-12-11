@@ -13,19 +13,79 @@ $(document).ready(function(){
 //注册页面的对象
 var userIndex   =   (function(){
 
+    //将要新添加标签 数组
+    var  addTag     =   [];
+
+    //标签模板项
+    var template    =   {
+        tagItem :   '<span class="tag label label-info"> #{name} <span data-role="remove"></span></span>',
+    };
+
     var optIndex    =   {
         build       :   function(){
             optIndex.bindEvent();
         },
         bindEvent   :   function(){
+            $('#btnTextArticlePublish').bind('click',function(){
+                var title   =   $('#inputTextTitle').val();
+                var content =   $('#textareaTextContent').val();
+
+                if(title == ''){
+                    message.msg('标题不可为空.');
+                    return false;
+                }
+                if(content == ''){
+                    message.msg('内容不可为空.');
+                    return false;
+                }
+
+                var  tagLen    =    $('#divTextArticleTag .label-info').length;
+                //说明有标签
+                if(tagLen > 0){
+
+                }
+
+                //进行后台处理
+
+
+            });
 
             //输入框绑定回车事件
             $('#inputTextArticleTag').bind('keydown',function(event){
                 if(event.keyCode == '13'){
                     event.preventDefault();
 
-                    console.log($('#inputTextArticleTag').val());
+                    var  tagVal    =    $('#inputTextArticleTag').val();
+                    var  tagLen    =    $('#divTextArticleTag .label-info').length;
 
+                    if(tagVal == ''){
+                        message.msg('标签不可为空.');
+                        return false;
+                    }
+
+                    if(tagLen < 3){
+                        var startChar   =   tagVal.substr(0,1);
+                        if(startChar!='#'){
+                            tagVal = '#' + tagVal;
+                        }
+                        var tagHtmlStr  =   template.tagItem.format({name:tagVal});
+                        $('#inputTextArticleTag').before(tagHtmlStr);
+                        $('#inputTextArticleTag').val('');
+
+                        tagLen    =    $('#divTextArticleTag .label-info').length;
+                        if(tagLen == 3){
+                            $('#inputTextArticleTag').hide();
+                        }
+
+                        $('#divTextArticleTag .label-info').bind('click',function(){
+                            var _this = $(this);
+                            _this.remove();
+                            $('#inputTextArticleTag').show();
+                        });
+
+                    }else{
+                        message.msg('暂时只能添加3个标签.');
+                    }
                 }
             });
 

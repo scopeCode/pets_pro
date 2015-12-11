@@ -1,12 +1,1 @@
 <div class="load" id="divLoad" style="display: none;"><i></i>请稍候...</div>
-<script type="text/javascript">
-    var  mobileRule     =   /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
-    var  isPcOpen       =   function(){
-        var isOnPc= (/Android|webOS|Windows Phone|iph|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent));
-        if(!isOnPc){
-            return true;
-        }
-        return false;
-    };
-
-</script>

@@ -13,11 +13,6 @@
                 <textarea class="form-control" rows="2" placeholder="在这里填写文字" id="textareaTextContent"></textarea>
 
                 <div class="bootstrap-tagsinput" id="divTextArticleTag">
-
-                    <span class="tag label label-info"> 标签1 <span data-role="remove"></span></span>
-                    <span class="tag label label-info"> 标签2 <span data-role="remove"></span></span>
-                    <span class="tag label label-info"> 标签3 <span data-role="remove"></span></span>
-
                     <input type="text" placeholder="#标签" style="width: 3em !important;"  id="inputTextArticleTag">
                 </div>
             </div>
@@ -25,13 +20,15 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 <div class="btn-group dropdown">
-                    <button type="button" class="btn btn-primary ">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="#">现在发布<span class="fui-check-circle pull-right"></span></a> </li>
-                        <li><a href="#">保存为草稿</a></li>
-                        <li><a href="#">发私密日志</a></li>
-                    </ul>
+                    <button type="button" class="btn btn-primary " id="btnTextArticlePublish">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    <!--
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="#">现在发布<span class="fui-check-circle pull-right"></span></a> </li>
+                            <li><a href="#">保存为草稿</a></li>
+                            <li><a href="#">发私密日志</a></li>
+                        </ul>
+                    -->
                 </div>
             </div>
         </div>

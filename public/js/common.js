@@ -29,3 +29,33 @@ function ajaxFailure(xhr){
         }
     }
 };
+var  mobileRule     =   /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+var  isPcOpen       =   function(){
+    var isOnPc= (/Android|webOS|Windows Phone|iph|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent));
+    if(!isOnPc){
+        return true;
+    }
+    return false;
+};
+/**
+ * 格式化字符串
+ * @param a  {JSON}     JSON设定格式化字符串中对应的值
+ * @returns  {String}
+ * DEMO:     var li = "<li class='#{cls}'>#{text}</li>"; console.log(li.format({cls:'cls',text:'test'}));
+ */
+String.prototype.format = function(a){
+    c = String(this);
+    var b = Array.prototype.slice.call(arguments, 0),
+        d = Object.prototype.toString;
+    if (b.length) {
+        b = b.length == 1 ? (a !== null && (/\[object Array\]|\[object Object\]/.test(d.call(a))) ? a : b) : b;
+        return c.replace(/#\{(.+?)\}/g, function (f, h) {
+            var g = b[h];
+            if ("[object Function]" == d.call(g)) {
+                g = g(h);
+            }
+            return ("undefined" == typeof g ? "" : g);
+        });
+    }
+    return c;
+};
