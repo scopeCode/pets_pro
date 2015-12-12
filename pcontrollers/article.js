@@ -32,20 +32,26 @@ exports.createTextArticle = function (req, res, next) {
             ep.emit('prop_err', '信息不完整。');
             return;
         }
-        if (title.length > 5 && title.length < 15) {
+        if (title.length < 5 || title.length > 15) {
             ep.emit('prop_err', '标题至少需要5个字符。最长不超过15个字符.');
             return;
         }
         // END 验证信息的正确性
 
-        articleProxy.Article.createTextArticle(title,content,type,function(err,article){
+        articleProxy.createArticle(title,content,'1',function(err,article){
+
             if(err){
                 return next(err);
             }
 
+            var articleId   =   article._id;
+            articleProxy.createArticleUser(articleId,userId,'0',function(err){});
+
             if(tags !=''){ //存储 标签数据
 
             }
+
+            res.json(commonResponse.success(article));
         });
 
 

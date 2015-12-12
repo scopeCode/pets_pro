@@ -13,7 +13,9 @@ var UserInfoSchema  =   new Schema({
     SEX                 :   {type   :   Number  ,default    :   0           },      //性别 0 保密  1 男 2 女
     EMAIL               :   {type   :   String  ,default    :   ''          },      //邮箱信息  为了能找回密码
     BIRTH               :   {type   :   Date    ,default    :   null        },      //用户的生日
-    /*2015-12-08  完善数据库字段*/
+    /*2015-12-12    完善数据库字段*/
+    SIGN                :   {type   :   String  ,default    :   ''          },      //个性签名
+    /*2015-12-08    完善数据库字段*/
     PHOTO               :   {type   :   String  ,default    :   ''          },      //用户的头像 七牛的HASH码
     IS_PUBLISH_TEXT     :   {type   :   Boolean ,default    :   false       },      //是否发表过 文字类型的文章
     IS_PUBLISH_PHOTO    :   {type   :   Boolean ,default    :   false       },      //是否发表过 图片类型的文章

@@ -4,9 +4,9 @@
  */
 var models      =   require('../pmodels');
 
-exports.Article            =   models.Article;
-exports.ArticleUser        =   models.ArticleUser;
-exports.ArticleFile        =   models.ArticleFile;
+var Article            =   models.Article;
+var ArticleUser        =   models.ArticleUser;
+var ArticleFile        =   models.ArticleFile;
 
 /**
  * 创建文章表
@@ -50,3 +50,16 @@ exports.createArticleFile      =   function(articleId,fileHash,callback){
     articleFile.FILE_HASH         =    fileHash;
     articleFile.save(callback);
 };
+
+/**
+ * 根据用户ID获取用户的信息
+ * @param limit
+ * @param pageNo
+ * @param userId
+ * @param callback
+ */
+exports.getAllArticleByUid     =    function(limit,pageNo,userId,callback){
+    ArticleUser.findOne({USER_ID:userId})
+        .populate('ARTICLES')
+        .exec(callback);
+}

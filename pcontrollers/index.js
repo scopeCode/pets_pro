@@ -3,6 +3,9 @@
  * Created by WG on 2015/12/5.
  */
 
+var hotBlog          =     require('../common/hotBlog');
+var articleProxy    =   require('../proxy/article');
+
 /**
  * show index page
  * @param  {object}   req  the request object
@@ -12,6 +15,11 @@
  */
 exports.show = function (req, res, next) {
     try{
+
+        articleProxy.getAllArticleByUid(0,10,'566bc61fb8ad358c2d8c5f51',function(err,data){
+            console.log(data);
+        });
+
         res.render('index', {'user':req.session.user.user,'userInfo':req.session.user.userInfo});
     }catch(ex){
         next(ex);

@@ -3,7 +3,7 @@
 {<bodyContentLeft}
     <div class="col-md-7 col-md-offset-1">
         <div class="content_list">
-            <ul>
+            <ul id="ulLeftContent">
                 <li class="release-tool">
                     <div class="media">
                         <div class="media-left"> <a href="#"> <img src="img/img_user.png" width="64px" height="64px"> </a> </div>
@@ -44,16 +44,28 @@
         <p class="mbn">热门博客</p>
         <div class="recommend－list">
             <ul>
-                <li>
-                    <div class="media">
-                        <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
-                        <div class="media-body">
-                            <h4>仰望明天</h4>
-                            <p>个人描述</p>
-                        </div>
-                        <div class="media-right"> <a href="#" class="btn-box" title="关注"><span class="fui-plus"></span></a> </div>
-                    </div>
-                </li>
+                {@getHotBlog petReq="http://localhost/user/getHotBlog"}
+                    <items>
+                        <li>
+                            <div class="media">
+                                <div class="media-left">
+                                    <a href="javascript:;;">
+                                      <img src="{?PHOTO}{PHOTO}{:else}/img/img_normal.png{/PHOTO}" width="36px" height="36px">
+                                     </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4>{NICK}</h4>
+                                    <p>{?SIGN}{SIGN}{:else}这个家伙很懒,什么也没有留下.{/SIGN}</p>
+                                </div>
+                                <div class="media-right">
+                                    <a href="javascript:;;" class="btn-box" title="关注"><span class="fui-plus"></span></a>
+                                </div>
+                            </div>
+                        </li>
+                    </items>
+                {:else}
+                    You got an Error: {error}
+                {/getHotBlog}
 
                 <li class="bbn"> <a href="javascript:;;" class="">查看更多达人</a> </li>
             </ul>

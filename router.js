@@ -2,10 +2,11 @@
  * 全局路由的设定
  * Created by WG on 2015/12/5.
  */
-var index               = require("./pcontrollers/index");
-var login               = require("./pcontrollers/login");
-var register            = require("./pcontrollers/register");
-var auth                = require("./pmiddlewares/auth");
+var index               =   require("./pcontrollers/index");
+var login               =   require("./pcontrollers/login");
+var register            =   require("./pcontrollers/register");
+var auth                =   require("./pmiddlewares/auth");
+var article             =   require("./pcontrollers/article");
 
 module.exports = function (app) {
 
@@ -22,5 +23,8 @@ module.exports = function (app) {
     app.route('/user/login').post(login.login);
     app.route('/user/logout').get(login.logout);
 
+    //[文章处理 ]-----------------------------------------------------------------\\
+    app.route('/user/article/createTextArticle').all(auth.loginRequired).
+        post(article.createTextArticle);
 
 };

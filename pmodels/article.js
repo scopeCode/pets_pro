@@ -11,6 +11,10 @@ var ArticleSchema  =   new Schema({
     CONTENT     :   {type   :   String                              },      //文章的内容
     TYPE        :   {type   :   Number                              },      //文章的类型 1:文字2：图片3：链接4：视频
     STATUS      :   {type   :   Boolean     ,default  :    true     },      //文章的状态
+    /*2015-12-12    新增加联表查找对外字段*/
+    ARTICLE_FILE:   {type   :   ObjectId    ,ref: 'ArticleFile'     },
+    ARTICLE_TAG :   {type   :   ObjectId    ,ref: 'ArticleTag'      },
+
     CREATED     :   {type   :   Date        ,default  :    Date.now }       //创建时间
 });
 

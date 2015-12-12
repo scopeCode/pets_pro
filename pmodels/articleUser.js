@@ -11,6 +11,8 @@ var ArticleUserSchema  =   new Schema({
     USER_ID     :   {type   :   ObjectId                            },      //文章对应的用户表
     TYPE        :   {type   :   Number      ,default  :    0        },      //文章属性 0：自创 1:转载
     STATUS      :   {type   :   Boolean     ,default  :    true     },      //文件的状态
+    /*2015-12-12    新增加联表查找对外字段*/
+    ARTICLES    :   {type   :   ObjectId    ,ref: 'Article'         },
     CREATED     :   {type   :   Date        ,default  :    Date.now }       //创建时间
 });
 
