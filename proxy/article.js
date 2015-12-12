@@ -4,9 +4,9 @@
  */
 var models      =   require('../pmodels');
 
-var Article            =   models.Article;
-var ArticleUser        =   models.ArticleUser;
-var ArticleFile        =   models.ArticleFile;
+var Article             =   models.Article;
+var ArticleUser         =   models.ArticleUser;
+var ArticleFile         =   models.ArticleFile;
 
 /**
  * 创建文章表
@@ -59,7 +59,7 @@ exports.createArticleFile      =   function(articleId,fileHash,callback){
  * @param callback
  */
 exports.getAllArticleByUid     =    function(limit,pageNo,userId,callback){
-    ArticleUser.findOne({USER_ID:userId})
-        .populate('ARTICLES')
+    ArticleUser.find({USER_ID:userId})
+        .populate('ARTICLE_ID  USER_ID')
         .exec(callback);
 }

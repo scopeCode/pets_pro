@@ -7,6 +7,22 @@ var dustjs        =     require('adaro');
 function getHotBlogReq(url,cb){
 
 };
+
+dustjs.dust.helpers.formatDate = function (chunk, context, bodies, params) {
+    var value = dust.helpers.tap(params.value, chunk, context),
+        timestamp,
+        month,
+        date,
+        year;
+
+    timestamp = new Date(value);
+    month = timestamp.getMonth() + 1;
+    date = timestamp.getDate();
+    year = timestamp.getFullYear();
+
+    return chunk.write(date + '.' + month + '.' + year);
+};
+
 /*
 dustjs.dust.helpers.getHotBlog = function(chunk, context, bodies, params) {
 

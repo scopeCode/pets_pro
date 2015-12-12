@@ -4,7 +4,7 @@
  */
 
 var hotBlog          =     require('../common/hotBlog');
-var articleProxy    =   require('../proxy/article');
+var articleProxy     =   require('../proxy/article');
 
 /**
  * show index page
@@ -15,12 +15,17 @@ var articleProxy    =   require('../proxy/article');
  */
 exports.show = function (req, res, next) {
     try{
+        var userId  = req.session.user.user._id;
 
-        articleProxy.getAllArticleByUid(0,10,'566bc61fb8ad358c2d8c5f51',function(err,data){
+        articleProxy.getAllArticleByUid(0,15,userId,function(err,data){
+            if(err){
+                return next(err);
+            }
             console.log(data);
-        });
 
-        res.render('index', {'user':req.session.user.user,'userInfo':req.session.user.userInfo});
+
+            res.render('index', {'user':req.session.user.user,'userInfo':req.session.user.userInfo,'data':data});
+        });
     }catch(ex){
         next(ex);
     }

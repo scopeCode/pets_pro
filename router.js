@@ -19,7 +19,6 @@ module.exports = function (app) {
     app.route('/user/v_login').get(login.show);
     app.route('/user/v_register').get(register.show);
     app.route('/user/create').post(register.create);
-    app.route('/user/v_index').all(auth.loginRequired).get(index.show);
     app.route('/user/login').post(login.login);
     app.route('/user/logout').get(login.logout);
 

@@ -11,7 +11,18 @@ var app           =     express();
 var cfg           =     require('./config');
 var routes        =     require("./router");
 
-app.engine("dust",dustjs.dust({ cache: false }));
+
+var options = {
+    helpers: [
+        function (dust) {
+            dust.helpers.myHelper = function (a, b, c, d) {}
+        }
+    ],
+    cache: false
+};
+
+app.engine("dust",dustjs.dust(options));
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'dust');
 
