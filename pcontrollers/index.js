@@ -1,9 +1,8 @@
 /**
- * 全局个人测试页面
+ * 全局个人页面
  * Created by WG on 2015/12/5.
  */
 
-var hotBlog          =     require('../common/hotBlog');
 var articleProxy     =   require('../proxy/article');
 
 /**
@@ -21,12 +20,9 @@ exports.show = function (req, res, next) {
             if(err){
                 return next(err);
             }
-            console.log(data);
-
-
             res.render('index', {'user':req.session.user.user,'userInfo':req.session.user.userInfo,'data':data});
         });
-    }catch(ex){
+     }catch(ex){
         next(ex);
     }
 };

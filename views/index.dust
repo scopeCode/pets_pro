@@ -43,13 +43,12 @@
                                     {USER_ID.NICK}234
                                   <img src="{?USER_ID.PHOTO}{USER_ID.PHOTO}{:else}img/img_normal.png{/USER_ID.PHOTO}" width="64px" height="64px">
                               </a>
-
                           </div>
                           <div class="media-body">
                             <div class="list_content ">
                               <div class="content_top">
                                  <img src="img/img_user.png" class="content_img" width="36px" height="36px"> 仰望明天
-                                <div class="pull-right text-muted">{ARTICLE_ID.CREATED}</div>
+                                <div class="pull-right text-muted">{@formatDate value=ARTICLE_ID.CREATED /}</div>
                                 <!--鼠标移上去显示个人信息的地方-->
                                 <div class="person-info" style="display:none;">
                                   <div class="person-inner">

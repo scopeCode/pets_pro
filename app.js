@@ -14,9 +14,7 @@ var routes        =     require("./router");
 
 var options = {
     helpers: [
-        function (dust) {
-            dust.helpers.myHelper = function (a, b, c, d) {}
-        }
+        './common/dustHelper'
     ],
     cache: false
 };
