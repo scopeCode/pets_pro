@@ -29,7 +29,7 @@ exports.show = function (req, res, next) {
  * @param  {Function} next the next handler
  * @return {null}
  */
-exports.create  =   function(req,res,next){
+exports.createUser  =   function(req,res,next){
 
     var ep  =   new EventProxy();
     ep.fail(next);
@@ -73,24 +73,4 @@ exports.create  =   function(req,res,next){
         }
     });
 
-};
-
-/**
- * 验证用户是否存在
- * @param req
- * @param res
- * @param next
- */
-exports.userIsExists    =   function(req,res,next){
-    var userName    =   req.body.userName;
-    userProxy.getUserByUserName(userName,function(err,user){
-        if(err){
-           return next(err);
-        }
-        if(user){
-            res.json({"result":1,"data":{},"msg":''});
-        }else{
-            res.json({"result":0,"data":{},"msg":'该用户已经存在.'});
-        }
-    });
 };

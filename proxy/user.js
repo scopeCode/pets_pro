@@ -59,19 +59,14 @@ exports.createUserInfo          =   function(userId,nick,callback){
  * @param callback
  */
 exports.getUserByUserName       =   function(loginName,callback){
-
-    try{
         User.findOne({
-            'include':[UserInfo],
             'where': {
                 'USER_NAME': loginName
             }
         }).then(function(u){
             callback(u);
         });
-    }catch(ex){
-        console.log(ex);
-    }
+
     //User.findOne({'USER_NAME': loginName}, callback);
 };
 

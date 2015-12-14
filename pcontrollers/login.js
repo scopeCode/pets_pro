@@ -81,12 +81,8 @@ exports.login   =   function(req,res,next){
         }
     });
 
-    //TODO  需要优化下，对用户的状态进行判断  如果状态不对则 session 为空，不允许登录
-    userProxy.getUserByUserName(userName,function(err,user){
-        if(err){return next(err);}
-
+    userProxy.getUserByUserName(userName,function(user){
         if(user){
-
             if(!user.STATUS){
                 ep.emit('prop_err', '该用户已被管理员屏蔽.');
             }
