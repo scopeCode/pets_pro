@@ -59,42 +59,29 @@ exports.create  =   function(req,res,next){
     // END 验证信息的正确性
 
     ep.on('createUserInfo',function(user){
-        var userId      =   user._id;
-        var nick        =   '用户'  + user.USER_NAME.substr(7);
-        userProxy.createUserInfo(userId,nick,function(err,userInfo){
-            if(err){
-                return next(err);
-            }
+        var userId      =   user.id;
+        var nick        =   '用户'  + user.userName.substr(7);
+        userProxy.createUserInfo(userId,nick,function(userInfo){
 
             //记录日志
             var loggerContent   =  {};
             loggerContent.user      =   user;
             loggerContent.userInfo  =   userInfo;
 
-            loggerProxy.createLogger('pets.user.register', JSON.stringify(loggerContent) ,function(err){
-                if(err){
-                    return next(err);
-                }
-            });
+            loggerProxy.createLogger('pets.user.register',
+                JSON.stringify(loggerContent),function(logger){});
 
             res.json(commonResponse.success());
         });
 
     });
-
-    userProxy.getUserByUserName(userName,function(err,user){
-        if(err){
-            return next(err);
-        }
+    userProxy.getUserByUserName(userName,function(user){
         if(user){
             ep.emit('prop_err', '该用户已经存在.');
         }else{
 
             var md5Str   =   utils.md5(pwd,'base64');
-            userProxy.createUser(userName,md5Str,function(err,user){
-                if(err){
-                    return next(err);
-                }
+            userProxy.createUser(userName,md5Str,function(user){
                 ep.emit('createUserInfo',user);
             })
         }

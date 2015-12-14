@@ -16,11 +16,17 @@ var ArticleFile         =   models.ArticleFile;
  * @param callback
  */
 exports.createArticle          =   function(title,content,type,callback){
+    Article.create({
+        title   :title,
+        content :content,
+        type    :type
+    }).then(callback);
+    /*
     var  article       =   new Article();
     article.TITLE      =    title;
     article.CONTENT    =    content;
     article.TYPE       =    type;
-    article.save(callback);
+    article.save(callback);*/
 };
 
 /**
@@ -31,11 +37,16 @@ exports.createArticle          =   function(title,content,type,callback){
  * @param callback
  */
 exports.createArticleUser      =   function(articleId,userId,type,callback){
-    var  articleUser            =   new ArticleUser();
+    ArticleUser.create({
+        articleId:articleId,
+        userId:userId,
+        type:type
+    }).then(callback);
+    /*var  articleUser            =   new ArticleUser();
     articleUser.ARTICLE_ID      =    articleId;
     articleUser.USER_ID         =    userId;
     articleUser.TYPE            =    type;
-    articleUser.save(callback);
+    articleUser.save(callback);*/
 };
 
 /**
@@ -45,10 +56,14 @@ exports.createArticleUser      =   function(articleId,userId,type,callback){
  * @param callback
  */
 exports.createArticleFile      =   function(articleId,fileHash,callback){
-    var  articleFile              =   new ArticleFile();
+    ArticleFile.create({
+        articleId:articleId,
+        fileHash:fileHash
+    }).then(callback);
+    /*var  articleFile              =   new ArticleFile();
     articleFile.ARTICLE_ID        =    articleId;
     articleFile.FILE_HASH         =    fileHash;
-    articleFile.save(callback);
+    articleFile.save(callback);*/
 };
 
 /**
@@ -58,8 +73,8 @@ exports.createArticleFile      =   function(articleId,fileHash,callback){
  * @param userId
  * @param callback
  */
-exports.getAllArticleByUid     =    function(limit,pageNo,userId,callback){
-    ArticleUser.find({USER_ID:userId})
+exports.getArticleListByUid     =    function(limit,pageNo,userId,callback){
+    /*ArticleUser.find({USER_ID:userId})
         .populate('ARTICLE_ID  USER_ID')
-        .exec(callback);
+        .exec(callback);*/
 }

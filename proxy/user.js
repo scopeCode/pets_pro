@@ -6,16 +6,6 @@ var models      =   require('../pmodels');
 var User        =   models.User;
 var UserInfo    =   models.UserInfo;
 
-
-/**
- * 根据   UserName    查询用户信息
- * @param loginName
- * @param callback
- */
-exports.getUserByUserName       =   function(loginName,callback){
-    User.findOne({'USER_NAME': loginName}, callback);
-};
-
 /**
  * 创建一条新的用户信息
  * @param loginName
@@ -23,10 +13,14 @@ exports.getUserByUserName       =   function(loginName,callback){
  * @param callback
  */
 exports.createUser              =   function(loginName,pwd,callback){
-    var    user     =   new User();
+    User.create({
+        userName:loginName,
+        userPwd:pwd
+    }).then(callback);
+    /*var    user     =   new User();
     user.USER_NAME  =   loginName;
     user.USER_PWD   =   pwd;
-    user.save(callback);
+    user.save(callback);*/
 };
 
 /**
@@ -36,11 +30,39 @@ exports.createUser              =   function(loginName,pwd,callback){
  * @param callback
  */
 exports.createUserInfo          =   function(userId,nick,callback){
-    var  userInfo       =   new UserInfo();
+    UserInfo.create({
+        userId      :userId,
+        userNick    :nick
+    }).then(callback);
+    /*var  userInfo       =   new UserInfo();
     userInfo.USER_ID    =   userId;
     userInfo.NICK       =   nick;
+    userInfo.save(callback);*/
+};
 
-    userInfo.save(callback);
+
+/**
+ * 根据   UserName    查询用户信息
+ * @param loginName
+ * @param callback
+ */
+exports.getUserByUserName       =   function(loginName,callback){
+    try{
+        User.find({
+            where: {
+                USER_NAME: loginName
+            },
+            include:{
+                model:UserInfo,
+                as:'UserInfo'
+            }
+        }).then(function(u){
+            callback(u);
+        });
+    }catch(ex){
+        console.log(ex);
+    }
+    //User.findOne({'USER_NAME': loginName}, callback);
 };
 
 /**
