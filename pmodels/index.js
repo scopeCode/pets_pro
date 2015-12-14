@@ -45,8 +45,9 @@ exports.ArticleFile         =   ArticleFile;
 exports.SysLogger           =   SysLogger;
 
 //设定对应的逻辑
-User.hasOne(UserInfo);
-UserInfo.belongsTo(User,{foreignKey:'USER_ID'});
+UserInfo.belongsTo(User,{as:'User',foreignKey:'USER_ID'});
+ArticleUser.belongsTo(User,{as:'User',foreignKey:'USER_ID'});
+ArticleFile.belongsTo(Article,{as:'Article',foreignKey:'ARTICLE_ID'});
 
 /*
 User.sync({force: true}).then(function () {});

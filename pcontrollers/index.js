@@ -22,6 +22,8 @@ exports.show = function (req, res, next) {
             }
             res.render('index', {'user':req.session.user.user,'userInfo':req.session.user.userInfo,'data':data});
         });
+
+
      }catch(ex){
         next(ex);
     }
