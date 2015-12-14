@@ -38,14 +38,13 @@ exports.createTextArticle = function (req, res, next) {
         }
         // END 验证信息的正确性
 
-        articleProxy.createArticle(title,content,'1',function(err,article){
+        articleProxy.createArticle(title,content,'1',function(article){
 
-            if(err){
-                return next(err);
-            }
+            var articleId   =   article.id;
 
-            var articleId   =   article._id;
-            articleProxy.createArticleUser(articleId,userId,'0',function(err){});
+            articleProxy.createArticleUser(articleId,userId,'0',function(data){
+
+            });
 
             if(tags !=''){ //存储 标签数据
 

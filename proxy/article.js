@@ -21,12 +21,6 @@ exports.createArticle          =   function(title,content,type,callback){
         content :content,
         type    :type
     }).then(callback);
-    /*
-    var  article       =   new Article();
-    article.TITLE      =    title;
-    article.CONTENT    =    content;
-    article.TYPE       =    type;
-    article.save(callback);*/
 };
 
 /**
@@ -42,11 +36,6 @@ exports.createArticleUser      =   function(articleId,userId,type,callback){
         userId:userId,
         type:type
     }).then(callback);
-    /*var  articleUser            =   new ArticleUser();
-    articleUser.ARTICLE_ID      =    articleId;
-    articleUser.USER_ID         =    userId;
-    articleUser.TYPE            =    type;
-    articleUser.save(callback);*/
 };
 
 /**
@@ -60,10 +49,6 @@ exports.createArticleFile      =   function(articleId,fileHash,callback){
         articleId:articleId,
         fileHash:fileHash
     }).then(callback);
-    /*var  articleFile              =   new ArticleFile();
-    articleFile.ARTICLE_ID        =    articleId;
-    articleFile.FILE_HASH         =    fileHash;
-    articleFile.save(callback);*/
 };
 
 /**
@@ -73,8 +58,13 @@ exports.createArticleFile      =   function(articleId,fileHash,callback){
  * @param userId
  * @param callback
  */
-exports.getArticleListByUid     =    function(limit,pageNo,userId,callback){
-    /*ArticleUser.find({USER_ID:userId})
-        .populate('ARTICLE_ID  USER_ID')
-        .exec(callback);*/
+exports.getArticleUserListByUid     =    function(limit,pageNo,userId,callback){
+    Article.find({
+        'where':{
+            'USER_ID' : userId
+        },
+        'order': [
+            ['CREATED', 'DESC']
+        ]
+    });
 }

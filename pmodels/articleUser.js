@@ -23,6 +23,11 @@ var ArticleUser = mysqlCient.sequelize.define('T_B_ARTICLE_USER',
             field:"USER_ID",
             comment:'用户的ID'
         },
+        creator:{
+            type:mysqlCient.Sequelize.BIGINT,
+            field:"CREATOR",
+            comment:'文章的创建者'
+        },
         type:{
             type:mysqlCient.Sequelize.INTEGER,
             field:"TYPE",

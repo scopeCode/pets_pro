@@ -62,12 +62,14 @@ exports.getUserByUserName       =   function(loginName,callback){
         User.findOne({
             'where': {
                 'USER_NAME': loginName
+            },
+            include:{
+                model:UserInfo,
+                as:'UserInfo'
             }
         }).then(function(u){
             callback(u);
         });
-
-    //User.findOne({'USER_NAME': loginName}, callback);
 };
 
 /**
@@ -76,5 +78,9 @@ exports.getUserByUserName       =   function(loginName,callback){
  * @param callback
  */
 exports.getUserInfoById         =   function(userId,callback){
-    UserInfo.findOne({'USER_ID': userId}, callback);
+    UserInfo.findOne({
+        'where':{
+            'USER_ID' : userId
+        }
+    }).then(callback);
 };

@@ -35,6 +35,7 @@ var UserInfo            =   require('./userInfo').UserInfo;
 var Article             =   require('./article').Article;
 var ArticleUser         =   require('./articleUser').ArticleUser;
 var ArticleFile         =   require('./articleFile').ArticleFile;
+var ArticleTag          =   require('./articleTag').ArticleTag;
 var SysLogger           =   require('./logger').SysLogger;
 
 exports.User                =   User;
@@ -42,12 +43,17 @@ exports.UserInfo            =   UserInfo;
 exports.Article             =   Article;
 exports.ArticleUser         =   ArticleUser;
 exports.ArticleFile         =   ArticleFile;
+exports.ArticleTag          =   ArticleTag;
 exports.SysLogger           =   SysLogger;
 
-//设定对应的逻辑
-UserInfo.belongsTo(User,{as:'User',foreignKey:'USER_ID'});
-ArticleUser.belongsTo(User,{as:'User',foreignKey:'USER_ID'});
-ArticleFile.belongsTo(Article,{as:'Article',foreignKey:'ARTICLE_ID'});
+
+
+ //设定对应的逻辑
+ //User.hasOne(UserInfo, {as: 'UserInfo',foreignKey:'ID'});
+ //UserInfo.belongsTo(User, {as: 'User',foreignKey:'USER_ID'});
+
+ //ArticleUser.belongsTo(User,{as:'Users',foreignKey:'CREATOR'});
+ //Article.hasMany(ArticleFile, {as: 'ArticleFile',foreignKey:'ARTICLE_ID'});
 
 /*
 User.sync({force: true}).then(function () {});

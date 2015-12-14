@@ -70,10 +70,8 @@ exports.login   =   function(req,res,next){
 
     ep.on('loginResultOpt',function(user,userInfo){
         var md5Str  =   utils.md5(pwd,'base64');
-        if(user.USER_PWD    ==  md5Str){
-
-            user.USER_PWD = '';
-
+        if(user.userPwd    ==  md5Str){
+            user.userPwd = '';
             req.session.user    =   {'user':user,'userInfo':userInfo};
             res.json(commonResponse.success());
         }else{
@@ -83,12 +81,11 @@ exports.login   =   function(req,res,next){
 
     userProxy.getUserByUserName(userName,function(user){
         if(user){
-            if(!user.STATUS){
+            if(user.status == false){
                 ep.emit('prop_err', '该用户已被管理员屏蔽.');
             }
             else{
-                    userProxy.getUserInfoById(user._id,function(err,userInfo){
-                        if(err){return next(err);}
+                    userProxy.getUserInfoById(user.id,function(userInfo){
                         ep.emit('loginResultOpt',user,userInfo);
                     });
             }
