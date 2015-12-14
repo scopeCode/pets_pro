@@ -14,7 +14,7 @@ var SysLogger = mysqlCient.sequelize.define('T_B_SYS_LOG',
             comment:'主键,自动增长 bigint 长整形'
         },
         type:{
-            type:mysqlCient.Sequelize.INTEGER,
+            type:mysqlCient.Sequelize.STRING,
             field:"TYPE",
             comment:'日志类型'
         },

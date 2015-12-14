@@ -13,10 +13,22 @@ var UserInfo    =   models.UserInfo;
  * @param callback
  */
 exports.createUser              =   function(loginName,pwd,callback){
+
     User.create({
         userName:loginName,
         userPwd:pwd
-    }).then(callback);
+    }).then(function(user){
+        if(user){
+            UserInfo.create({
+                userId      :user.id,
+                userNick    :"用户"+loginName.substr(7)
+            }).then(function(userInfo){
+                callback(user,userInfo);
+            });
+        }else{
+            callback(null);
+        }
+    });
     /*var    user     =   new User();
     user.USER_NAME  =   loginName;
     user.USER_PWD   =   pwd;
@@ -47,14 +59,12 @@ exports.createUserInfo          =   function(userId,nick,callback){
  * @param callback
  */
 exports.getUserByUserName       =   function(loginName,callback){
+
     try{
-        User.find({
-            where: {
-                USER_NAME: loginName
-            },
-            include:{
-                model:UserInfo,
-                as:'UserInfo'
+        User.findOne({
+            'include':[UserInfo],
+            'where': {
+                'USER_NAME': loginName
             }
         }).then(function(u){
             callback(u);

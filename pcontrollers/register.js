@@ -41,9 +41,7 @@ exports.create  =   function(req,res,next){
     ep.on('prop_err', function (msg) {
         res.json(commonResponse.fail(msg));
     });
-
     var  mobileRule     =   /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
-
     // 验证信息的正确性
     if ([userName, pwd, repwd].some(function (item) { return item === ''; })) {
         ep.emit('prop_err', '信息不完整.');
@@ -56,33 +54,21 @@ exports.create  =   function(req,res,next){
     if (pwd !== repwd) {
         return ep.emit('prop_err', '两次密码输入不一致.');
     }
-    // END 验证信息的正确性
 
-    ep.on('createUserInfo',function(user){
-        var userId      =   user.id;
-        var nick        =   '用户'  + user.userName.substr(7);
-        userProxy.createUserInfo(userId,nick,function(userInfo){
-
-            //记录日志
-            var loggerContent   =  {};
-            loggerContent.user      =   user;
-            loggerContent.userInfo  =   userInfo;
-
-            loggerProxy.createLogger('pets.user.register',
-                JSON.stringify(loggerContent),function(logger){});
-
+    ep.on("createLoggerEvent",function(user,userInfo){
+        loggerProxy.createLogger('pets.user.register',JSON.stringify(user),function(logger){
             res.json(commonResponse.success());
         });
-
     });
+
+    // END 验证信息的正确性
     userProxy.getUserByUserName(userName,function(user){
         if(user){
             ep.emit('prop_err', '该用户已经存在.');
         }else{
-
             var md5Str   =   utils.md5(pwd,'base64');
-            userProxy.createUser(userName,md5Str,function(user){
-                ep.emit('createUserInfo',user);
+            userProxy.createUser(userName,md5Str,function(user,userInfo){
+                ep.emit('createLoggerEvent', user,userInfo);
             })
         }
     });
