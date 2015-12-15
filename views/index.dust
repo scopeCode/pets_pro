@@ -74,6 +74,7 @@
 
                               </div>
                               <div class="content_body" data-toggle="modal" data-target="#content_body_info">
+                                  <h6> {title}</h6>
                                   {#ArticleFile}
                                     <img src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
                                   {/ArticleFile}
