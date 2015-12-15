@@ -41,12 +41,7 @@ var userIndex   =   (function(){
                     return false;
                 }
 
-                var  tagLen     =    $('#divTextArticleTag .label-info').length;
-                var  tag        =   "";
-                //说明有标签
-                if(tagLen > 0){
-
-                }
+                var  tag        =    $.trim($('#divTextArticleTag').text());
 
                 //进行后台处理
                 try{

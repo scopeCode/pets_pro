@@ -185,10 +185,12 @@ exports.ArticleFile = ArticleFile;
 exports.ArticleTag = ArticleTag;
 exports.ArticleUser = ArticleUser;
 
-ArticleUser.hasMany(ArticleFile,    {as: 'ArticleFile',foreignKey:'ARTICLE_ID'});
-ArticleUser.hasMany(ArticleTag,     {as: 'ArticleFile',foreignKey:'ARTICLE_ID'});
-Article.hasMany(ArticleUser,        {as: 'ArticleFile',foreignKey:'ARTICLE_ID'});
 
-ArticleFile.belongsTo(ArticleUser,  {as: 'Article',foreignKey:'ARTICLE_ID'});
-ArticleTag.belongsTo(ArticleUser,   {as: 'Article',foreignKey:'ARTICLE_ID'});
-ArticleUser.belongsTo(Article,  {as: 'Article',foreignKey:'ARTICLE_ID'});
+Article.hasMany(ArticleFile,        {as: 'ArticleFile',foreignKey:'ARTICLE_ID'});
+ArticleFile.belongsToMany(Article,  {as: 'Article',through:'ARTICLE_ID'});
+
+Article.hasMany(ArticleTag,         {as: 'ArticleTag',foreignKey:'ARTICLE_ID'});
+ArticleTag.belongsToMany(Article,   {as: 'Article',through:'ARTICLE_ID'});
+
+Article.hasOne(ArticleUser,         {as: 'ArticleUser',foreignKey:'ARTICLE_ID'});
+ArticleUser.belongsTo(Article,      {as: 'Article',foreignKey:'ARTICLE_ID'});

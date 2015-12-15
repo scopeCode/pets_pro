@@ -51,12 +51,14 @@ exports.createTextArticle = function (req, res, next) {
         ep.on('createArticleTag',function(tags,article){
             var articleId = article.id;
             var tagArr = [];
-            var tagsArr = tags.split('$$$');
+            var tagsArr = tags.split(' ');
             var tagsArrLen = tagsArr.length;
             for(var i=0;i<tagsArrLen;i++){
-                var item = JSON.parse(tagsArr[i]);
-                var obj = {'articleId':articleId,'tagName':item.tagName};
-                tagArr.push(obj);
+                var item = tagsArr[i];
+                if(item!=''){
+                    var obj = {'articleId':articleId,'tagName':item};
+                    tagArr.push(obj);
+                }
             }
             articleProxy.batchCreateArticleTag(tagArr,function(data){
                 var objRes = {};

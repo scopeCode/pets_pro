@@ -47,10 +47,11 @@ exports.ArticleTag          =   ArticleTag;
 exports.SysLogger           =   SysLogger;
 
  //设定对应的逻辑
-
-/*User.sync({force: true}).then(function () {});
+/*
+User.sync({force: true}).then(function () {});
 UserInfo.sync({force: true}).then(function () {});
 Article.sync({force: true}).then(function () {});
-ArticleUser.sync({force: true}).then(function () {});
 ArticleFile.sync({force: true}).then(function () {});
+ArticleTag.sync({force: true}).then(function () {});
+ArticleUser.sync({force: true}).then(function () {});
 SysLogger.sync({force: true}).then(function () {});*/

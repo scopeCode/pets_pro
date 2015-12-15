@@ -15,14 +15,9 @@ var articleProxy     =   require('../proxy/article');
 exports.show = function (req, res, next) {
     try{
         var userObj =   req.session.user.user;
-       // var userId  = userObj.id;
-
         articleProxy.queryArticleList(userObj.id,function(data){
-            var data = data;
+            res.render('index',{'user':userObj,'data':data});
         });
-
-        res.render('index',{'user':userObj});
-
 
      }catch(ex){
         next(ex);

@@ -87,23 +87,28 @@ exports.batchCreateArticleTag   =   function(tags,callback){
  * @param callback
  */
 exports.queryArticleList       =   function(userId,callback){
-
-    ArticleUser.findAll(
+    Article.findAll(
         {
-            where:{
-                'USER_ID':userId
-            },
             include:[
                 {
-                    model:Article,
-                    as:'Article'
+                    model:ArticleUser,
+                    as:'ArticleUser',
+                    where:{
+                        'USER_ID':userId
+                    }
                 },
                 {
                     model:ArticleFile,
                     as:'ArticleFile'
+                },
+                {
+                    model:ArticleTag,
+                    as:'ArticleTag'
                 }
-            ]
+            ],
+            order:"`T_B_ARTICLE`.`CREATED` DESC"
         }
+
     ).then(function(data){
             callback(data);
         });

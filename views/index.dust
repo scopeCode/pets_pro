@@ -47,8 +47,8 @@
                             <div class="list_content ">
                               <div class="content_top">
                                  <img src="img/img_user.png" class="content_img" width="36px" height="36px">
-                                 {NICK}
-                                 <div class="pull-right text-muted">{@formatDate value=CREATED /}</div>
+                                 {user.UserInfo.userNick}
+                                 <div class="pull-right text-muted">{@formatDate value=user.UserInfo.created /}</div>
 
                                 <!--鼠标移上去显示个人信息的地方-->
                                 <div class="person-info" style="display:none;">
@@ -74,16 +74,21 @@
 
                               </div>
                               <div class="content_body" data-toggle="modal" data-target="#content_body_info">
-                                {@getArticleFile articleType=articleType articleId=articleId /}
+                                  {#ArticleFile}
+                                    <img src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
+                                  {/ArticleFile}
                                 <p>
-                                    {ARTICLE_ID.CONTENT}
+                                    {content}
                                 </p>
                                 <p class="mbm">
-                                    <a href="#" class="mrm text-muted">#宠物</a>
-                                    <a href="#" class="mrm text-muted">#狗</a>
+                                    {#ArticleTag}
+                                        <a href="#" class="mrm text-muted">{tagName}</a>
+                                    {/ArticleTag}
                                 </p>
                               </div>
-                              <div class="content_bottom"> <a class="text-muted" href="#">20热度</a>
+
+                              <div class="content_bottom">
+                                  <a class="text-muted" href="#">20热度</a>
                                 <!--鼠标点击热度--><!-- 弹出时给body加一个class="modal-open" -->
                                 <div class="hot-info">
                                   <div class="hot-inner">
