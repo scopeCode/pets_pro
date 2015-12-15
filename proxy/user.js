@@ -29,27 +29,6 @@ exports.createUser              =   function(loginName,pwd,callback){
             callback(null);
         }
     });
-    /*var    user     =   new User();
-    user.USER_NAME  =   loginName;
-    user.USER_PWD   =   pwd;
-    user.save(callback);*/
-};
-
-/**
- * 创建用户信息表的信息
- * @param userId
- * @param nick
- * @param callback
- */
-exports.createUserInfo          =   function(userId,nick,callback){
-    UserInfo.create({
-        userId      :userId,
-        userNick    :nick
-    }).then(callback);
-    /*var  userInfo       =   new UserInfo();
-    userInfo.USER_ID    =   userId;
-    userInfo.NICK       =   nick;
-    userInfo.save(callback);*/
 };
 
 
@@ -62,10 +41,6 @@ exports.getUserByUserName       =   function(loginName,callback){
         User.findOne({
             'where': {
                 'USER_NAME': loginName
-            },
-            include:{
-                model:UserInfo,
-                as:'UserInfo'
             }
         }).then(function(u){
             callback(u);

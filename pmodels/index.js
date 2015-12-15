@@ -46,8 +46,6 @@ exports.ArticleFile         =   ArticleFile;
 exports.ArticleTag          =   ArticleTag;
 exports.SysLogger           =   SysLogger;
 
-
-
  //设定对应的逻辑
  //User.hasOne(UserInfo, {as: 'UserInfo',foreignKey:'ID'});
  //UserInfo.belongsTo(User, {as: 'User',foreignKey:'USER_ID'});
@@ -55,14 +53,12 @@ exports.SysLogger           =   SysLogger;
  //ArticleUser.belongsTo(User,{as:'Users',foreignKey:'CREATOR'});
  //Article.hasMany(ArticleFile, {as: 'ArticleFile',foreignKey:'ARTICLE_ID'});
 
-/*
-User.sync({force: true}).then(function () {});
+/*User.sync({force: true}).then(function () {});
 UserInfo.sync({force: true}).then(function () {});
 Article.sync({force: true}).then(function () {});
 ArticleUser.sync({force: true}).then(function () {});
 ArticleFile.sync({force: true}).then(function () {});
 SysLogger.sync({force: true}).then(function () {});*/
-
 
 //建立mongodb的链接
 /*var mongoose = require('mongoose');

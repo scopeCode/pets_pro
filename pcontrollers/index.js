@@ -14,11 +14,16 @@ var articleProxy     =   require('../proxy/article');
  */
 exports.show = function (req, res, next) {
     try{
-        var userId  = req.session.user.user._id;
+        var userId  = req.session.user.user.id;
+        articleProxy.queryArticleList(userId,function(data){
 
-        //--获取该用户的前15条最新的文章 包括 转载来的和 关注的文章
-
-        res.render('index', {'user':req.session.user.user,'userInfo':req.session.user.userInfo,'data':data});
+            res.render('index',
+                {
+                    'user':req.session.user.user,
+                    'userInfo':req.session.user.userInfo,
+                    'data':data
+                });
+        });
 
      }catch(ex){
         next(ex);

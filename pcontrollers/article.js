@@ -21,7 +21,7 @@ exports.createTextArticle = function (req, res, next) {
 
         //获取 当前用户的信息
         var user = req.session.user.user;
-        var userId  =   user._id;
+        var userId  =   user.id;
         //获取页面提交的信息
         var title   =   req.body.title;
         var content =   req.body.content;
@@ -38,21 +38,38 @@ exports.createTextArticle = function (req, res, next) {
         }
         // END 验证信息的正确性
 
-        articleProxy.createArticle(title,content,'1',function(article){
-
-            var articleId   =   article.id;
-
-            articleProxy.createArticleUser(articleId,userId,'0',function(data){
-
+        ep.on('createArticleUser',function(article){
+            articleProxy.createArticleUser(article.id,userId,userId,'0',function(data){
+                if(tags !=''){ //存储 标签数据
+                    ep.emit('createArticleTag',tags,article);
+                }else{
+                    res.json(commonResponse.success(article));
+                }
             });
-
-            if(tags !=''){ //存储 标签数据
-
-            }
-
-            res.json(commonResponse.success(article));
         });
 
+        ep.on('createArticleTag',function(tags,article){
+            var articleId = article.id;
+            var tagArr = [];
+            var tagsArr = tags.split('$$$');
+            var tagsArrLen = tagsArr.length;
+            for(var i=0;i<tagsArrLen;i++){
+                var item = JSON.parse(tagsArr[i]);
+                var obj = {'articleId':articleId,'tagName':item.tagName};
+                tagArr.push(obj);
+            }
+            articleProxy.batchCreateArticleTag(tagArr,function(data){
+                var objRes = {};
+                objRes.tags = tagArr;
+                objRes.article = article;
+
+                res.json(commonResponse.success(objRes));
+            });
+        });
+
+        articleProxy.createArticle(title,content,'1',function(article){
+            ep.emit('createArticleUser',article);
+        });
 
     }catch(ex){
         next(ex);

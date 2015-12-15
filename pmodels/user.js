@@ -3,6 +3,7 @@
  * Created by scj-mo on 2015/12/6.
  */
 var mysqlCient   =   require("./index");
+
 var User = mysqlCient.sequelize.define('T_B_USER',
     {
         id : {
