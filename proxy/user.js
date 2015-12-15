@@ -38,9 +38,13 @@ exports.createUser              =   function(loginName,pwd,callback){
  * @param callback
  */
 exports.getUserByUserName       =   function(loginName,callback){
-        User.findOne({
-            'where': {
+    User.findOne({
+            where: {
                 'USER_NAME': loginName
+            },
+            include:{
+                model:UserInfo,
+                as:'UserInfo'
             }
         }).then(function(u){
             callback(u);

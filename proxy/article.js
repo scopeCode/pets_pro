@@ -8,7 +8,7 @@ var Article             =   models.Article;
 var ArticleUser         =   models.ArticleUser;
 var ArticleFile         =   models.ArticleFile;
 var ArticleTag          =   models.ArticleTag;
-var sequelize           =   models.sequelize;
+
 /**
  * 创建文章表
  * @param title
@@ -88,18 +88,26 @@ exports.batchCreateArticleTag   =   function(tags,callback){
  */
 exports.queryArticleList       =   function(userId,callback){
 
-    var sql = [];
-    sql.push("SELECT u.`USER_ID`,u.CREATOR,a.`TITLE`,a.`TYPE` as articleType,a.`CONTENT`,a.`CREATED`,_u.`NICK`,_u.`PHOTO`,a.ID as articleId");
-    sql.push(" FROM t_b_article_user u");
-    sql.push(" LEFT JOIN t_b_article      a ON a.`ID` = u.`ID`");
-    sql.push(" LEFT JOIN t_b_user_ex	    _u ON _u.USER_ID = u.CREATOR ");
-    sql.push(" WHERE u.USER_ID = " + userId);
-    sql.push(" ORDER BY u.CREATED DESC");
+    ArticleUser.findAll(
+        {
+            where:{
+                'USER_ID':userId
+            },
+            include:[
+                {
+                    model:Article,
+                    as:'Article'
+                },
+                {
+                    model:ArticleFile,
+                    as:'ArticleFile'
+                }
+            ]
+        }
+    ).then(function(data){
+            callback(data);
+        });
 
-    sequelize.query(sql.join(''),
-        {logging : true, plain : false,  raw : true}).then(function(res){
-            callback(res[0]);
-    });
 };
 
 /**

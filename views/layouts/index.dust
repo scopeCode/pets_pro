@@ -55,8 +55,8 @@
 
                             <li>
                                 <a href="javascript:;;">
-                                    <img src="{?userInfo.PHOTO}{userInfo.PHOTO} {:else}/img/img_normal.png {/userInfo.PHOTO}" width="36px" height="36px" style="margin-right:5px;">
-                                    {userInfo.NICK}
+                                    <img src="{?user.UserInfo.photo}http://7xjik2.com1.z0.glb.clouddn.com/{user.UserInfo.photo}{:else}/img/img_normal.png{/user.UserInfo.photo}" width="36px" height="36px" style="margin-right:5px;">
+                                    {user.UserInfo.userNick}
                                 </a>
                             </li>
 

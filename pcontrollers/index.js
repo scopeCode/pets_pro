@@ -14,16 +14,15 @@ var articleProxy     =   require('../proxy/article');
  */
 exports.show = function (req, res, next) {
     try{
-        var userId  = req.session.user.user.id;
-        articleProxy.queryArticleList(userId,function(data){
+        var userObj =   req.session.user.user;
+       // var userId  = userObj.id;
 
-            res.render('index',
-                {
-                    'user':req.session.user.user,
-                    'userInfo':req.session.user.userInfo,
-                    'data':data
-                });
+        articleProxy.queryArticleList(userObj.id,function(data){
+            var data = data;
         });
+
+        res.render('index',{'user':userObj});
+
 
      }catch(ex){
         next(ex);

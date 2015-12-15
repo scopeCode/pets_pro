@@ -68,10 +68,10 @@ module.exports = function(dust){
      * @param bodies
      * @param params
      */
-    /*dust.helper.tagList =    function (chunk, context, bodies, params) {
-        var articleId   =   params.articleId;
-
-        return "";
-    };*/
+    dust.helpers.trim =    function (chunk, context, bodies, params) {
+        var _value   =   params.value;
+        _value  =  _value.replaceAll(" ","");
+        return chunk.write(_value);
+    };
 
 };

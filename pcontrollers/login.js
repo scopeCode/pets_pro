@@ -68,11 +68,11 @@ exports.login   =   function(req,res,next){
     }
     // END 验证信息的正确性
 
-    ep.on('loginResultOpt',function(user,userInfo){
+    ep.on('loginResultOpt',function(user){
         var md5Str  =   utils.md5(pwd,'base64');
         if(user.userPwd    ==  md5Str){
             user.userPwd = '';
-            req.session.user    =   {'user':user,'userInfo':userInfo};
+            req.session.user    =   {'user':user};
             res.json(commonResponse.success());
         }else{
             ep.emit('prop_err', '密码输入有误.');
@@ -85,9 +85,7 @@ exports.login   =   function(req,res,next){
                 ep.emit('prop_err', '该用户已被管理员屏蔽.');
             }
             else{
-                    userProxy.getUserInfoById(user.id,function(userInfo){
-                        ep.emit('loginResultOpt',user,userInfo);
-                    });
+                ep.emit('loginResultOpt',user);
             }
         }else{
             ep.emit('prop_err', '该用户不存在.');

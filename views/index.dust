@@ -40,7 +40,7 @@
                        <div class="media">
                           <div class="media-left">
                               <a href="javascript:;;">
-                                  <img src="{?PHOTO}http://7xjik2.com1.z0.glb.clouddn.com/{PHOTO}{:else}/img/img_normal.png{/PHOTO}" width="64px" height="64px">
+                                  <img src="{?user.UserInfo.photo}http://7xjik2.com1.z0.glb.clouddn.com/{user.UserInfo.photo}{:else}/img/img_normal.png{/user.UserInfo.photo}" width="64px" height="64px">
                               </a>
                           </div>
                           <div class="media-body">
