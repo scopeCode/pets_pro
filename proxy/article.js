@@ -8,6 +8,8 @@ var Article             =   models.Article;
 var ArticleUser         =   models.ArticleUser;
 var ArticleFile         =   models.ArticleFile;
 var ArticleTag          =   models.ArticleTag;
+var ArticleLog          =   models.ArticleLog;
+var ArticleHot          =   models.ArticleHot;
 
 /**
  * 创建文章表
@@ -22,6 +24,26 @@ exports.createArticle          =   function(title,content,type,callback){
         content :content,
         type    :type
     }).then(callback);
+};
+
+exports.updateArticleHotCnt     =   function(articleId,type,callback){
+    switch (type){
+        case "1":{//加1
+            /*Article.findOneAndUpdate
+            Article.update(
+                {
+                    HOT_COUNT:HOT_COUNT+1
+                },
+                {
+                    where:{
+                        'ARTICLE_ID':articleId
+                }
+            }).then(callback);*/
+        }break;
+        case "2":{//减1
+
+        }break;
+    }
 };
 
 /**
@@ -81,6 +103,34 @@ exports.batchCreateArticleTag   =   function(tags,callback){
     ArticleTag.bulkCreate(tags).then(callback);
 };
 
+/***
+ * 添加文章热度的对应关系
+ * @param userId
+ * @param articleId
+ * @param callback
+ */
+exports.createArticleHot        =   function(userId,articleId,callback){
+    ArticleHot.create({
+        userId:userId,
+        articleId:articleId
+    }).then(callback);
+};
+
+/***
+ * 删除文章热度的对应关系
+ * @param userId
+ * @param articleId
+ * @param callback
+ */
+exports.deleteArticleHot        =   function(userId,articleId,callback){
+    ArticleHot.delete({
+        userId:userId,
+        articleId:articleId
+    }).then(callback);
+};
+
+
+//------------------------------------------------------------------------------------//
 /**
  * 根据Uid查询属于他的文章信息
  * @param userId
@@ -99,11 +149,22 @@ exports.queryArticleList       =   function(userId,callback){
                 },
                 {
                     model:ArticleFile,
-                    as:'ArticleFile'
+                    as:'ArticleFile',
+                    where:{
+                        'STATUS':true
+                    }
                 },
                 {
                     model:ArticleTag,
                     as:'ArticleTag'
+                },
+                {
+                    model:ArticleHot,
+                    as:'ArticleHot',
+                    where:{
+                        'USER_ID':userId,
+                        'STATUS':true
+                    }
                 }
             ],
             order:"`T_B_ARTICLE`.`CREATED` DESC"

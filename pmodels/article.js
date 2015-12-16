@@ -28,6 +28,12 @@ var Article = mysqlCient.sequelize.define('T_B_ARTICLE',
             field:"TYPE",
             comment:'文章的类型 1:文字2：图片3：链接4：视频'
         },
+        count:{
+            type:mysqlCient.Sequelize.INTEGER,
+            field:"HOT_COUNT",
+            defaultValue:0,
+            comment:'文章的热度值'
+        },
         status:{
             type:mysqlCient.Sequelize.BOOLEAN,
             field:"STATUS",
@@ -180,7 +186,59 @@ var ArticleUser = mysqlCient.sequelize.define('T_B_ARTICLE_USER',
     }
 );
 
-var ArticleUser = mysqlCient.sequelize.define('T_B_ARTICLE_HOT',
+var ArticleLog = mysqlCient.sequelize.define('T_B_ARTICLE_LOG',
+    {
+        id : {
+            type : mysqlCient.Sequelize.BIGINT,
+            autoIncrement : true,
+            primaryKey : true,
+            unique : true,
+            field:'ID',
+            comment:'主键,自动增长 bigint 长整形'
+        },
+        articleId:{
+            type:mysqlCient.Sequelize.BIGINT,
+            field:"ARTICLE_ID",
+            comment:'文章表的ID'
+        },
+        userId:{
+            type:mysqlCient.Sequelize.BIGINT,
+            field:"USER_ID",
+            comment:'用户的ID'
+        },
+        type:{
+            type:mysqlCient.Sequelize.INTEGER,
+            field:"TYPE",
+            comment:'类型操作符'
+        },
+        content:{
+            type:mysqlCient.Sequelize.STRING,
+            field:"CONTENT",
+            comment:'文章日志的内容'
+        },
+        status:
+        {
+            type:mysqlCient.Sequelize.BOOLEAN,
+            field:"STATUS",
+            defaultValue: true,
+            comment:'状态'
+        },
+        created:{
+            type:mysqlCient.Sequelize.DATE,
+            field:"CREATED",
+            defaultValue:mysqlCient.Sequelize.NOW,
+            comment:'创建时间.'
+        }
+    },
+    {
+        freezeTableName: true,  //冻结表名_使用自己设定的表名进行定义
+        timestamps:false,       //排除掉,默认的 updateAt createdAt 两个字段
+        tableName:'T_B_ARTICLE_LOG'    //自定义表名
+    }
+);
+
+
+var ArticleHot = mysqlCient.sequelize.define('T_B_ARTICLE_HOT',
     {
         id : {
             type : mysqlCient.Sequelize.BIGINT,
@@ -205,7 +263,7 @@ var ArticleUser = mysqlCient.sequelize.define('T_B_ARTICLE_HOT',
             type:mysqlCient.Sequelize.BOOLEAN,
             field:"STATUS",
             defaultValue: true,
-            comment:'文件的状态'
+            comment:'状态'
         },
         created:{
             type:mysqlCient.Sequelize.DATE,
@@ -215,18 +273,18 @@ var ArticleUser = mysqlCient.sequelize.define('T_B_ARTICLE_HOT',
         }
     },
     {
-        freezeTableName: true,  //冻结表名_使用自己设定的表名进行定义
-        timestamps:false,       //排除掉,默认的 updateAt createdAt 两个字段
-        tableName:'T_B_ARTICLE_HOT'    //自定义表名
+        freezeTableName: true,          //冻结表名_使用自己设定的表名进行定义
+        timestamps:false,               //排除掉,默认的 updateAt createdAt 两个字段
+        tableName:'T_B_ARTICLE_HOT'     //自定义表名
     }
 );
 
-exports.Article = Article;
-exports.ArticleFile = ArticleFile;
-exports.ArticleTag = ArticleTag;
-exports.ArticleUser = ArticleUser;
-exports.ArticleHot = ArticleHot;
-
+exports.Article     =   Article;
+exports.ArticleFile =   ArticleFile;
+exports.ArticleTag  =   ArticleTag;
+exports.ArticleUser =   ArticleUser;
+exports.ArticleLog  =   ArticleLog;
+exports.ArticleHot  =   ArticleHot;
 
 
 Article.hasMany(ArticleFile,        {as: 'ArticleFile',foreignKey:'ARTICLE_ID'});
@@ -237,6 +295,9 @@ ArticleTag.belongsToMany(Article,   {as: 'Article',through:'ARTICLE_ID'});
 
 Article.hasOne(ArticleUser,         {as: 'ArticleUser',foreignKey:'ARTICLE_ID'});
 ArticleUser.belongsTo(Article,      {as: 'Article',foreignKey:'ARTICLE_ID'});
+
+Article.hasMany(ArticleLog,         {as: 'ArticleLog',foreignKey:'ARTICLE_ID'});
+ArticleLog.belongsToMany(Article,   {as: 'Article',through:'ARTICLE_ID'});
 
 Article.hasMany(ArticleHot,         {as: 'ArticleHot',foreignKey:'ARTICLE_ID'});
 ArticleHot.belongsToMany(Article,   {as: 'Article',through:'ARTICLE_ID'});

@@ -18,7 +18,7 @@ var userIndex   =   (function(){
 
     //标签模板项
     var template    =   {
-        tagItem :   '<span class="tag label label-info"> #{name} <span data-role="remove"></span></span>',
+        tagItem :   '<span class="tag label label-info" data="#{name}">#{name}<span data-role="remove"></span></span>',
     };
 
     var optIndex    =   {
@@ -41,7 +41,17 @@ var userIndex   =   (function(){
                     return false;
                 }
 
-                var  tag        =    $.trim($('#divTextArticleTag').text());
+                var  tag        =    [];
+
+                var  tagList    =   $('#divTextArticleTag .label-info');
+                var  tagListLen =   tagList.length;
+                for(var i=0;i<tagListLen;i++){
+                    var item = tagList[i];
+                    var _name   =   $(item).attr('data');
+                    tag.push(_name);
+                }
+
+                $.trim($('#divTextArticleTag').text());
 
                 //进行后台处理
                 try{
@@ -59,7 +69,7 @@ var userIndex   =   (function(){
                     //设定需要传递的参数
                     cfg.data.push("title="		    +	title);
                     cfg.data.push("content="		+	content);
-                    cfg.data.push("tags="		    +	tag);
+                    cfg.data.push("tags="		    +	tag.join('$$$$$'));
 
                     cfg.start();
 
@@ -127,7 +137,7 @@ var userIndex   =   (function(){
                             tagVal = '#' + tagVal;
                         }
                         var tagHtmlStr  =   template.tagItem.format({name:tagVal});
-                        $('#inputTextArticleTag').before(tagHtmlStr);
+                        $('#inputTextArticleTag').before($.trim(tagHtmlStr));
                         $('#inputTextArticleTag').val('');
 
                         tagLen    =    $('#divTextArticleTag .label-info').length;

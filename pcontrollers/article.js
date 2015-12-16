@@ -51,7 +51,7 @@ exports.createTextArticle = function (req, res, next) {
         ep.on('createArticleTag',function(tags,article){
             var articleId = article.id;
             var tagArr = [];
-            var tagsArr = tags.split(' ');
+            var tagsArr = tags.split('$$$$$');
             var tagsArrLen = tagsArr.length;
             for(var i=0;i<tagsArrLen;i++){
                 var item = tagsArr[i];
@@ -75,5 +75,31 @@ exports.createTextArticle = function (req, res, next) {
 
     }catch(ex){
         next(ex);
+    }
+};
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.articleHotSet   =   function (req, res, next) {
+
+    var articleId   =   req.body.articleId;
+    var optType     =   req.body.optType; //1:添加 2:取消热度
+    var userId      =   req.session.user.user.id;
+
+    switch(optType){
+        case "1":{
+            //添加 articleHot 一条记录
+            //更新 文章表的count + 1;
+            //日志表的信息插入一条
+        }break;
+        case "2":{
+            //删除 articleHot 的状态
+            //更新 文章表的count - 1;
+            //日志删除
+        }break;
     }
 };

@@ -25,5 +25,5 @@ module.exports = function (app) {
     //[文章处理 ]-----------------------------------------------------------------\\
     app.route('/user/article/createTextArticle').all(auth.loginRequired).
         post(article.createTextArticle);
-
+    app.route('/user/article/tag/').all(auth.loginRequired).get();
 };

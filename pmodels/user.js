@@ -91,6 +91,12 @@ var UserInfo = mysqlCient.sequelize.define('T_B_USER_EX',
             comment:'用户的头像信息,除非特殊情况,一般都是hash码',
             defaultValue:''
         },
+        bgPhoto:{
+            type:mysqlCient.Sequelize.STRING,
+            field:"BG_PHOTO",
+            comment:'用户的背景,除非特殊情况,一般都是hash码',
+            defaultValue:''
+        },
         sign:{
             type:mysqlCient.Sequelize.STRING,
             field:"SIGN",
