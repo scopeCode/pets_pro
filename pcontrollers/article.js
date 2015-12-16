@@ -90,11 +90,28 @@ exports.articleHotSet   =   function (req, res, next) {
     var optType     =   req.body.optType; //1:添加 2:取消热度
     var userId      =   req.session.user.user.id;
 
+    var ep  =   new EventProxy();
+    ep.fail(next);
+
+    ep.on('updateArticleCnt', function (articleId) {
+        //更新 文章表的count + 1;
+        articleProxy.updateArticleHotCnt(articleId,type,function(data){
+            ep.emit('inertArticleLog',articleId);
+        });
+    });
+    ep.on('inertArticleLog', function (articleId) {
+        //日志表的信息插入一条
+        articleProxy.createArticleLog(articleId,userId,'1',req.session.user.userInfo.nick + ',攒了此贴.',function(){
+            res.json(commonResponse.success());
+        });
+    });
+
     switch(optType){
         case "1":{
             //添加 articleHot 一条记录
-            //更新 文章表的count + 1;
-            //日志表的信息插入一条
+            articleProxy.createArticleHot(userId,articleId,function(articleHot){
+                ep.emit('updateArticleCnt',articleId);
+            });
         }break;
         case "2":{
             //删除 articleHot 的状态

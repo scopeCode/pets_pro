@@ -29,19 +29,26 @@ exports.createArticle          =   function(title,content,type,callback){
 exports.updateArticleHotCnt     =   function(articleId,type,callback){
     switch (type){
         case "1":{//加1
-            /*Article.findOneAndUpdate
             Article.update(
                 {
-                    HOT_COUNT:HOT_COUNT+1
+                    'HOT_COUNT':"`T_B_ARTICLE`.`HOT_COUNT` + 1"
                 },
                 {
                     where:{
                         'ARTICLE_ID':articleId
                 }
-            }).then(callback);*/
+            }).then(callback);
         }break;
         case "2":{//减1
-
+            Article.update(
+                {
+                    'HOT_COUNT':"`T_B_ARTICLE`.`HOT_COUNT` - 1"
+                },
+                {
+                    where:{
+                        'ARTICLE_ID':articleId
+                    }
+                }).then(callback);
         }break;
     }
 };
@@ -128,8 +135,22 @@ exports.deleteArticleHot        =   function(userId,articleId,callback){
         articleId:articleId
     }).then(callback);
 };
-
-
+/**
+ * 文章的操作记录表
+ * @param articleId
+ * @param userId
+ * @param type
+ * @param content
+ * @param callback
+ */
+exports.createArticleLog        =   function(articleId,userId,type,content,callback){
+    ArticleLog.create({
+        articleId:articleId,
+        userId:userId,
+        type:type,
+        content:content
+    }).then(callback);
+};
 //------------------------------------------------------------------------------------//
 /**
  * 根据Uid查询属于他的文章信息
@@ -149,22 +170,16 @@ exports.queryArticleList       =   function(userId,callback){
                 },
                 {
                     model:ArticleFile,
-                    as:'ArticleFile',
-                    where:{
-                        'STATUS':true
-                    }
+                    as:'ArticleFile'
                 },
                 {
                     model:ArticleTag,
                     as:'ArticleTag'
-                },
+                }
+                ,
                 {
                     model:ArticleHot,
-                    as:'ArticleHot',
-                    where:{
-                        'USER_ID':userId,
-                        'STATUS':true
-                    }
+                    as:'ArticleHot'
                 }
             ],
             order:"`T_B_ARTICLE`.`CREATED` DESC"
@@ -190,3 +205,4 @@ exports.querArtileFiles      = function(articleId,callback){
         callback(data);
     });
 };
+

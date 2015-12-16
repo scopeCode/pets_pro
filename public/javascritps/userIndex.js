@@ -157,12 +157,84 @@ var userIndex   =   (function(){
                 }
             });
 
+        },//build end
+        clickHotCnt:function(_this){
+            var item = $(_this);
+            var articleId = item.attr('articleId');
+            $('#articleHotInfo'+articleId).show();
+            //--远程读取数据信息 倒叙排列
+        },
+        clickSetArticleHot:function(_this){
+            var item  = $(_this);
+            var isActive    =   item.hasClass('active');
+            var opt     =   isActive ? "2" : "1"; //1为加 2为减
+
+            //进行后台处理
+            try{
+
+                var cfg = {
+                    url		    :	"/user/article/updateArticleHotCnt",
+                    data		:	[],
+                    method	    :	"POST",
+                    start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                    end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                };
+
+
+                //设定需要传递的参数
+                cfg.data.push("articleId="		    +	title);
+                cfg.data.push("optType="		    +	content);
+
+                cfg.start();
+
+                $.ajax({
+                    url         :   cfg.url,
+                    method      :   cfg.method,
+                    data        :   cfg.data.join('&'),
+                    dataType    :   'json',
+                    success     :   function(json){
+                        try{
+                            if(json.result) {
+                                message.msg('操作成功.');
+                            }else{
+                                message.msg('操作失败:' +   json.msg);
+                            }
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    },
+                    error       :   function(xhr){
+                        try{
+                            ajaxFailure(xhr);
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    }
+                });
+            }catch(ex){
+                log(ex);
+            }//catch(ex) end
         }
     };
 
     return {
         build   :   function(){
             optIndex.build();
+        },
+        clickHotCnt:function(_this){
+            optIndex.clickHotCnt(_this);
+        },
+        clickSetArticleHot:function(_this){
+            optIndex.clickSetArticleHot(_this);
+        },
+        tranlateArticle:function(_this){
+            //自己不能转发自己的文章直接屏蔽掉
         }
     };
 })();

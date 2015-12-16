@@ -89,12 +89,12 @@
                               </div>
 
                               <div class="content_bottom">
-                                  <a class="text-muted" href="javascript:;;">{count}热度</a>
+                                  <a class="text-muted" href="javascript:;;" articleId="{id}" onclick="userIndex.clickHotCnt(this)">{count}热度</a>
 
                                     <!--鼠标点击热度--><!-- 弹出时给body加一个class="modal-open" -->
-                                    <div class="hot-info">
+                                    <div class="hot-info" id="articleHotInfo{id}">
                                       <div class="hot-inner">
-                                        <ul>
+                                        <ul id="artileLogList{id}">
                                           <li>
                                             <div class="media">
                                               <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
@@ -102,76 +102,23 @@
                                               <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
                                             </div>
                                           </li>
-                                          <li>
-                                            <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
-                                              <div class="media-body"> 仰望明天1 评价了此贴 </div>
-                                              <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
-                                            </div>
-                                          </li>
-                                          <li>
-                                            <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
-                                              <div class="media-body"> 仰望明天2 攒了此贴 </div>
-                                              <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
-                                            </div>
-                                          </li>
-                                          <li>
-                                            <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
-                                              <div class="media-body"> 仰望明天3 从仰望明天1处转载此贴载此贴载此贴 </div>
-                                              <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
-                                            </div>
-                                          </li>
-                                          <li>
-                                            <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
-                                              <div class="media-body"> 仰望明天1 评价了此贴 </div>
-                                              <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
-                                            </div>
-                                          </li>
-                                          <li>
-                                            <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
-                                              <div class="media-body"> 仰望明天2 攒了此贴 </div>
-                                              <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
-                                            </div>
-                                          </li>
-                                          <li>
-                                            <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
-                                              <div class="media-body"> 仰望明天3 从仰望明天1处转载此贴载此贴载此贴 </div>
-                                              <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
-                                            </div>
-                                          </li>
-                                          <li>
-                                            <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
-                                              <div class="media-body"> 仰望明天1 评价了此贴 </div>
-                                              <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
-                                            </div>
-                                          </li>
-                                          <li>
-                                            <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
-                                              <div class="media-body"> 仰望明天2 攒了此贴 </div>
-                                              <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
-                                            </div>
-                                          </li>
-                                          <li>
-                                            <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
-                                              <div class="media-body"> 仰望明天3 从仰望明天1处转载此贴载此贴载此贴 </div>
-                                              <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
-                                            </div>
-                                          </li>
                                         </ul>
                                       </div>
                                     </div>
                                     <!--end鼠标移上去显示个人信息的地方-->
+
                                 <div class="bottom_tool">
-                                    <a class="fui-link mrm" href="#" title="转发"></a>
-                                    <a class="fui-heart {#ArticleHot}active{/ArticleHot}" href="javascript:;;" title="喜欢"></a> </div>
+
+                                    {@if cond="{ArticleUser.userId}-{ArticleUser.creator} != 0"}
+                                        <a class="fui-link mrm" href="javascript:;;" title="转发" onclick=""></a>
+                                    {/if}
+
+                                    {#ArticleHot}
+                                            {@if cond="{userId}-{user.UserInfo.userId} == 0"}899{/if}
+                                            {@if cond="'{userId}' === '{user.UserInfo.userId}'" }<a class="fui-heart" href="javascript:;;" title="喜欢"></a>{/if}
+                                        {:else}
+                                            <a class="fui-heart" href="javascript:;;" title="喜欢"></a>
+                                    {/ArticleHot}
                                 </div>
                             </div>
                           </div>

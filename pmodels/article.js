@@ -3,6 +3,8 @@
  * Created by scj-mo on 2015/12/8.
  */
 var mysqlCient   =   require("./index");
+var UserInfo            =   require('./user').UserInfo;
+
 var Article = mysqlCient.sequelize.define('T_B_ARTICLE',
     {
         id : {
@@ -209,7 +211,7 @@ var ArticleLog = mysqlCient.sequelize.define('T_B_ARTICLE_LOG',
         type:{
             type:mysqlCient.Sequelize.INTEGER,
             field:"TYPE",
-            comment:'类型操作符'
+            comment:'类型操作符  1:热度 2:评论  3：转发'
         },
         content:{
             type:mysqlCient.Sequelize.STRING,
@@ -286,15 +288,17 @@ exports.ArticleUser =   ArticleUser;
 exports.ArticleLog  =   ArticleLog;
 exports.ArticleHot  =   ArticleHot;
 
+//Article.hasOne(UserInfo,            {as: 'UserInfo',foreignKey:'USER_ID'});
+//UserInfo.belongsTo(Article,         {as: 'Article',foreignKey:'USER_ID'} );
 
 Article.hasMany(ArticleFile,        {as: 'ArticleFile',foreignKey:'ARTICLE_ID'});
 ArticleFile.belongsToMany(Article,  {as: 'Article',through:'ARTICLE_ID'});
 
-Article.hasMany(ArticleTag,         {as: 'ArticleTag',foreignKey:'ARTICLE_ID'});
-ArticleTag.belongsToMany(Article,   {as: 'Article',through:'ARTICLE_ID'});
-
 Article.hasOne(ArticleUser,         {as: 'ArticleUser',foreignKey:'ARTICLE_ID'});
 ArticleUser.belongsTo(Article,      {as: 'Article',foreignKey:'ARTICLE_ID'});
+
+Article.hasMany(ArticleTag,         {as: 'ArticleTag',foreignKey:'ARTICLE_ID'});
+ArticleTag.belongsToMany(Article,   {as: 'Article',through:'ARTICLE_ID'});
 
 Article.hasMany(ArticleLog,         {as: 'ArticleLog',foreignKey:'ARTICLE_ID'});
 ArticleLog.belongsToMany(Article,   {as: 'Article',through:'ARTICLE_ID'});
