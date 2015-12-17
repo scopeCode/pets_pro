@@ -202,17 +202,105 @@ exports.queryArticleList       =   function(userId,callback){
 };
 
 /**
- * 查询文章所属的图片文件
+ * 利用sql进行查询文件信息 并整理对应的关系
  * @param articleId
  * @param callback
  */
-exports.querArtileFiles      = function(articleId,callback){
-    ArticleFile.findAll({
-        where: {
-            articleId: articleId
+exports.queryArticleListEx     = function(userId,callback){
+    var sql = [];
+    sql.push('SELECT ');
+    sql.push('	a.id as aId,a.TITLE as aTitle,a.CONTENT as aContent,a.CREATED as aCreated,a.HOT_COUNT as aHotCount,a.TYPE as aType,');
+    sql.push('	u.ARTICLE_ID as uArticleId,u.CREATOR as uCreator,u.USER_ID as uUserId,');
+    sql.push(' f.ARTICLE_ID as fArticleId,f.FILE_HASH as fFileHash,');
+    sql.push('  t.ARTICLE_ID as tArticleId,t.TAG_NAME as tTagName,');
+    sql.push('  h.ARTICLE_ID as hArticleId,h.USER_ID as  hUserId,');
+    sql.push('  e.BG_PHOTO   as eBgPhoto,e.NICK as eNick,e.PHOTO as ePhoto,e.SIGN as eSign');
+    sql.push(' FROM t_b_article  a');
+    sql.push('	LEFT JOIN t_b_article_user u on u.ARTICLE_ID = a.ID  AND u.USER_ID = ' + userId +" ");
+    sql.push('	LEFT JOIN t_b_article_file f on f.ARTICLE_ID = a.ID');
+    sql.push('	LEFT JOIN t_b_article_tag  t on t.ARTICLE_ID = a.ID');
+    sql.push('	LEFT JOIN t_b_article_hot  h on h.ARTICLE_ID = a.ID');
+    sql.push('	LEFT JOIN t_b_user_ex      e on e.USER_ID    = u.USER_ID ');
+    sql.push('ORDER BY a.CREATED desc;');
+
+    models.sequelize.query(sql.join('')).spread(function(results, metadata) {
+
+        var resultData = [];
+        var temp =[];
+        var len = metadata.length;
+
+        var articleList = [
+
+        ]
+
+        var tempObj = {
+            base:{},
+            tag:[],
+            user:{},
+            hot:[]
+        };
+
+        for(var i=0;i<len;i++){
+            var item = metadata[i];
+
+            var id          =   item.aId;
+            var title       =   item.aTitle;
+            var content     =   item.aContent;
+            var created     =   item.aCreated;
+            var hotCount    =   item.aHotCount;
+            var type        =   item.aType;
+            var creator     =   item.uCreator;
+            var userId      =   item.uUserId;
+
+            var fileHash    =   item.fFileHash;
+
+            var tagName     =   item.tTagName;
+
+            var bgPhoto     =   item.eBgPhoto;
+            var nick        =   item.eNick;
+            var photo       =   item.ePhoto;
+            var sign        =   item.eSign;
+
+            //用户信息
+            if(temp[item.id]){//没有
+                if(tempObj.base.length >0){
+                    articleList.push(tempObj);
+                }
+
+                tempObj = {
+                    base:{},
+                    tag:[],
+                    user:{},
+                    hot:[],
+                    file:[]
+                };
+
+                tempObj.base.id          =   id;
+                tempObj.base.title       =   title;
+                tempObj.base.content     =   content;
+                tempObj.base.created     =   created;
+                tempObj.base.hotCount    =   hotCount;
+                tempObj.base.type        =   type;
+                tempObj.base.creator     =   creator;
+                tempObj.base.userId      =   userId;
+
+                tempObj.user.bgPhoto     =   bgPhoto;
+                tempObj.user.nick        =   nick;
+                tempObj.user.photo       =   photo;
+                tempObj.user.sign        =   sign;
+
+                tempObj.tag.push({tagName:tagName});
+                tempObj.file.push({fileHash:fileHash});
+
+            }else{
+
+            }
+
+
         }
-    }).then(function(data){
-        callback(data);
+
+
+        callback(resultData);
     });
 };
 

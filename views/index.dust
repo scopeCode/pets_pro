@@ -111,7 +111,11 @@
                                     {@if cond="{ArticleUser.userId}-{ArticleUser.creator} != 0"}
                                         <a class="fui-link mrm" href="javascript:;;" title="转发" onclick=""></a>
                                     {/if}
-                                    <a class='fui-heart {@IsShowHot value=ArticleHot uid=user.UserInfo.userId /}' href="javascript:;;" title="喜欢" articleId='{id}' onclick="userIndex.clickSetArticleHot(this)"></a>
+
+                                    {@if cond="{ArticleUser.userId}-{ArticleUser.creator} != 0"}
+                                        <a class='fui-heart {@IsShowHot value=ArticleHot uid=user.UserInfo.userId /}' href="javascript:;;" title="喜欢" articleId='{id}' onclick="userIndex.clickSetArticleHot(this)"></a>
+                                    {/if}
+
                                 </div>
                             </div>
                           </div>
