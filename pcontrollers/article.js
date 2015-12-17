@@ -95,13 +95,22 @@ exports.articleHotSet   =   function (req, res, next) {
 
     ep.on('updateArticleCnt', function (articleId) {
         //更新 文章表的count + 1;
-        articleProxy.updateArticleHotCnt(articleId,type,function(data){
-            ep.emit('inertArticleLog',articleId);
+        articleProxy.updateArticleHotCnt(articleId,optType,function(data){
+            switch (optType){
+                case  "1":{ep.emit('inertArticleLog',articleId);}break;
+                case  "2":{ep.emit('deleteArticleLog',articleId,userId);}break;
+            }
+        });
+    });
+    ep.on('deleteArticleLog', function (articleId) {
+        //日志表的信息插入一条
+        articleProxy.deleteArticleLog(articleId,userId,'1',function(){
+            res.json(commonResponse.success());
         });
     });
     ep.on('inertArticleLog', function (articleId) {
         //日志表的信息插入一条
-        articleProxy.createArticleLog(articleId,userId,'1',req.session.user.userInfo.nick + ',攒了此贴.',function(){
+        articleProxy.createArticleLog(articleId,userId,'1',req.session.user.user.UserInfo.userNick + ',攒了此贴.',function(){
             res.json(commonResponse.success());
         });
     });
@@ -115,8 +124,9 @@ exports.articleHotSet   =   function (req, res, next) {
         }break;
         case "2":{
             //删除 articleHot 的状态
-            //更新 文章表的count - 1;
-            //日志删除
+            articleProxy.deleteArticleHot(userId,articleId,function(articleHot){
+                ep.emit('updateArticleCnt',articleId);
+            })
         }break;
     }
 };

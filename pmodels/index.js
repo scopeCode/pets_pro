@@ -30,8 +30,8 @@ exports.Sequelize  = Sequelize;
 exports.mysqlCient = mysql;
 
 //引入数据表的对象
-var User                =   require('./user').User;
-var UserInfo            =   require('./user').UserInfo;
+var User                =   require('./article').User;
+var UserInfo            =   require('./article').UserInfo;
 var Article             =   require('./article').Article;
 var ArticleUser         =   require('./article').ArticleUser;
 var ArticleFile         =   require('./article').ArticleFile;
@@ -53,6 +53,7 @@ exports.SysLogger           =   SysLogger;
 
 //设定对应的逻辑
 
+/*
 User.sync({force: true}).then(function () {});
 UserInfo.sync({force: true}).then(function () {});
 Article.sync({force: true}).then(function () {});
@@ -61,4 +62,4 @@ ArticleUser.sync({force: true}).then(function () {});
 ArticleTag.sync({force: true}).then(function () {});
 ArticleLog.sync({force: true}).then(function () {});
 ArticleHot.sync({force: true}).then(function () {});
-SysLogger.sync({force: true}).then(function () {});
+SysLogger.sync({force: true}).then(function () {});*/

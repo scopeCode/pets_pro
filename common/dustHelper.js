@@ -21,57 +21,43 @@ module.exports = function(dust){
             timestamp,
             month,
             date,
-            year;
+            year,
+            hour,
+            min,
+            second;
 
         timestamp = new Date(value);
-        month = timestamp.getMonth() + 1;
-        date = timestamp.getDate();
-        year = timestamp.getFullYear();
+        month   =   timestamp.getMonth() + 1;
+        date    =   timestamp.getDate();
+        year    =   timestamp.getFullYear();
+        hour    =   timestamp.getHours();
+        min     =   timestamp.getMinutes();
+        second  =   timestamp.getSeconds();
 
-        return chunk.write(year + '/' + month + '/' + date);
+        return chunk.write(year + '/' + month + '/' + date +' ' + hour+':'+min+':'+second);
     };
 
     /**
-     * 获取文章的图片信息
+     *
      * @param chunk
      * @param context
      * @param bodies
      * @param params
-     * @returns {*}
      */
-    dust.helpers.getArticleFile = function (chunk, context, bodies, params) {
-        var type        =   params.articleType;
-        var articleId   =   params.articleId;
-        type = 2;
-        if(type == 1){
-            return chunk.write('') ;
+    dust.helpers.IsShowHot =    function (chunk, context, bodies, params) {
+        var _value  =   params.value;
+        var _uid    =   params.uid;
+        var _res    =   "";
+        var _len    =   _value.length;
+
+        for(var i=0;i<_len;i++){
+            var userId = _value[i].userId;
+            if(userId == _uid){
+                _res = "active";
+                break;
+            }
         }
-        (function(chunk,articleId){
-            articleProxy.querArtileFiles(articleId,function(data){
-                (function(chunk){
-                    var filesArr = [];
-                    var len = data.length;
-                    for(var i=0;i<len;i++){
-                        var file = data[i];
-                        filesArr.push('<img src="http://7xjik2.com1.z0.glb.clouddn.com/'+file.fileHash+'" style="width:100%">');
-                    }
-                    return chunk.write(filesArr.join(''));
-                })(chunk);
-            });
-        })(chunk,articleId);
-    };
-
-    /**
-     * 获取文章的标签信息
-     * @param chunk
-     * @param context
-     * @param bodies
-     * @param params
-     */
-    dust.helpers.trim =    function (chunk, context, bodies, params) {
-        var _value   =   params.value;
-        _value  =  _value.replaceAll(" ","");
-        return chunk.write(_value);
+        return chunk.write(_res);
     };
 
 };

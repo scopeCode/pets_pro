@@ -167,7 +167,8 @@ var userIndex   =   (function(){
         clickSetArticleHot:function(_this){
             var item  = $(_this);
             var isActive    =   item.hasClass('active');
-            var opt     =   isActive ? "2" : "1"; //1为加 2为减
+            var opt         =   isActive ? "2" : "1"; //1为加 2为减
+            var articleId   =   item.attr('articleId');
 
             //进行后台处理
             try{
@@ -182,8 +183,8 @@ var userIndex   =   (function(){
 
 
                 //设定需要传递的参数
-                cfg.data.push("articleId="		    +	title);
-                cfg.data.push("optType="		    +	content);
+                cfg.data.push("articleId="		    +	articleId);
+                cfg.data.push("optType="		    +	opt);
 
                 cfg.start();
 
@@ -196,6 +197,14 @@ var userIndex   =   (function(){
                         try{
                             if(json.result) {
                                 message.msg('操作成功.');
+                                switch (opt){
+                                    case "1":{
+                                        item.addClass('active');
+                                    }break;
+                                    case "2":{
+                                        item.removeClass('active');
+                                    }break;
+                                }
                             }else{
                                 message.msg('操作失败:' +   json.msg);
                             }

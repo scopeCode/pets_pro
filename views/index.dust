@@ -48,7 +48,7 @@
                               <div class="content_top">
                                  <img src="img/img_user.png" class="content_img" width="36px" height="36px">
                                  {user.UserInfo.userNick}
-                                 <div class="pull-right text-muted">{@formatDate value=user.UserInfo.created /}</div>
+                                 <div class="pull-right text-muted">{@formatDate value=created /}</div>
 
                                 <!--鼠标移上去显示个人信息的地方-->
                                 <div class="person-info" style="display:none;">
@@ -108,17 +108,10 @@
                                     <!--end鼠标移上去显示个人信息的地方-->
 
                                 <div class="bottom_tool">
-
                                     {@if cond="{ArticleUser.userId}-{ArticleUser.creator} != 0"}
                                         <a class="fui-link mrm" href="javascript:;;" title="转发" onclick=""></a>
                                     {/if}
-
-                                    {#ArticleHot}
-                                            {@if cond="{userId}-{user.UserInfo.userId} == 0"}899{/if}
-                                            {@if cond="'{userId}' === '{user.UserInfo.userId}'" }<a class="fui-heart" href="javascript:;;" title="喜欢"></a>{/if}
-                                        {:else}
-                                            <a class="fui-heart" href="javascript:;;" title="喜欢"></a>
-                                    {/ArticleHot}
+                                    <a class='fui-heart {@IsShowHot value=ArticleHot uid=user.UserInfo.userId /}' href="javascript:;;" title="喜欢" articleId='{id}' onclick="userIndex.clickSetArticleHot(this)"></a>
                                 </div>
                             </div>
                           </div>
@@ -156,10 +149,7 @@
                             </div>
                         </li>
                     </items>
-                {:else}
-                    You got an Error: {error}
                 {/getHotBlog}
-
                 <li class="bbn"> <a href="javascript:;;" class="">查看更多达人</a> </li>
             </ul>
         </div>

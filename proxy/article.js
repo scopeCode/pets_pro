@@ -10,6 +10,8 @@ var ArticleFile         =   models.ArticleFile;
 var ArticleTag          =   models.ArticleTag;
 var ArticleLog          =   models.ArticleLog;
 var ArticleHot          =   models.ArticleHot;
+var UserInfo            =   models.UserInfo;
+var User                =   models.User;
 
 /**
  * 创建文章表
@@ -27,30 +29,20 @@ exports.createArticle          =   function(title,content,type,callback){
 };
 
 exports.updateArticleHotCnt     =   function(articleId,type,callback){
+
+    var sql = "";
     switch (type){
         case "1":{//加1
-            Article.update(
-                {
-                    'HOT_COUNT':"`T_B_ARTICLE`.`HOT_COUNT` + 1"
-                },
-                {
-                    where:{
-                        'ARTICLE_ID':articleId
-                }
-            }).then(callback);
+            sql = 'UPDATE t_b_article SET HOT_COUNT = HOT_COUNT + 1 WHERE ID = '+articleId;
         }break;
         case "2":{//减1
-            Article.update(
-                {
-                    'HOT_COUNT':"`T_B_ARTICLE`.`HOT_COUNT` - 1"
-                },
-                {
-                    where:{
-                        'ARTICLE_ID':articleId
-                    }
-                }).then(callback);
+            sql = 'UPDATE t_b_article SET HOT_COUNT = HOT_COUNT - 1 WHERE ID = '+articleId;
         }break;
     }
+
+    models.sequelize.query(sql).spread(function(results, metadata) {
+        callback(results, metadata);
+    });
 };
 
 /**
@@ -130,9 +122,11 @@ exports.createArticleHot        =   function(userId,articleId,callback){
  * @param callback
  */
 exports.deleteArticleHot        =   function(userId,articleId,callback){
-    ArticleHot.delete({
-        userId:userId,
-        articleId:articleId
+    ArticleHot.destroy({
+        where:{
+            userId:userId,
+            articleId:articleId
+        }
     }).then(callback);
 };
 /**
@@ -149,6 +143,22 @@ exports.createArticleLog        =   function(articleId,userId,type,content,callb
         userId:userId,
         type:type,
         content:content
+    }).then(callback);
+};
+/**
+ * 删除文章日志
+ * @param articleId
+ * @param userId
+ * @param type
+ * @param callback
+ */
+exports.deleteArticleLog        =   function(articleId,userId,type,callback){
+    ArticleLog.destroy({
+        where:{
+            articleId:articleId,
+            userId:userId,
+            type:type
+        }
     }).then(callback);
 };
 //------------------------------------------------------------------------------------//
