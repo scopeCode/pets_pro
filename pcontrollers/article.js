@@ -130,3 +130,20 @@ exports.articleHotSet   =   function (req, res, next) {
         }break;
     }
 };
+
+/**
+ *
+ * @param articleId
+ * @param limit
+ * @param pageSize
+ */
+exports.queryArticleLogByArticleId  =   function(req, res, next){
+
+    var articleId =   req.body.articleId;
+    var limit     =   req.body.limit;
+    var pageSize  =   req.body.pageSize;
+
+    articleProxy.queryArticleLog(articleId,limit,pageSize,function(data){
+        res.json(commonResponse.success(data));
+    });
+}

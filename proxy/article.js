@@ -210,34 +210,35 @@ exports.queryArticleListEx     = function(userId,callback){
     var sql = [];
     sql.push('SELECT ');
     sql.push('	a.id as aId,a.TITLE as aTitle,a.CONTENT as aContent,a.CREATED as aCreated,a.HOT_COUNT as aHotCount,a.TYPE as aType,');
-    sql.push('	u.ARTICLE_ID as uArticleId,u.CREATOR as uCreator,u.USER_ID as uUserId,');
-    sql.push(' f.ARTICLE_ID as fArticleId,f.FILE_HASH as fFileHash,');
+    sql.push('	u.ARTICLE_ID as uArticleId,u.CREATOR as uCreator,u.USER_ID as uUserId,u.TYPE as uType, ');
+    sql.push('  f.ARTICLE_ID as fArticleId,f.FILE_HASH as fFileHash,');
     sql.push('  t.ARTICLE_ID as tArticleId,t.TAG_NAME as tTagName,');
     sql.push('  h.ARTICLE_ID as hArticleId,h.USER_ID as  hUserId,');
     sql.push('  e.BG_PHOTO   as eBgPhoto,e.NICK as eNick,e.PHOTO as ePhoto,e.SIGN as eSign');
     sql.push(' FROM t_b_article  a');
-    sql.push('	LEFT JOIN t_b_article_user u on u.ARTICLE_ID = a.ID  AND u.USER_ID = ' + userId +" ");
-    sql.push('	LEFT JOIN t_b_article_file f on f.ARTICLE_ID = a.ID');
-    sql.push('	LEFT JOIN t_b_article_tag  t on t.ARTICLE_ID = a.ID');
-    sql.push('	LEFT JOIN t_b_article_hot  h on h.ARTICLE_ID = a.ID');
-    sql.push('	LEFT JOIN t_b_user_ex      e on e.USER_ID    = u.USER_ID ');
-    sql.push('ORDER BY a.CREATED desc;');
+    sql.push('	LEFT JOIN t_b_article_user u on u.ARTICLE_ID = a.ID ');
+    sql.push('	LEFT JOIN t_b_article_file f on f.ARTICLE_ID = a.ID ');
+    sql.push('	LEFT JOIN t_b_article_tag  t on t.ARTICLE_ID = a.ID ');
+    sql.push('	LEFT JOIN t_b_article_hot  h on h.ARTICLE_ID = a.ID ');
+    sql.push('	LEFT JOIN t_b_user_ex      e on e.USER_ID    = u.CREATOR  ');
+    sql.push('  WHERE u.USER_ID =  ' + userId );
+    sql.push('  ORDER BY a.CREATED desc;');
 
     models.sequelize.query(sql.join('')).spread(function(results, metadata) {
 
-        var resultData = [];
         var temp =[];
         var len = metadata.length;
 
-        var articleList = [
-
-        ]
+        var articleList = [];
 
         var tempObj = {
             base:{},
-            tag:[],
+            tags:[],
+            files:[],
             user:{},
-            hot:[]
+            hot:false,
+            isHot:false,    //是否可以加热
+            isTrans:false   //是否可以转发
         };
 
         for(var i=0;i<len;i++){
@@ -251,9 +252,9 @@ exports.queryArticleListEx     = function(userId,callback){
             var type        =   item.aType;
             var creator     =   item.uCreator;
             var userId      =   item.uUserId;
+            var utype       =   item.uType;//自创 转发
 
             var fileHash    =   item.fFileHash;
-
             var tagName     =   item.tTagName;
 
             var bgPhoto     =   item.eBgPhoto;
@@ -261,18 +262,23 @@ exports.queryArticleListEx     = function(userId,callback){
             var photo       =   item.ePhoto;
             var sign        =   item.eSign;
 
+            var hUserId     =   item.hUserId;
+
             //用户信息
-            if(temp[item.id]){//没有
-                if(tempObj.base.length >0){
+            if(!temp[id]){//没有
+
+                if(tempObj.base.id){
                     articleList.push(tempObj);
                 }
 
                 tempObj = {
                     base:{},
-                    tag:[],
+                    tags:[],
+                    files:[],
                     user:{},
-                    hot:[],
-                    file:[]
+                    hot:false,
+                    isHot:false,    //是否可以加热
+                    isTrans:false   //是否可以转发
                 };
 
                 tempObj.base.id          =   id;
@@ -289,18 +295,57 @@ exports.queryArticleListEx     = function(userId,callback){
                 tempObj.user.photo       =   photo;
                 tempObj.user.sign        =   sign;
 
-                tempObj.tag.push({tagName:tagName});
-                tempObj.file.push({fileHash:fileHash});
+                if(tagName){
+                    tempObj.tags.push({tagName:tagName});
+                }
+                if(fileHash){
+                    tempObj.files.push({fileHash:fileHash});
+                }
+
+                if(creator != userId){
+                    if(hUserId){
+                        tempObj.hot = true;
+                    }
+                    tempObj.isHot = true;
+                }
+
+                if(creator != userId  && utype!=1){ //文章的创建者 和发布者 不是同一个人 且 type 为转发的 则允许转发
+                    tempObj.isTrans = true;
+                }
+                temp[id] = id;
 
             }else{
-
+                if(tagName){
+                    tempObj.tags.push({tagName:tagName});
+                }
+                if(fileHash){
+                    tempObj.files.push({fileHash:fileHash});
+                }
             }
-
-
         }
 
+        //兜底
+        if(tempObj.base.id){
+            articleList.push(tempObj);
+        }
 
-        callback(resultData);
+        callback(articleList);
     });
 };
 
+/**
+ * 查询文章的日志记录表
+ * @param articleId
+ * @param callback
+ */
+exports.queryArticleLog     =   function(articleId,limit,pageSize,callback){
+    var sql = [];
+    sql.push(' SELECT log.ARTICLE_ID,log.CONTENT,log.CREATED,ex.PHOTO,ex.BG_PHOTO,ex.NICK  ');
+    sql.push(' FROM t_b_article_log log ');
+    sql.push(' LEFT JOIN t_b_user_ex ex on ex.USER_ID = log.USER_ID ');
+    sql.push(' WHERE log.ARTICLE_ID = ' + articleId);
+    sql.push(' LIMIT '+ (parseInt(limit) * parseInt(pageSize)) +','+pageSize);
+    models.sequelize.query(sql.join('')).spread(function(results, metadata) {
+        callback(results, metadata);
+    });
+};

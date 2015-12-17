@@ -451,8 +451,10 @@ exports.ArticleUser =   ArticleUser;
 exports.ArticleLog  =   ArticleLog;
 exports.ArticleHot  =   ArticleHot;
 
+
 User.hasOne(UserInfo,               {as: 'UserInfo',foreignKey:'USER_ID'});
 UserInfo.belongsTo(User,            {as: 'User',foreignKey:'USER_ID'});
+
 
 Article.hasMany(ArticleFile,        {as: 'ArticleFile',foreignKey:'ARTICLE_ID'});
 ArticleFile.belongsToMany(Article,  {as: 'Article',through:'ARTICLE_ID'});

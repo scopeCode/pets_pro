@@ -40,31 +40,30 @@
                        <div class="media">
                           <div class="media-left">
                               <a href="javascript:;;">
-                                  <img src="{?user.UserInfo.photo}http://7xjik2.com1.z0.glb.clouddn.com/{user.UserInfo.photo}{:else}/img/img_normal.png{/user.UserInfo.photo}" width="64px" height="64px">
+                                  <img src="{?user.photo}http://7xjik2.com1.z0.glb.clouddn.com/{user.photo}{:else}/img/img_normal.png{/user.photo}" width="64px" height="64px">
                               </a>
                           </div>
                           <div class="media-body">
                             <div class="list_content ">
                               <div class="content_top">
-                                 <img src="img/img_user.png" class="content_img" width="36px" height="36px">
-                                 {user.UserInfo.userNick}
-                                 <div class="pull-right text-muted">{@formatDate value=created /}</div>
+                                  <!-- <img src="/img/img_user.png" class="content_img" width="36px" height="36px"> -->
+                                 {user.nick}
+                                 <div class="pull-right text-muted">{@formatDate value=base.created /}</div>
 
                                 <!--鼠标移上去显示个人信息的地方-->
                                 <div class="person-info" style="display:none;">
                                   <div class="person-inner">
                                     <div class="person-inner-bg">
-
-                                     <img src="img/01.jpg"> </div>
+                                     <img src="/img/01.jpg"> </div>
                                     <div class="person-inner-top"> 仰望明天
                                       <div class="pull-right btn btn-default btn-xs">取消关注</div>
                                     </div>
                                     <div class="person-inner-body"> You will get hit by a serious dose of typography inspiration.
                                       <div class="person-show">
                                         <ul>
-                                          <li> <img src="img/01.jpg"> </li>
-                                          <li> <img src="img/02.jpg"> </li>
-                                          <li> <img src="img/03.jpg"> </li>
+                                          <li> <img src="/img/01.jpg"> </li>
+                                          <li> <img src="/img/02.jpg"> </li>
+                                          <li> <img src="/img/03.jpg"> </li>
                                         </ul>
                                       </div>
                                     </div>
@@ -74,30 +73,30 @@
 
                               </div>
                               <div class="content_body" data-toggle="modal" data-target="#content_body_info">
-                                  <h6> {title}</h6>
-                                  {#ArticleFile}
+                                  <h6> {base.title}</h6>
+                                  {#files}
                                     <img src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
-                                  {/ArticleFile}
+                                  {/files}
                                 <p>
-                                    {content}
+                                    {base.content}
                                 </p>
                                 <p class="mbm">
-                                    {#ArticleTag}
+                                    {#tags}
                                         <a href="#" class="mrm text-muted">{tagName}</a>
-                                    {/ArticleTag}
+                                    {/tags}
                                 </p>
                               </div>
 
                               <div class="content_bottom">
-                                  <a class="text-muted" href="javascript:;;" articleId="{id}" onclick="userIndex.clickHotCnt(this)">{count}热度</a>
+                                  <a class="text-muted" href="javascript:;;" articleId="{base.id}" id="articleId{base.id}" cnt="{base.hotCount}" onclick="userIndex.clickHotCnt(this)">{base.hotCount}热度</a>
 
                                     <!--鼠标点击热度--><!-- 弹出时给body加一个class="modal-open" -->
-                                    <div class="hot-info" id="articleHotInfo{id}">
+                                    <div class="hot-info" id="articleHotInfo{base.id}">
                                       <div class="hot-inner">
-                                        <ul id="artileLogList{id}">
+                                        <ul id="artileLogList{base.id}">
                                           <li>
                                             <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
+                                              <div class="media-left"> <a href="#"> <img src="/img/img_normal.png" width="36px" height="36px"> </a> </div>
                                               <div class="media-body"> 仰望明天 转载此贴 </div>
                                               <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
                                             </div>
@@ -108,13 +107,10 @@
                                     <!--end鼠标移上去显示个人信息的地方-->
 
                                 <div class="bottom_tool">
-                                    {@if cond="{ArticleUser.userId}-{ArticleUser.creator} != 0"}
-                                        <a class="fui-link mrm" href="javascript:;;" title="转发" onclick=""></a>
-                                    {/if}
-
-                                    {@if cond="{ArticleUser.userId}-{ArticleUser.creator} != 0"}
-                                        <a class='fui-heart {@IsShowHot value=ArticleHot uid=user.UserInfo.userId /}' href="javascript:;;" title="喜欢" articleId='{id}' onclick="userIndex.clickSetArticleHot(this)"></a>
-                                    {/if}
+                                    {?isTrans}<a class="fui-link mrm" href="javascript:;;" title="转发" onclick=""></a>{/isTrans}
+                                    {?isHot}
+                                        <a class='fui-heart {?hot}active{/hot}' href="javascript:;;" title="喜欢" articleId='{base.id}' onclick="userIndex.clickSetArticleHot(this)"></a>
+                                    {/isHot}
 
                                 </div>
                             </div>

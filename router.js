@@ -27,4 +27,6 @@ module.exports = function (app) {
         post(article.createTextArticle);
     app.route('/user/article/updateArticleHotCnt').all(auth.loginRequired).
         post(article.articleHotSet);
+    app.route('/user/article/queryArticleLogByArticleId').all(auth.loginRequired).
+        post(article.queryArticleLogByArticleId);
 };

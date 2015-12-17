@@ -162,7 +162,80 @@ var userIndex   =   (function(){
             var item = $(_this);
             var articleId = item.attr('articleId');
             $('#articleHotInfo'+articleId).show();
+            $('body').addClass('modal-open');
             //--远程读取数据信息 倒叙排列
+
+            //进行后台处理
+            try{
+
+                var cfg = {
+                    url		    :	"/user/article/queryArticleLogByArticleId",
+                    page        :{
+                        limit   :   0,
+                        pageSize:   15
+                    },
+                    data		:	[],
+                    method	    :	"POST",
+                    temp        :  '<li><div class="media"><div class="media-left"> <a href="javascript:;;"> <img src="#{img}" width="36px" height="36px"> </a> </div><div class="media-body"> #{content} </div><div class="media-right"> <a href="javascript:;;" data="#{userId}" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div></div></li>',
+                    start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                    end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                };
+
+                //设定需要传递的参数
+                cfg.data.push("articleId="+	articleId);
+                cfg.data.push("limit="+	cfg.page.limit);
+                cfg.data.push("pageSize="+	cfg.page.pageSize);
+
+                cfg.start();
+
+                $.ajax({
+                    url         :   cfg.url,
+                    method      :   cfg.method,
+                    data        :   cfg.data.join('&'),
+                    dataType    :   'json',
+                    success     :   function(json){
+                        try{
+                            if(json.result) {
+                                console.log(json.data);
+
+                                var len = json.data.length;
+                                for(var i=0;i<len;i++){
+                                    var item = json.data[i];
+
+                                    var articleId = item.ARTICLE_ID,
+                                        bgPhoto=item.BG_PHOTO,
+                                        content=item.CONTENT,
+                                        created=item.CREATED,
+                                        nick=item.NICK,
+                                        photo=item.PHOTO;
+                    ///img/img_normal.png
+                                }
+
+                            }else{
+                                message.msg('操作失败,' +   json.msg);
+                            }
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    },
+                    error       :   function(xhr){
+                        try{
+                            ajaxFailure(xhr);
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    }
+                });
+            }catch(ex){
+                log(ex);
+            }//catch(ex) end
+
         },
         clickSetArticleHot:function(_this){
             var item  = $(_this);
@@ -197,12 +270,19 @@ var userIndex   =   (function(){
                         try{
                             if(json.result) {
                                 message.msg('操作成功.');
+                                var cnt =parseInt($('#articleId'+articleId).attr('cnt'));
                                 switch (opt){
                                     case "1":{
                                         item.addClass('active');
+                                        //加1
+                                        var _cnt = (cnt + 1) + '';
+                                        $('#articleId'+articleId).html( _cnt    + '热度').attr('cnt',_cnt);
                                     }break;
                                     case "2":{
                                         item.removeClass('active');
+                                        //减去1
+                                        var _cnt = (cnt - 1) + '';
+                                        $('#articleId'+articleId).html((cnt - 1) + '热度').attr('cnt',_cnt);
                                     }break;
                                 }
                             }else{
