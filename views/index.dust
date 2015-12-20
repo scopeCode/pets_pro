@@ -6,26 +6,26 @@
             <ul id="ulLeftContent">
                 <li class="release-tool" id="ulLeftContentLi">
                     <div class="media">
-                        <div class="media-left"> <a href="#"> <img src="img/img_user.png" width="64px" height="64px"> </a> </div>
+                        <div class="media-left"> <a href="#"> <img src="/img/img_user.png" width="64px" height="64px"> </a> </div>
                         <div class="media-body">
                             <div class="list_content ">
                                 <div class="col-xs-3" data-toggle="modal" data-target="#release-text">
-                                    <div class="text-center"> <img src="img/ic_text.png">
+                                    <div class="text-center"> <img src="/img/ic_text.png">
                                         <p class="mbn"><small>文字</small></p>
                                     </div>
                                 </div>
                                 <div class="col-xs-3" data-toggle="modal" data-target="#release-photo">
-                                    <div class="text-center"> <img src="img/ic_photo.png">
+                                    <div class="text-center"> <img src="/img/ic_photo.png">
                                         <p class="mbn"><small>图片</small></p>
                                     </div>
                                 </div>
                                 <div class="col-xs-3" data-toggle="modal" data-target="#release-link">
-                                    <div class="text-center"> <img src="img/ic_link.png">
+                                    <div class="text-center"> <img src="/img/ic_link.png">
                                         <p class="mbn"><small>链接</small></p>
                                     </div>
                                 </div>
                                 <div class="col-xs-3" data-toggle="modal" data-target="#release-camera">
-                                    <div class="text-center"> <img src="img/ic_camera.png">
+                                    <div class="text-center"> <img src="/img/ic_camera.png">
                                         <p class="mbn"><small>视频</small></p>
                                     </div>
                                 </div>
@@ -38,48 +38,44 @@
                 {#data}
                     <li>
                        <div class="media">
-                          <div class="media-left">
-                              <a href="javascript:;;">
+                          <div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="{base.id}" onmouseout="userIndex.imgOnmouseout(this)">
+                              <a href="javascript:;;"  >
                                   <img src="{?user.photo}http://7xjik2.com1.z0.glb.clouddn.com/{user.photo}{:else}/img/img_normal.png{/user.photo}" width="64px" height="64px">
+                                  {?isHot}
+                                      <div class="person-info" style="display: none;" id="divArticleUserId{base.id}">
+                                          <div class="person-inner">
+                                              <div class="person-inner-bg">
+                                                  <img src="{?user.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{user.bgPhoto}{:else}/img/01.jpg{/user.bgPhoto}"> </div>
+                                              <div class="person-inner-top">
+                                                  <div class="pull-right btn btn-default btn-xs">取消/关注</div>
+                                              </div>
+                                              <div class="person-inner-body"> {user.sign}
+                                                  <div class="person-show">
+                                                      <ul>
+                                                          加载中...
+                                                      </ul>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  {/isHot}
+
                               </a>
                           </div>
                           <div class="media-body">
                             <div class="list_content ">
                               <div class="content_top">
-                                  <!-- <img src="/img/img_user.png" class="content_img" width="36px" height="36px"> -->
                                  {user.nick}
                                  <div class="pull-right text-muted">{@formatDate value=base.created /}</div>
-
-                                <!--鼠标移上去显示个人信息的地方-->
-                                <div class="person-info" style="display:none;">
-                                  <div class="person-inner">
-                                    <div class="person-inner-bg">
-                                     <img src="/img/01.jpg"> </div>
-                                    <div class="person-inner-top"> 仰望明天
-                                      <div class="pull-right btn btn-default btn-xs">取消关注</div>
-                                    </div>
-                                    <div class="person-inner-body"> You will get hit by a serious dose of typography inspiration.
-                                      <div class="person-show">
-                                        <ul>
-                                          <li> <img src="/img/01.jpg"> </li>
-                                          <li> <img src="/img/02.jpg"> </li>
-                                          <li> <img src="/img/03.jpg"> </li>
-                                        </ul>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!--end鼠标移上去显示个人信息的地方-->
-
                               </div>
                               <div class="content_body" data-toggle="modal" data-target="#content_body_info">
-                                  <h6> {base.title}</h6>
+                                  <h6>
+                                      {@OutTextOrLink value=base/}
+                                  </h6>
                                   {#files}
                                     <img src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
                                   {/files}
-                                <p>
-                                    {base.content}
-                                </p>
+                                  <p>{base.content}</p>
                                 <p class="mbm">
                                     {#tags}
                                         <a href="#" class="mrm text-muted">{tagName}</a>
@@ -90,17 +86,11 @@
                               <div class="content_bottom">
                                   <a class="text-muted" href="javascript:;;" articleId="{base.id}" id="articleId{base.id}" cnt="{base.hotCount}" onclick="userIndex.clickHotCnt(this)">{base.hotCount}热度</a>
 
-                                    <!--鼠标点击热度--><!-- 弹出时给body加一个class="modal-open" -->
+                                    <!--鼠标点击热度-->
                                     <div class="hot-info" id="articleHotInfo{base.id}">
                                       <div class="hot-inner">
                                         <ul id="artileLogList{base.id}">
-                                          <li>
-                                            <div class="media">
-                                              <div class="media-left"> <a href="#"> <img src="/img/img_normal.png" width="36px" height="36px"> </a> </div>
-                                              <div class="media-body"> 仰望明天 转载此贴 </div>
-                                              <div class="media-right"> <a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div>
-                                            </div>
-                                          </li>
+                                            加载中.....
                                         </ul>
                                       </div>
                                     </div>
@@ -113,7 +103,6 @@
                                     {?isHot}
                                         <a class='fui-heart {?hot}active{/hot}' href="javascript:;;" title="喜欢" articleId='{base.id}' onclick="userIndex.clickSetArticleHot(this)"></a>
                                     {/isHot}
-
                                 </div>
                             </div>
                           </div>
@@ -127,6 +116,7 @@
 {/bodyContentLeft}
 
 {<bodyContentRight}
+
 <div class="col-md-3">
     <div class="content-right">
         <p class="mbn">热门博客</p>

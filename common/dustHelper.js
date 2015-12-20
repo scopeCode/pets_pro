@@ -60,4 +60,14 @@ module.exports = function(dust){
         return chunk.write(_res);
     };
 
+    dust.helpers.OutTextOrLink =    function (chunk, context, bodies, params) {
+        var _value  =   params.value;
+        var _res    =   _value.title;
+
+        if(_value.type+'' =='3'){
+            _res = '<a target="_blank" href="'+_res+'">'+_value.title+'</a>';
+        }
+        return chunk.write(_res);
+    };
+
 };

@@ -26,14 +26,11 @@ exports.createTextArticle = function (req, res, next) {
         var title   =   req.body.title;
         var content =   req.body.content;
         var tags    =   req.body.tags;
+        var type    =   req.body.type||'1';
 
         // 验证信息的正确性
         if ([title,content].some(function (item) { return item === ''; })) {
             ep.emit('prop_err', '信息不完整。');
-            return;
-        }
-        if (title.length < 5 || title.length > 15) {
-            ep.emit('prop_err', '标题至少需要5个字符。最长不超过15个字符.');
             return;
         }
         // END 验证信息的正确性
@@ -69,7 +66,7 @@ exports.createTextArticle = function (req, res, next) {
             });
         });
 
-        articleProxy.createArticle(title,content,'1',function(article){
+        articleProxy.createArticle(title,content,type,function(article){
             ep.emit('createArticleUser',article);
         });
 

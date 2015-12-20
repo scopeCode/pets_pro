@@ -86,25 +86,26 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <div class="modal-title" id="myModalLabel"> 引用链接 </div>
+                <div class="modal-title"> 引用链接 </div>
             </div>
             <div class="modal-body" >
-                <input class="form-control input-lg" placeholder="粘贴网址" style="height:100px;">
-                <textarea class="form-control" rows="2" placeholder="愿意的话可以添加说明"></textarea>
-                <div class="bootstrap-tagsinput"><span class="tag label label-info">标签1<span data-role="remove"></span></span> <span class="tag label label-info"> 标签2<span data-role="remove"></span></span> <span class="tag label label-info"> 标签3<span data-role="remove"></span></span>
-                    <input type="text" placeholder="#标签" style="width: 3em !important; background:#fff;">
+                <input class="form-control input-lg" placeholder="粘贴网址" style="height:100px;" id="inputLinkArticleValue">
+                <textarea class="form-control" rows="2" placeholder="愿意的话可以添加说明" id="textareaLinkArticleContent"></textarea>
+                <div class="bootstrap-tagsinput" id="divLinkArticleTag">
+                    <input type="text" placeholder="#标签" style="width: 3em !important; background:#fff;" id="inputLinkArticleTag">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 <div class="btn-group dropdown">
-                    <button type="button" class="btn btn-primary ">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    <button type="button" id="btnLinkArticlePublish" class="btn btn-primary ">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    <!--
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a href="#">现在发布<span class="fui-check-circle pull-right"></span></a> </li>
                         <li><a href="#">保存为草稿</a></li>
                         <li><a href="#">发私密日志</a></li>
-                    </ul>
+                    </ul> -->
                 </div>
             </div>
         </div>

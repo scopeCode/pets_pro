@@ -28,6 +28,116 @@ var userIndex   =   (function(){
         },
         bindEvent   :   function(){
 
+
+            //点击发布 链接的文章的处理
+            $('#btnLinkArticlePublish').bind('click',function(){
+
+                var link = $.trim($('#inputLinkArticleValue').val());
+                if(link == ''){
+                    message.msg('链接地址不可为空.');
+                    return false;
+                }
+
+                var res = /(https?|ftp|mms):\/\/([A-z0-9]+[_\-]?[A-z0-9]+\.)*[A-z0-9]+\-?[A-z0-9]+\.[A-z]{2,}(\/.*)*\/?/.test(link);
+                if(!res){
+                    message.msg('链接地址不合法.');
+                    return false;
+                }
+
+                var title   = link;
+                var content = $('#textareaLinkArticleContent').val();
+
+                var  resTagList =       [];
+                var  tag        =    [];
+
+                var  tagList    =   $('#divLinkArticleTag .label-info');
+                var  tagListLen =   tagList.length;
+                for(var i=0;i<tagListLen;i++){
+                    var item = tagList[i];
+                    var _name   =   $(item).attr('data');
+                    resTagList.push(template.tagTemp.format({
+                        tagName:_name
+                    }));
+                    tag.push(_name);
+                }
+
+                //进行后台处理
+                try{
+
+                    var cfg = {
+                        url		    :	"/user/article/createTextArticle",
+                        data		:	[],
+                        method	    :	"POST",
+
+                        temp        :   '<li><div class="media"><div class="media-left"><a href="javascript:;;"><img src="#{img}" width="64px" height="64px"></a></div><div class="media-body"><div class="list_content"><div class="content_top">#{nick}<div class="pull-right text-muted">#{created}</div></div><div class="content_body" data-toggle="modal" data-target="#content_body_info"><h6>#{title}</h6><p>#{content}</p><p class="mbm" >#{tagList}</p></div><div class="content_bottom"><a class="text-muted" href="javascript:;;" cnt="0" onclick="userIndex.clickHotCnt(this)">0热度</a><div class="bottom_tool"></div></div></div></div></div></li>',
+                        start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                        end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                    };
+
+
+
+                    //设定需要传递的参数
+                    cfg.data.push("title="		    +	title   );
+                    cfg.data.push("content="		+	content );
+                    cfg.data.push("type=3"                      );
+                    cfg.data.push("tags="		    +	tag.join('$$$$$'));
+
+                    cfg.start();
+
+
+                    $.ajax({
+                        url         :   cfg.url,
+                        method      :   cfg.method,
+                        data        :   cfg.data.join('&'),
+                        dataType    :   'json',
+                        success     :   function(json){
+                            try{
+                                if(json.result) {
+                                    message.msg('发布成功.');
+                                    //隐藏发布窗体,并清空发布窗体
+                                    $('#release-link').modal('hide');
+                                    $('#inputLinkArticleValue').val('');
+                                    $('#textareaLinkArticleContent').val('');
+                                    $("#divLinkArticleTag span").remove();
+                                    //向主界面增加一个该文章的信息 发布成功,进行推送到关注这个人,通知有新文章发布[待完善]
+
+                                    var str  = cfg.temp.format({
+                                        img:$('#imgMyPhoto').attr('src'),
+                                        nick:$("#aMyNick").text(),
+                                        title:title,
+                                        content:content,
+                                        created:'刚刚',
+                                        tagList:resTagList.join('')
+                                    });
+
+                                    $('#ulLeftContentLi').after(str);
+                                }else{
+                                    message.msg('发布失败,' +   json.msg);
+                                }
+                            }catch(ex){
+                                log(ex);
+                            }
+                            finally{
+                                cfg.end();
+                            }
+                        },
+                        error       :   function(xhr){
+                            try{
+                                ajaxFailure(xhr);
+                            }catch(ex){
+                                log(ex);
+                            }
+                            finally{
+                                cfg.end();
+                            }
+                        }
+                    });
+                }catch(ex){
+                    log(ex);
+                }//catch(ex) end
+
+            });
+
             //点击发布文章按钮事件处理
             $('#btnTextArticlePublish').bind('click',function(){
                 var title   =   $('#inputTextTitle').val();
@@ -56,8 +166,6 @@ var userIndex   =   (function(){
                     tag.push(_name);
                 }
 
-                $.trim($('#divTextArticleTag').text());
-
                 //进行后台处理
                 try{
 
@@ -76,6 +184,7 @@ var userIndex   =   (function(){
                     //设定需要传递的参数
                     cfg.data.push("title="		    +	title);
                     cfg.data.push("content="		+	content);
+                    cfg.data.push("type=1"		                );
                     cfg.data.push("tags="		    +	tag.join('$$$$$'));
 
                     cfg.start();
@@ -135,6 +244,45 @@ var userIndex   =   (function(){
 
             });
 
+            //输入框绑定回车事件
+            $('#inputLinkArticleTag').bind('keydown',function(event){
+                if(event.keyCode == '13'){
+                    event.preventDefault();
+
+                    var  tagVal    =    $('#inputLinkArticleTag').val();
+                    var  tagLen    =    $('#divLinkArticleTag .label-info').length;
+
+                    if(tagVal == ''){
+                        message.msg('标签不可为空.');
+                        return false;
+                    }
+
+                    if(tagLen < 3){
+                        var startChar   =   tagVal.substr(0,1);
+                        if(startChar!='#'){
+                            tagVal = '#' + tagVal;
+                        }
+                        var tagHtmlStr  =   template.tagItem.format({name:tagVal});
+
+                        $('#inputLinkArticleTag').before($.trim(tagHtmlStr));
+                        $('#inputLinkArticleTag').val('');
+
+                        tagLen    =    $('#divLinkArticleTag .label-info').length;
+                        if(tagLen == 3){
+                            $('#inputLinkArticleTag').hide();
+                        }
+
+                        $('#divLinkArticleTag .label-info').bind('click',function(){
+                            var _this = $(this);
+                            _this.remove();
+                            $('#inputLinkArticleTag').show();
+                        });
+
+                    }else{
+                        message.msg('暂时只能添加3个标签.');
+                    }
+                }
+            });
             //输入框绑定回车事件
             $('#inputTextArticleTag').bind('keydown',function(event){
                 if(event.keyCode == '13'){
@@ -331,6 +479,16 @@ var userIndex   =   (function(){
             }//catch(ex) end
 
         },
+        imgOnmousemove:function(_this){
+            var articleId   =   $(_this).attr('data');
+            var ele         =   $('#divArticleUserId'+articleId);
+            ele.show();
+        },
+        imgOnmouseout:function(_this,e){
+            var articleId   =   $(_this).attr('data');
+            var ele         =   $('#divArticleUserId'+articleId);
+            ele.hide();
+        },
         clickSetArticleHot:function(_this){
             var item  = $(_this);
             var isActive    =   item.hasClass('active');
@@ -418,6 +576,12 @@ var userIndex   =   (function(){
         },
         tranlateArticle:function(_this){
             //自己不能转发自己的文章直接屏蔽掉
+        },
+        imgOnmousemove:function(_this){
+            optIndex.imgOnmousemove(_this);
+        },
+        imgOnmouseout:function(_this){
+            optIndex.imgOnmouseout(_this);
         }
     };
 })();

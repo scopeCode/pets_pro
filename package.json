@@ -25,6 +25,7 @@
     "mongoose": "^4.2.8",
     "mysql": "^2.9.0",
     "pm2": "^0.15.10",
+    "qiniu": "^6.1.9",
     "sequelize": "^3.14.2",
     "serve-favicon": "~2.3.0",
     "should": "^7.1.1",
