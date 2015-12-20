@@ -5,6 +5,7 @@
 
 var articleProxy     =   require('../proxy/article');
 
+
 /**
  * show index page
  * @param  {object}   req  the request object
@@ -20,6 +21,14 @@ exports.show = function (req, res, next) {
         });
 
      }catch(ex){
+        next(ex);
+    }
+};
+
+exports.upLoadFile  =   function(req,res,next){
+    try{
+
+    }catch(ex){
         next(ex);
     }
 };
