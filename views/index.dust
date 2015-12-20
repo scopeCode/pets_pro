@@ -4,7 +4,7 @@
     <div class="col-md-7 col-md-offset-1">
         <div class="content_list">
             <ul id="ulLeftContent">
-                <li class="release-tool">
+                <li class="release-tool" id="ulLeftContentLi">
                     <div class="media">
                         <div class="media-left"> <a href="#"> <img src="img/img_user.png" width="64px" height="64px"> </a> </div>
                         <div class="media-body">
@@ -107,7 +107,9 @@
                                     <!--end鼠标移上去显示个人信息的地方-->
 
                                 <div class="bottom_tool">
-                                    {?isTrans}<a class="fui-link mrm" href="javascript:;;" title="转发" onclick=""></a>{/isTrans}
+                                    {?isTrans}
+                                       <a class="fui-link mrm" href="javascript:;;" title="转发" onclick=""></a>
+                                    {/isTrans}
                                     {?isHot}
                                         <a class='fui-heart {?hot}active{/hot}' href="javascript:;;" title="喜欢" articleId='{base.id}' onclick="userIndex.clickSetArticleHot(this)"></a>
                                     {/isHot}

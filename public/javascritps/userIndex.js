@@ -18,7 +18,8 @@ var userIndex   =   (function(){
 
     //标签模板项
     var template    =   {
-        tagItem :   '<span class="tag label label-info" data="#{name}">#{name}<span data-role="remove"></span></span>',
+        tagItem     :   '<span class="tag label label-info" data="#{name}">#{name}<span data-role="remove"></span></span>',
+        tagTemp     :   '<a href="#" class="mrm text-muted">#{tagName}</a>',
     };
 
     var optIndex    =   {
@@ -41,6 +42,7 @@ var userIndex   =   (function(){
                     return false;
                 }
 
+                var  resTagList =       [];
                 var  tag        =    [];
 
                 var  tagList    =   $('#divTextArticleTag .label-info');
@@ -48,6 +50,9 @@ var userIndex   =   (function(){
                 for(var i=0;i<tagListLen;i++){
                     var item = tagList[i];
                     var _name   =   $(item).attr('data');
+                    resTagList.push(template.tagTemp.format({
+                        tagName:_name
+                    }));
                     tag.push(_name);
                 }
 
@@ -60,6 +65,8 @@ var userIndex   =   (function(){
                         url		    :	"/user/article/createTextArticle",
                         data		:	[],
                         method	    :	"POST",
+
+                        temp        :   '<li><div class="media"><div class="media-left"><a href="javascript:;;"><img src="#{img}" width="64px" height="64px"></a></div><div class="media-body"><div class="list_content"><div class="content_top">#{nick}<div class="pull-right text-muted">#{created}</div></div><div class="content_body" data-toggle="modal" data-target="#content_body_info"><h6>#{title}</h6><p>#{content}</p><p class="mbm" >#{tagList}</p></div><div class="content_bottom"><a class="text-muted" href="javascript:;;" cnt="0" onclick="userIndex.clickHotCnt(this)">0热度</a><div class="bottom_tool"></div></div></div></div></div></li>',
                         start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
                         end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
                     };
@@ -90,6 +97,16 @@ var userIndex   =   (function(){
                                     $("#divTextArticleTag span").remove();
                                     //向主界面增加一个该文章的信息 发布成功,进行推送到关注这个人,通知有新文章发布[待完善]
 
+                                    var str  = cfg.temp.format({
+                                        img:$('#imgMyPhoto').attr('src'),
+                                        nick:$("#aMyNick").text(),
+                                        title:title,
+                                        content:content,
+                                        created:'刚刚',
+                                        tagList:resTagList.join('')
+                                    });
+
+                                    $('#ulLeftContentLi').after(str);
                                 }else{
                                     message.msg('发布失败,' +   json.msg);
                                 }
@@ -158,16 +175,79 @@ var userIndex   =   (function(){
             });
 
         },//build end
+        queryArticleList:function(limit,pageSize){
+//进行后台处理
+            try{
+
+                var cfg = {
+                    url		    :	"/user/article/createTextArticle",
+                    data		:	[],
+                    method	    :	"POST",
+                    temp        :   '',
+                    start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                    end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                };
+
+
+                //设定需要传递的参数
+                cfg.data.push("title="		    +	title);
+                cfg.data.push("content="		+	content);
+                cfg.data.push("tags="		    +	tag.join('$$$$$'));
+
+                cfg.start();
+
+
+                $.ajax({
+                    url         :   cfg.url,
+                    method      :   cfg.method,
+                    data        :   cfg.data.join('&'),
+                    dataType    :   'json',
+                    success     :   function(json){
+                        try{
+                            if(json.result) {
+
+                            }else{
+                                message.msg('读取信息失败,' +   json.msg);
+                            }
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    },
+                    error       :   function(xhr){
+                        try{
+                            ajaxFailure(xhr);
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    }
+                });
+            }catch(ex){
+                log(ex);
+            }//catch(ex) end
+        },
         clickHotCnt:function(_this){
             var item = $(_this);
             var articleId = item.attr('articleId');
+            var cnt = item.attr('cnt');
+
+            //--远程读取数据信息 倒叙排列
+            if(cnt == '0'){
+                message.msg('0数你还点个啥?');
+                return false;
+            }
+
             $('#articleHotInfo'+articleId).show();
             $('body').addClass('modal-open');
-            //--远程读取数据信息 倒叙排列
 
             //进行后台处理
             try{
-
+                //TODO 这个位置怎么分页
                 var cfg = {
                     url		    :	"/user/article/queryArticleLogByArticleId",
                     page        :{
@@ -199,18 +279,32 @@ var userIndex   =   (function(){
                                 console.log(json.data);
 
                                 var len = json.data.length;
+                                var a = [];
                                 for(var i=0;i<len;i++){
                                     var item = json.data[i];
 
-                                    var articleId = item.ARTICLE_ID,
-                                        bgPhoto=item.BG_PHOTO,
-                                        content=item.CONTENT,
-                                        created=item.CREATED,
-                                        nick=item.NICK,
-                                        photo=item.PHOTO;
-                    ///img/img_normal.png
+                                    var articleId   =   item.ARTICLE_ID,
+                                        bgPhoto     =   item.BG_PHOTO,
+                                        content     =   item.CONTENT,
+                                        created     =   item.CREATED,
+                                        nick        =   item.NICK,
+                                        userId      =   item.USER_ID,
+                                        photo       =   '/img/img_normal.png';
+
+                                    if(item.PHOTO){
+                                        photo = 'http://7xjik2.com1.z0.glb.clouddn.com/'+item.PHOTO;
+                                    }
+
+                                    var str = cfg.temp.format({
+                                                    img:photo,
+                                                    content:content,
+                                                    userId:userId
+                                                });
+
+                                    a.push(str);
                                 }
 
+                                $('#artileLogList2').append(str);
                             }else{
                                 message.msg('操作失败,' +   json.msg);
                             }

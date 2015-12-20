@@ -206,7 +206,7 @@ exports.queryArticleList       =   function(userId,callback){
  * @param articleId
  * @param callback
  */
-exports.queryArticleListEx     = function(userId,callback){
+exports.queryArticleListEx     = function(userId,limit,pageSize,callback){
     var sql = [];
     sql.push('SELECT ');
     sql.push('	a.id as aId,a.TITLE as aTitle,a.CONTENT as aContent,a.CREATED as aCreated,a.HOT_COUNT as aHotCount,a.TYPE as aType,');
@@ -307,9 +307,6 @@ exports.queryArticleListEx     = function(userId,callback){
                         tempObj.hot = true;
                     }
                     tempObj.isHot = true;
-                }
-
-                if(creator != userId  && utype!=1){ //文章的创建者 和发布者 不是同一个人 且 type 为转发的 则允许转发
                     tempObj.isTrans = true;
                 }
                 temp[id] = id;
@@ -340,7 +337,7 @@ exports.queryArticleListEx     = function(userId,callback){
  */
 exports.queryArticleLog     =   function(articleId,limit,pageSize,callback){
     var sql = [];
-    sql.push(' SELECT log.ARTICLE_ID,log.CONTENT,log.CREATED,ex.PHOTO,ex.BG_PHOTO,ex.NICK  ');
+    sql.push(' SELECT log.ARTICLE_ID,log.CONTENT,log.CREATED,log.USER_ID,ex.PHOTO,ex.BG_PHOTO,ex.NICK  ');
     sql.push(' FROM t_b_article_log log ');
     sql.push(' LEFT JOIN t_b_user_ex ex on ex.USER_ID = log.USER_ID ');
     sql.push(' WHERE log.ARTICLE_ID = ' + articleId);
