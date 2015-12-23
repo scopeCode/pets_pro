@@ -3,8 +3,9 @@
  * Created by scj-mo on 2015/12/6.
  */
 var models      =   require('../pmodels');
+var loggerProxy     =   require('../proxy/logger');
 var User        =   models.User;
-var UserInfo    =   models.UserInfo;
+var Info        =   models.Info;
 
 /**
  * 创建一条新的用户信息
@@ -12,22 +13,24 @@ var UserInfo    =   models.UserInfo;
  * @param pwd
  * @param callback
  */
-exports.createUser              =   function(loginName,pwd,callback){
-
-    User.create({
-        userName:loginName,
-        userPwd:pwd
-    }).then(function(user){
-        if(user){
-            UserInfo.create({
-                userId      :user.id,
-                userNick    :"用户"+loginName.substr(7)
-            }).then(function(userInfo){
-                callback(user,userInfo);
+exports.createUser              =   function(userName,pwd,callback){
+    return models.sequelize.transaction(function (t) {
+        return User.create({
+                userName    :   userName,
+                userPwd     :   pwd
+        }, {transaction: t}).then(function (user) {
+            return user.createInfo({
+                userId      :   user.id,
+                userNick    :   "用户"+userName.substr(7)
+            }, {transaction: t}).then(function(info){
+                var content= JSON.stringify(user) + JSON.stringify(info);
+                loggerProxy.createLogger('pets.user.register',content,function(logger){});
             });
-        }else{
-            callback(null);
-        }
+        });
+    }).then(function (result) {
+        callback(result);
+    }).catch(function (err) {
+        console.error(err);
     });
 };
 
@@ -40,26 +43,12 @@ exports.createUser              =   function(loginName,pwd,callback){
 exports.getUserByUserName       =   function(loginName,callback){
     User.findOne({
             where: {
-                'USER_NAME': loginName
+                'userName': loginName
             },
             include:{
-                model:UserInfo,
-                as:'UserInfo'
+                model:Info
             }
         }).then(function(u){
             callback(u);
         });
-};
-
-/**
- * 根据userId 返回用户的信息
- * @param userId
- * @param callback
- */
-exports.getUserInfoById         =   function(userId,callback){
-    UserInfo.findOne({
-        'where':{
-            'USER_ID' : userId
-        }
-    }).then(callback);
 };

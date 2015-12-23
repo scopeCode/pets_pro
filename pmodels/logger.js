@@ -3,29 +3,26 @@
  * Created by scj-mo on 2015/12/11.
  */
 var mysqlCient   =   require("./index");
-var SysLogger = mysqlCient.sequelize.define('T_B_SYS_LOG',
+var SysLogger = mysqlCient.sequelize.define('sysLog',
     {
-        id : {
-            type : mysqlCient.Sequelize.BIGINT,
-            autoIncrement : true,
-            primaryKey : true,
-            unique : true,
-            field:'ID',
-            comment:'主键,自动增长 bigint 长整形'
+        userId:{
+            type:mysqlCient.Sequelize.BIGINT,
+            field:"userId",
+            comment:'用户表的主键ID'
         },
         type:{
             type:mysqlCient.Sequelize.STRING,
-            field:"TYPE",
+            field:"type",
             comment:'日志类型'
         },
         content:{
             type:mysqlCient.Sequelize.STRING,
-            field:"CONTENT",
+            field:"content",
             comment:'日志内容'
         },
         created:{
             type:mysqlCient.Sequelize.DATE,
-            field:"CREATED",
+            field:"created",
             defaultValue:mysqlCient.Sequelize.NOW,
             comment:'创建时间.'
         }
@@ -33,20 +30,9 @@ var SysLogger = mysqlCient.sequelize.define('T_B_SYS_LOG',
     {
         freezeTableName: true,  //冻结表名_使用自己设定的表名进行定义
         timestamps:false,       //排除掉,默认的 updateAt createdAt 两个字段
-        tableName:'T_B_SYS_LOG'    //自定义表名
+        tableName:'sysLog'    //自定义表名
     }
 );
 exports.SysLogger = SysLogger;
 
-/*
-    var mongoose        =   require('mongoose');
-    var Schema          = mongoose.Schema;
-
-    var LoggerSchema  =   new Schema({
-        TYPE        :   {type   :   String                              },      //日志类型
-        CONTENT     :   {type   :   String                              },      //日志内容
-        CREATED     :   {type   :   Date        ,default  :    Date.now }       //创建时间
-    });
-
-    mongoose.model('Logger',LoggerSchema);
-*/
+//SysLogger.sync({force: true}).then(function () {});

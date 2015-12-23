@@ -5,19 +5,6 @@
 var models          =   require('../pmodels');
 var SysLogger       =   models.SysLogger;
 
-exports.createLogger    =   function(type,content,callback){
-    SysLogger.create({type :type,content:content}).then(callback);
+exports.createLogger    =   function(type,content,userId,callback){
+    SysLogger.create({type :type,content:content,userId:userId}).then(callback);
 };
-
-/*
-var models          =   require('../pmodels');
-var Logger          =   models.Logger;
-
-exports.createLogger      =   function(type,content,callback){
-    var  logger                 =   new Logger();
-    logger.CONTENT         =    content;
-    logger.TYPE            =    type;
-
-    logger.save(callback);
-};
- */

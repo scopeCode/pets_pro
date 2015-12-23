@@ -23,43 +23,21 @@ var config ={
             freezeTableName: true,
             timestamps:false
         }
-    }
+    },
+    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE
 };
 exports.sequelize  = new Sequelize(config.database, config.username, config.password, config.options);
 exports.Sequelize  = Sequelize;
-exports.mysqlCient = mysql;
 
 //引入数据表的对象
-var User                =   require('./article').User;
-var UserInfo            =   require('./article').UserInfo;
-var Article             =   require('./article').Article;
-var ArticleUser         =   require('./article').ArticleUser;
-var ArticleFile         =   require('./article').ArticleFile;
-var ArticleTag          =   require('./article').ArticleTag;
-var ArticleLog          =   require('./article').ArticleLog;
-var ArticleHot          =   require('./article').ArticleHot;
-var SysLogger           =   require('./logger').SysLogger;
+var models          =   require('./models');
+var logger          =   require('./logger');
 
-exports.User                =   User;
-exports.UserInfo            =   UserInfo;
-exports.Article             =   Article;
-exports.ArticleUser         =   ArticleUser;
-exports.ArticleFile         =   ArticleFile;
-exports.ArticleTag          =   ArticleTag;
-exports.ArticleLog          =   ArticleLog;
-exports.ArticleHot          =   ArticleHot;
-exports.SysLogger           =   SysLogger;
-
-
-//设定对应的逻辑
-
-/*
-User.sync({force: true}).then(function () {});
-UserInfo.sync({force: true}).then(function () {});
-Article.sync({force: true}).then(function () {});
-ArticleFile.sync({force: true}).then(function () {});
-ArticleUser.sync({force: true}).then(function () {});
-ArticleTag.sync({force: true}).then(function () {});
-ArticleLog.sync({force: true}).then(function () {});
-ArticleHot.sync({force: true}).then(function () {});
-SysLogger.sync({force: true}).then(function () {});*/
+exports.User        =   models.User;
+exports.Info        =   models.Info;
+exports.Article     =   models.Article;
+exports.File        =   models.File;
+exports.Tag         =   models.Tag;
+exports.Log         =   models.Log;
+exports.Hot         =   models.Hot;
+exports.SysLogger   =   logger.SysLogger;

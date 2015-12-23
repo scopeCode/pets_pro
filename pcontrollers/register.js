@@ -7,6 +7,7 @@ var userProxy       =   require('../proxy/user');
 var loggerProxy     =   require('../proxy/logger');
 var utils           =   require('utility');
 var commonResponse  =   require('../common/commonResponse');
+
 /**
  * show index page
  * @param  {object}   req  the request object
@@ -54,22 +55,16 @@ exports.createUser  =   function(req,res,next){
     if (pwd !== repwd) {
         return ep.emit('prop_err', '两次密码输入不一致.');
     }
-
-    ep.on("createLoggerEvent",function(user,userInfo){
-        loggerProxy.createLogger('pets.user.register',JSON.stringify(user),function(logger){
-            res.json(commonResponse.success());
-        });
-    });
-
     // END 验证信息的正确性
+
     userProxy.getUserByUserName(userName,function(user){
         if(user){
             ep.emit('prop_err', '该用户已经存在.');
         }else{
             var md5Str   =   utils.md5(pwd,'base64');
-            userProxy.createUser(userName,md5Str,function(user,userInfo){
-                ep.emit('createLoggerEvent', user,userInfo);
-            })
+            userProxy.createUser(userName,md5Str,function(user,info){
+                res.json(commonResponse.success());
+            });
         }
     });
 
