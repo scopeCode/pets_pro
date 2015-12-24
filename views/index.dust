@@ -38,9 +38,9 @@
                 {#data}
                     <li>
                        <div class="media">
-                          <div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="{base.id}" onmouseout="userIndex.imgOnmouseout(this)">
+                          <div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="{id}" onmouseout="userIndex.imgOnmouseout(this)">
                               <a href="javascript:;;"  >
-                                  <img src="{?user.photo}http://7xjik2.com1.z0.glb.clouddn.com/{user.photo}{:else}/img/img_normal.png{/user.photo}" width="64px" height="64px">
+                                  <img src="{?users[0].info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{users[0].info.photo}{:else}/img/img_normal.png{/users[0].info.photo}" width="64px" height="64px">
                                   {?isHot}
                                       <div class="person-info" style="display: none;" id="divArticleUserId{base.id}">
                                           <div class="person-inner">
@@ -59,23 +59,22 @@
                                           </div>
                                       </div>
                                   {/isHot}
-
                               </a>
                           </div>
                           <div class="media-body">
                             <div class="list_content ">
                               <div class="content_top">
-                                 {user.nick}
-                                 <div class="pull-right text-muted">{@formatDate value=base.created /}</div>
+                                 {users[0].info.userNick}
+                                 <div class="pull-right text-muted">{@formatDate value=created /}</div>
                               </div>
                               <div class="content_body" data-toggle="modal" data-target="#content_body_info">
                                   <h6>
-                                      {@OutTextOrLink value=base/}
+                                      {@OutTextOrLink value=./}
                                   </h6>
                                   {#files}
                                     <img src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
                                   {/files}
-                                  <p>{base.content}</p>
+                                  <p>{content}</p>
                                 <p class="mbm">
                                     {#tags}
                                         <a href="#" class="mrm text-muted">{tagName}</a>

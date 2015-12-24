@@ -48,9 +48,9 @@ exports.getUserByUserName       =   function(userName,callback){
             where: {
                 'userName': userName
             },
-            include:{
-                model:Info
-            }
+            include:[{
+                'model':Info
+            }]
         }).then(function(u){
             callback(u);
         });

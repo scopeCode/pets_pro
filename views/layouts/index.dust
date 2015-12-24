@@ -55,8 +55,8 @@
 
                             <li>
                                 <a href="javascript:;;" id="aMyNick">
-                                    <img id="imgMyPhoto" src="{?user.UserInfo.photo}http://7xjik2.com1.z0.glb.clouddn.com/{user.UserInfo.photo}{:else}/img/img_normal.png{/user.UserInfo.photo}" width="36px" height="36px" style="margin-right:5px;">
-                                    {user.UserInfo.userNick}
+                                    <img id="imgMyPhoto" src="{?user.info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{user.info.photo}{:else}/img/img_normal.png{/user.info.photo}" width="36px" height="36px" style="margin-right:5px;">
+                                    {user.info.userNick}
                                 </a>
                             </li>
 

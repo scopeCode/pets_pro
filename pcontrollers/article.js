@@ -3,11 +3,8 @@
  * Created by scj-mo on 2015/12/8.
  */
 var EventProxy      =   require('eventProxy');
-var loggerProxy     =   require('../proxy/logger');
 var articleProxy    =   require('../proxy/article');
-var utils           =   require('utility');
 var commonResponse  =   require('../common/commonResponse');
-
 
 exports.createTextArticle = function (req, res, next) {
     try{
@@ -26,48 +23,28 @@ exports.createTextArticle = function (req, res, next) {
         var title   =   req.body.title;
         var content =   req.body.content;
         var tags    =   req.body.tags;
-        var type    =   req.body.type||'1';
+        var type    =   req.body.type||'1';//默认是1 文字的处理
 
         // 验证信息的正确性
         if ([title,content].some(function (item) { return item === ''; })) {
             ep.emit('prop_err', '信息不完整。');
             return;
         }
+        if (title.length < 5 && title.length > 15) {
+            ep.emit('prop_err', '标题至少需要5个字符。最长不超过15个字符.');
+            return;
+        }
         // END 验证信息的正确性
 
-        ep.on('createArticleUser',function(article){
-            articleProxy.createArticleUser(article.id,userId,userId,'0',function(data){
-                if(tags !=''){ //存储 标签数据
-                    ep.emit('createArticleTag',tags,article);
-                }else{
-                    res.json(commonResponse.success(article));
-                }
-            });
-        });
-
-        ep.on('createArticleTag',function(tags,article){
-            var articleId = article.id;
-            var tagArr = [];
-            var tagsArr = tags.split('$$$$$');
-            var tagsArrLen = tagsArr.length;
-            for(var i=0;i<tagsArrLen;i++){
-                var item = tagsArr[i];
-                if(item!=''){
-                    var obj = {'articleId':articleId,'tagName':item};
-                    tagArr.push(obj);
-                }
-            }
-            articleProxy.batchCreateArticleTag(tagArr,function(data){
-                var objRes = {};
-                objRes.tags = tagArr;
-                objRes.article = article;
-
-                res.json(commonResponse.success(objRes));
-            });
-        });
-
-        articleProxy.createArticle(title,content,type,function(article){
-            ep.emit('createArticleUser',article);
+        var tagsArr = tags.split('$$$$$');
+        articleProxy.createArticle(
+            {
+                'title':title,
+                'content':content,
+                'type':type
+            },
+            tagsArr,[],userId,function(data){
+            res.json(commonResponse.success());
         });
 
     }catch(ex){
