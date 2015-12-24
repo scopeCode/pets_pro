@@ -13,6 +13,11 @@ var Hot = mysqlCient.sequelize.define('hot',
             defaultValue: true,
             comment:'状态'
         },
+        userId:{
+            type:mysqlCient.Sequelize.BIGINT,
+            field:"userId",
+            comment:'用户的ID'
+        },
         created:{
             type:mysqlCient.Sequelize.DATE,
             field:"created",

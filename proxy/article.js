@@ -27,11 +27,8 @@ exports.createArticle          =   function(article,tags,files,userId,callback){
     var type    = article.type;//默认为自创的文章
 
     return sequelize.transaction(function (t) {
-        return User.find(
-            {
-                'id' : userId
-            },
-            {transaction: t}).then(function(user){
+
+        return User.findById(userId,{transaction: t}).then(function(user){
 
             return user.createArticle({
                 'title' : title,
@@ -114,6 +111,9 @@ exports.queryArticleList       =   function(userId,_offset,_limit,callback){
                 'model': File
             },
             {
+                'model': Hot
+            },
+            {
                 'model': User,
                 'include': [
                     {'model': Info}
@@ -130,35 +130,55 @@ exports.queryArticleList       =   function(userId,_offset,_limit,callback){
 
         var artilesLen = artiles.length;
         if(!artilesLen || artilesLen == 0){
+
             callback([]);
-        }
 
-        proxy.after('result', artilesLen , function (artiles) {
-            callback(artiles);
-        });
+        }else{
 
-        for(var j=0;j<artilesLen;j++){
-            var item = artiles[j];
-            (function(artile){
-                var articleUser = artile.users[0].articleUser;
-                if(articleUser.creator != articleUser.userId){
-                    User.find({
-                        'include': [Info],
-                        'where': {
-                            'id':  articleUser.creator
-                        }
-                    }).then(function(data){
-                        artile.users[0] = data;
-                        if(artilesLen - 1 == j){
-                            return proxy.emit('result',artile);
+            proxy.after('result', artilesLen , function (artiles) {
+                callback(artiles);
+            });
+
+
+            for(var j=0;j<artilesLen;j++){
+                var item = artiles[j];
+                (function(artile){
+                    var articleUser = artile.users[0].articleUser;
+
+                    artile.isShowCancleFollow   =   false;     //是否显示取消关注的按钮
+                    artile.isShowReprint        =   false;     //是否显示 转发类的按钮
+                    artile.isShowHot            =   false;     //显示 已经有热度还是没有热度
+
+                    if(articleUser.creator != articleUser.userId){
+                        User.find({
+                            'include': [Info],
+                            'where': {
+                                'id':  articleUser.creator
+                            }
+                        }).then(function(data){
+                            artile.users[0] = data;
+                            if(artilesLen - 1 == j){
+                                return proxy.emit('result',artile);
+                            }
+
+
+
+                            proxy.emit('result',artile);
+                        });
+                    }else{
+                        if(articleUser.type +'' == '1'){//如果不是转发类的直接隐藏  取消关注
+                            artile.isShowCancleFollow = true;
                         }
                         proxy.emit('result',artile);
-                    });
-                }else{
-                    proxy.emit('result',artile);
-                }
-            })(item);
+                    }
+                })(item);
+            }
+
         }
+
+
+
+
 
     });
 

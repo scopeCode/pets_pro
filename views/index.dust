@@ -41,13 +41,14 @@
                           <div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="{id}" onmouseout="userIndex.imgOnmouseout(this)">
                               <a href="javascript:;;"  >
                                   <img src="{?users[0].info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{users[0].info.photo}{:else}/img/img_normal.png{/users[0].info.photo}" width="64px" height="64px">
-                                  {?isHot}
-                                      <div class="person-info" style="display: none;" id="divArticleUserId{base.id}">
+                                      <div class="person-info" style="display: none;" id="divArticleUserId{id}">
                                           <div class="person-inner">
                                               <div class="person-inner-bg">
                                                   <img src="{?user.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{user.bgPhoto}{:else}/img/01.jpg{/user.bgPhoto}"> </div>
                                               <div class="person-inner-top">
-                                                  <div class="pull-right btn btn-default btn-xs">取消/关注</div>
+                                                  {?isShowCancleFollow}
+                                                    <div class="pull-right btn btn-default btn-xs" >取消关注</div>
+                                                  {/isShowCancleFollow}
                                               </div>
                                               <div class="person-inner-body"> {user.sign}
                                                   <div class="person-show">
@@ -58,7 +59,6 @@
                                               </div>
                                           </div>
                                       </div>
-                                  {/isHot}
                               </a>
                           </div>
                           <div class="media-body">
@@ -83,12 +83,12 @@
                               </div>
 
                               <div class="content_bottom">
-                                  <a class="text-muted" href="javascript:;;" articleId="{base.id}" id="articleId{base.id}" cnt="{base.hotCount}" onclick="userIndex.clickHotCnt(this)">{base.hotCount}热度</a>
+                                  <a class="text-muted" href="javascript:;;" articleId="{id}" id="articleId{base.id}" cnt="{count}" onclick="userIndex.clickHotCnt(this)">{count}热度</a>
 
                                     <!--鼠标点击热度-->
-                                    <div class="hot-info" id="articleHotInfo{base.id}">
+                                    <div class="hot-info" id="articleHotInfo{id}">
                                       <div class="hot-inner">
-                                        <ul id="artileLogList{base.id}">
+                                        <ul id="artileLogList{id}">
                                             加载中.....
                                         </ul>
                                       </div>
