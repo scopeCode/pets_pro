@@ -11,6 +11,8 @@ var app           =     express();
 var cfg           =     require('./config');
 var routes        =     require("./router");
 
+//require("./pmodels/models");
+
 
 var options = {
     helpers: [

@@ -2,9 +2,78 @@
  * 全部模型的定义  ——  需要优化 进行 拆分成 单个文件进行存储
  * Created by scj-mo on 2015/12/24.
  */
-var mysqlCient = require('../pmodels/index');
 
-var User = mysqlCient.sequelize.define('user',
+var User            =   require('./user').User;
+var Info            =   require('./info').Info;
+var Article         =   require('./article').Article;
+var File            =   require('./file').File;
+var Tag             =   require('./tag').Tag;
+var Log             =   require('./log').Log;
+var Hot             =   require('./hot').Hot;
+var logger          =   require('./logger').SysLogger;
+
+
+var ArticleTag      =   require('./articleTag').ArticleTag;
+var ArticleFile     =   require('./articleFile').ArticleFile;
+var ArticleLog      =   require('./articleLog').ArticleLog;
+var ArticleHot      =   require('./articleHot').ArticleHot;
+var ArticleUser     =   require('./articleUser').ArticleUser;
+
+
+exports.User    =  User;
+exports.Info    =  Info;
+exports.Article =  Article;
+exports.File    =  File;
+exports.Tag     =  Tag;
+exports.Log     =  Log;
+exports.Hot     =  Hot;
+exports.logger  =  logger;
+
+exports.ArticleTag      =  ArticleTag;
+exports.ArticleFile     =  ArticleFile;
+exports.ArticleLog      =  ArticleLog;
+exports.ArticleHot      =  ArticleHot;
+exports.ArticleUser     =  ArticleUser;
+
+User.hasOne(Info);
+Info.belongsTo(User);
+
+Article.belongsToMany(File, {'through': ArticleFile});
+File.belongsToMany(Article, {'through': ArticleFile});
+
+Article.belongsToMany(Tag, {'through': ArticleTag});
+Tag.belongsToMany(Article, {'through': ArticleTag});
+
+
+Article.belongsToMany(Log, {'through': ArticleLog});
+Log.belongsToMany(Article, {'through': ArticleLog});
+
+Article.belongsToMany(Hot, {'through': ArticleHot});
+Hot.belongsToMany(Article, {'through': ArticleHot});
+
+Article.belongsToMany(User,{'through': ArticleUser});
+User.belongsToMany(Article,{'through': ArticleUser});
+
+/*
+User.sync({force: true}).then(function () {});
+Info.sync({force: true}).then(function () {});
+Article.sync({force: true}).then(function () {});
+File.sync({force: true}).then(function () {});
+Tag.sync({force: true}).then(function () {});
+Log.sync({force: true}).then(function () {});
+Hot.sync({force: true}).then(function () {});
+
+ArticleTag.sync({force: true}).then(function () {});
+ArticleFile.sync({force: true}).then(function () {});
+ArticleLog.sync({force: true}).then(function () {});
+ArticleHot.sync({force: true}).then(function () {});
+ArticleUser.sync({force: true}).then(function () {});
+logger.sync({force: true}).then(function () {});*/
+
+
+//var mysqlCient = require('../pmodels/index');
+
+/*var User = mysqlCient.sequelize.define('user',
     {
         userName:{
             type:mysqlCient.Sequelize.STRING,
@@ -43,9 +112,9 @@ var User = mysqlCient.sequelize.define('user',
         timestamps:false,       //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'user'    //自定义表名
     }
-);
+);*/
 
-var Info = mysqlCient.sequelize.define('info',
+/*var Info = mysqlCient.sequelize.define('info',
     {
         userNick:{
             type:mysqlCient.Sequelize.STRING,
@@ -142,25 +211,9 @@ var Info = mysqlCient.sequelize.define('info',
         timestamps:false,       //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'info'    //自定义表名
     }
-);
+);*/
 
-/*var UserInfo = mysqlCient.sequelize.define('userInfo',
- {
- status:
- {
- type:mysqlCient.Sequelize.BOOLEAN,
- field:"status",
- defaultValue: true,
- comment:'关系的状态'
- }
- },
- {
- freezeTableName: true,      //冻结表名_使用自己设定的表名进行定义
- timestamps:false,           //排除掉,默认的 updateAt createdAt 两个字段
- tableName:'userInfo' //自定义表名
- });*/
-
-
+/*
 var Article = mysqlCient.sequelize.define('article',
     {
         title:{
@@ -203,9 +256,9 @@ var Article = mysqlCient.sequelize.define('article',
         timestamps:false,           //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'article'     //自定义表名
     }
-);
+);*/
 
-var File = mysqlCient.sequelize.define('file',
+/*var File = mysqlCient.sequelize.define('file',
     {
         fileHash:{
             type:mysqlCient.Sequelize.STRING,
@@ -231,9 +284,9 @@ var File = mysqlCient.sequelize.define('file',
         timestamps:false,       //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'file'    //自定义表名
     }
-);
+);*/
 
-var ArticleFile = mysqlCient.sequelize.define('articleFile',
+/*var ArticleFile = mysqlCient.sequelize.define('articleFile',
     {
         status:
         {
@@ -247,9 +300,9 @@ var ArticleFile = mysqlCient.sequelize.define('articleFile',
         freezeTableName: true,      //冻结表名_使用自己设定的表名进行定义
         timestamps:false,           //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'articleFile' //自定义表名
-    });
+    });*/
 
-var Tag = mysqlCient.sequelize.define('tag',
+/*var Tag = mysqlCient.sequelize.define('tag',
     {
         tagName:{
             type:mysqlCient.Sequelize.STRING,
@@ -275,9 +328,9 @@ var Tag = mysqlCient.sequelize.define('tag',
         timestamps:false,       //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'tag'    //自定义表名
     }
-);
+);*/
 
-var ArticleTag = mysqlCient.sequelize.define('articleTag',
+/*var ArticleTag = mysqlCient.sequelize.define('articleTag',
     {
         status:
         {
@@ -291,9 +344,9 @@ var ArticleTag = mysqlCient.sequelize.define('articleTag',
         freezeTableName: true,      //冻结表名_使用自己设定的表名进行定义
         timestamps:false,           //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'articleTag' //自定义表名
-    });
+    });*/
 
-var Log = mysqlCient.sequelize.define('log',
+/*var Log = mysqlCient.sequelize.define('log',
     {
         type:{
             type:mysqlCient.Sequelize.INTEGER,
@@ -324,9 +377,9 @@ var Log = mysqlCient.sequelize.define('log',
         timestamps:false,       //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'log'    //自定义表名
     }
-);
+);*/
 
-var ArticleLog = mysqlCient.sequelize.define('articleLog',
+/*var ArticleLog = mysqlCient.sequelize.define('articleLog',
     {
         status:
         {
@@ -340,10 +393,10 @@ var ArticleLog = mysqlCient.sequelize.define('articleLog',
         freezeTableName: true,      //冻结表名_使用自己设定的表名进行定义
         timestamps:false,           //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'articleLog' //自定义表名
-    });
+    });*/
 
 
-var Hot = mysqlCient.sequelize.define('hot',
+/*var Hot = mysqlCient.sequelize.define('hot',
     {
         status:
         {
@@ -364,10 +417,10 @@ var Hot = mysqlCient.sequelize.define('hot',
         timestamps:false,               //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'hot'             //自定义表名
     }
-);
+);*/
 
 
-var ArticleHot = mysqlCient.sequelize.define('articleHot',
+/*var ArticleHot = mysqlCient.sequelize.define('articleHot',
     {
         status:
         {
@@ -381,9 +434,9 @@ var ArticleHot = mysqlCient.sequelize.define('articleHot',
         freezeTableName: true,      //冻结表名_使用自己设定的表名进行定义
         timestamps:false,           //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'articleHot' //自定义表名
-    });
+    });*/
 
-var ArticleUser = mysqlCient.sequelize.define('articleUser',
+/*var ArticleUser = mysqlCient.sequelize.define('articleUser',
     {
         creator:{
             type:mysqlCient.Sequelize.BIGINT,
@@ -414,16 +467,16 @@ var ArticleUser = mysqlCient.sequelize.define('articleUser',
         timestamps:false,       //排除掉,默认的 updateAt createdAt 两个字段
         tableName:'articleUser'    //自定义表名
     }
-);
+);*/
 
-exports.User        =   User;
+/*exports.User        =   User;
 exports.Info        =   Info;
 exports.Article     =   Article;
 exports.File        =   File;
 exports.Tag         =   Tag;
 exports.Log         =   Log;
-exports.Hot         =   Hot;
-
+exports.Hot         =   Hot;*/
+/*
 User.hasOne(Info);
 Info.belongsTo(User);
 
@@ -441,7 +494,7 @@ Article.belongsToMany(Hot, {'through': ArticleHot});
 Hot.belongsToMany(Article, {'through': ArticleHot});
 
 Article.belongsToMany(User,{'through': ArticleUser});
-User.belongsToMany(Article,{'through': ArticleUser});
+User.belongsToMany(Article,{'through': ArticleUser});*/
 
 
 

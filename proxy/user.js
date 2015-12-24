@@ -2,10 +2,12 @@
  * 关于用户操作的数据库处理
  * Created by scj-mo on 2015/12/6.
  */
-var models      =   require('../pmodels');
-var loggerProxy     =   require('../proxy/logger');
+var models      =   require('../pmodels/models');
+var sequelize   =   require('../pmodels/index').sequelize;
+
 var User        =   models.User;
 var Info        =   models.Info;
+var Logger      =   models.logger;
 
 /**
  * 创建一条新的用户信息
@@ -14,7 +16,7 @@ var Info        =   models.Info;
  * @param callback
  */
 exports.createUser              =   function(userName,pwd,callback){
-    return models.sequelize.transaction(function (t) {
+    return sequelize.transaction(function (t) {
         return User.create({
                 userName    :   userName,
                 userPwd     :   pwd
@@ -24,7 +26,8 @@ exports.createUser              =   function(userName,pwd,callback){
                 userNick    :   "用户"+userName.substr(7)
             }, {transaction: t}).then(function(info){
                 var content= JSON.stringify(user) + JSON.stringify(info);
-                loggerProxy.createLogger('pets.user.register',content,function(logger){});
+                var type = 'pets.user.register';
+                Logger.create({type :type,content:content,userId:user.id});
             });
         });
     }).then(function (result) {
@@ -40,10 +43,10 @@ exports.createUser              =   function(userName,pwd,callback){
  * @param loginName
  * @param callback
  */
-exports.getUserByUserName       =   function(loginName,callback){
+exports.getUserByUserName       =   function(userName,callback){
     User.findOne({
             where: {
-                'userName': loginName
+                'userName': userName
             },
             include:{
                 model:Info

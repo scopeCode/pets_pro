@@ -1,24 +1,26 @@
 /**
- * 日志模型表
- * Created by scj-mo on 2015/12/11.
+ * Created by WG on 2015/12/24.
  */
-var mysqlCient   =   require("./index");
-var SysLogger = mysqlCient.sequelize.define('sysLog',
+var mysqlCient = require('../pmodels/index');
+
+var Log = mysqlCient.sequelize.define('log',
     {
-        userId:{
-            type:mysqlCient.Sequelize.BIGINT,
-            field:"userId",
-            comment:'用户表的主键ID'
-        },
         type:{
-            type:mysqlCient.Sequelize.STRING,
+            type:mysqlCient.Sequelize.INTEGER,
             field:"type",
-            comment:'日志类型'
+            comment:'类型操作符  1:热度 2:评论  3：转发'
         },
         content:{
             type:mysqlCient.Sequelize.STRING,
             field:"content",
-            comment:'日志内容'
+            comment:'文章日志的内容'
+        },
+        status:
+        {
+            type:mysqlCient.Sequelize.BOOLEAN,
+            field:"status",
+            defaultValue: true,
+            comment:'状态'
         },
         created:{
             type:mysqlCient.Sequelize.DATE,
@@ -30,7 +32,7 @@ var SysLogger = mysqlCient.sequelize.define('sysLog',
     {
         freezeTableName: true,  //冻结表名_使用自己设定的表名进行定义
         timestamps:false,       //排除掉,默认的 updateAt createdAt 两个字段
-        tableName:'sysLog'    //自定义表名
+        tableName:'log'    //自定义表名
     }
 );
-exports.SysLogger = SysLogger;
+exports.Log = Log;

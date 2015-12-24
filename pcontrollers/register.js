@@ -4,7 +4,6 @@
  */
 var EventProxy      =   require('eventProxy');
 var userProxy       =   require('../proxy/user');
-var loggerProxy     =   require('../proxy/logger');
 var utils           =   require('utility');
 var commonResponse  =   require('../common/commonResponse');
 

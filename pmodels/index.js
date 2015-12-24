@@ -2,9 +2,7 @@
  * 建立mongoose对象,引入数据库模型
  * Created by WG on 2015/11/28.
  */
-var mysql       =   require("mysql");
 var Sequelize   =   require('sequelize');
-
 var config ={
     database:'baby',
     username:'root',
@@ -28,16 +26,3 @@ var config ={
 };
 exports.sequelize  = new Sequelize(config.database, config.username, config.password, config.options);
 exports.Sequelize  = Sequelize;
-
-//引入数据表的对象
-var models          =   require('./models');
-var logger          =   require('./logger');
-
-exports.User        =   models.User;
-exports.Info        =   models.Info;
-exports.Article     =   models.Article;
-exports.File        =   models.File;
-exports.Tag         =   models.Tag;
-exports.Log         =   models.Log;
-exports.Hot         =   models.Hot;
-exports.SysLogger   =   logger.SysLogger;
