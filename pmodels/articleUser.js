@@ -14,7 +14,7 @@ var ArticleUser = mysqlCient.sequelize.define('articleUser',
         type:{
             type:mysqlCient.Sequelize.INTEGER,
             field:"type",
-            comment:'文章类型 0：自创 1:转载'
+            comment:'文章类型 0：自创 1:转载 2:关注'
         },
         status:
         {

@@ -25,8 +25,14 @@ module.exports = function (app) {
     //[文章处理 ]-----------------------------------------------------------------\\
     app.route('/user/article/createTextArticle').all(auth.loginRequired).
         post(article.createTextArticle);
-    app.route('/user/article/updateArticleHotCnt').all(auth.loginRequired).
-        post(article.articleHotSet);
+
+    app.route('/user/article/articleAddHot').all(auth.loginRequired).
+        post(article.articleAddHot);
+    app.route('/user/article/articleDescHot').all(auth.loginRequired).
+        post(article.articleDescHot);
+    app.route('/user/article/articleReprint').all(auth.loginRequired).
+        post(article.articleReprint);
+
     app.route('/user/article/queryArticleLogByArticleId').all(auth.loginRequired).
         post(article.queryArticleLogByArticleId);
 };

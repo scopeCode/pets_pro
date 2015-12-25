@@ -15,6 +15,11 @@ var Log = mysqlCient.sequelize.define('log',
             field:"content",
             comment:'文章日志的内容'
         },
+        userId:{
+            type:mysqlCient.Sequelize.INTEGER,
+            field:"userId",
+            comment:'用户ID'
+        },
         status:
         {
             type:mysqlCient.Sequelize.BOOLEAN,

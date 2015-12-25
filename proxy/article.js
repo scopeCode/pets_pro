@@ -69,27 +69,101 @@ exports.createArticle          =   function(article,tags,files,userId,callback){
     }).catch(function (err) {
         console.error(err);
     });
-
 };
 
-exports.updateArticleHotCnt     =   function(articleId,type,callback){
+/**
+ * 文章增加热度
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.articleAddHot   =   function(articleId,userId,nick,callback){
+    return sequelize.transaction(function (t) {
+        return Article.findById(articleId,{transaction: t}).then(function(article){
+            var cnt = parseInt(article.count) + 1;
+            return article.update({
+                count:cnt
+            },{transaction: t}).then(function(){
+                //插入日志
+                return article.createHot({
+                    userId:userId
+                },{transaction: t}).then(function(){
+                    return article.createLog({
+                            type:1,
+                            userId:userId,
+                            content:nick+'点赞咯.'
+                    },{transaction: t})
+                });
+            });
+        });
+    }).then(function (result) {
+        callback(result);
+    }).catch(function (err) {
+        console.error(err);
+    });
+}
+/**
+ * 文章减去热度
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.articleDescHot  =   function(articleId,userId,callback){
+    return sequelize.transaction(function (t) {
+        return Article.findById(articleId,{
+            'include': [
+                {
+                    'model': Hot
+                },
+                {
+                    'model': Log
+                }
+            ]
+        },{transaction: t}).then(function(article){
+            var cnt = parseInt(article.count) - 1;
+            return article.update({
+                count:cnt
+            },{transaction: t}).then(function(data){
 
-    var sql = "";
-    switch (type){
-        case "1":{//加1
-            sql = 'UPDATE t_b_article SET HOT_COUNT = HOT_COUNT + 1 WHERE ID = '+articleId;
-        }break;
-        case "2":{//减1
-            sql = 'UPDATE t_b_article SET HOT_COUNT = HOT_COUNT - 1 WHERE ID = '+articleId;
-        }break;
-    }
-
-    models.sequelize.query(sql).spread(function(results, metadata) {
-        callback(results, metadata);
+                return data.getHots({
+                    articleId:articleId,
+                    userId  :userId
+                },{transaction: t}).then(function(obj){
+                    article.removeHot(obj);
+                    return article.getLogs({
+                        articleId:article.id
+                    },{transaction: t}).then(function(_articleLog){
+                        article.removeLog(_articleLog);
+                    });
+                });
+            });
+        });
+    }).then(function (result) {
+        callback(result);
+    }).catch(function (err) {
+        console.error(err);
     });
 };
 
-
+/**
+ * 文章被转载了
+ * @param userId
+ * @param article
+ * @param callback
+ */
+exports.articleReprint  =   function(articleId,userId,callback){
+    return sequelize.transaction(function (t) {
+        return Article.findById(articleId,{transaction: t}).then(function(article){
+            return User.findById(userId,{transaction: t}).then(function(user){
+                return article.addUser(user,{transaction: t});
+            });
+        });
+    }).then(function (result) {
+        callback(result);
+    }).catch(function (err) {
+        console.error(err);
+    });
+};
 
 //------------------------------------------------------------------------------------//
 /**
@@ -148,8 +222,34 @@ exports.queryArticleList       =   function(userId,_offset,_limit,callback){
                     artile.isShowCancleFollow   =   false;     //是否显示取消关注的按钮
                     artile.isShowReprint        =   false;     //是否显示 转发类的按钮
                     artile.isShowHot            =   false;     //显示 已经有热度还是没有热度
+                    artile.isActiveHot          =   false;     //显示 已经有热度还是没有热度
 
                     if(articleUser.creator != articleUser.userId){
+
+                        //处理下是否显示 取消关注的按钮 条件是 type = 2    0:自创,1:转载,2:关注文章
+                        artile.isShowReprint        =   true;
+
+                        if(articleUser.type +'' == '2'){
+                            artile.isShowCancleFollow = true;
+
+                        }
+                        if(articleUser.type +'' == '1'){
+                            artile.isShowReprint = false;
+                        }
+
+                        artile.isShowHot       =   true;
+
+                        var artileHotArr = artile.hots;
+                        var hotLen = artileHotArr.length;
+
+                        for(var  j=0;j<hotLen;j++){
+                            var _userId = artileHotArr[j].userId;
+                            if(_userId == articleUser.userId){
+                                artile.isActiveHot     =   true;
+                                break;
+                            }
+                        }
+
                         User.find({
                             'include': [Info],
                             'where': {
@@ -161,24 +261,15 @@ exports.queryArticleList       =   function(userId,_offset,_limit,callback){
                                 return proxy.emit('result',artile);
                             }
 
-
-
                             proxy.emit('result',artile);
                         });
                     }else{
-                        if(articleUser.type +'' == '1'){//如果不是转发类的直接隐藏  取消关注
-                            artile.isShowCancleFollow = true;
-                        }
                         proxy.emit('result',artile);
                     }
                 })(item);
             }
 
         }
-
-
-
-
 
     });
 

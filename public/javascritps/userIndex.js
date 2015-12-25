@@ -493,13 +493,14 @@ var userIndex   =   (function(){
             var item  = $(_this);
             var isActive    =   item.hasClass('active');
             var opt         =   isActive ? "2" : "1"; //1为加 2为减
+            var url         =   isActive ? "/user/article/articleDescHot" : "/user/article/articleAddHot"; //1为加 2为减
             var articleId   =   item.attr('articleId');
 
             //进行后台处理
             try{
 
                 var cfg = {
-                    url		    :	"/user/article/updateArticleHotCnt",
+                    url		    :	url,
                     data		:	[],
                     method	    :	"POST",
                     start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
@@ -509,7 +510,6 @@ var userIndex   =   (function(){
 
                 //设定需要传递的参数
                 cfg.data.push("articleId="		    +	articleId);
-                cfg.data.push("optType="		    +	opt);
 
                 cfg.start();
 
@@ -561,6 +561,62 @@ var userIndex   =   (function(){
             }catch(ex){
                 log(ex);
             }//catch(ex) end
+        },
+        tranlateArticle:function(_this){
+            var item  = $(_this);
+            var articleId   =   item.attr('articleId');
+
+            //进行后台处理
+            try{
+
+                var cfg = {
+                    url		    :	'/user/article/articleReprint',
+                    data		:	[],
+                    method	    :	"POST",
+                    start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                    end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                };
+
+
+                //设定需要传递的参数
+                cfg.data.push("articleId="		    +	articleId);
+
+                cfg.start();
+
+                $.ajax({
+                    url         :   cfg.url,
+                    method      :   cfg.method,
+                    data        :   cfg.data.join('&'),
+                    dataType    :   'json',
+                    success     :   function(json){//将关注的这条记录 变更转发
+                        try{
+                            if(json.result) {
+                                message.msg('操作成功.');
+
+                            }else{
+                                message.msg('操作失败:' +   json.msg);
+                            }
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    },
+                    error       :   function(xhr){
+                        try{
+                            ajaxFailure(xhr);
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    }
+                });
+            }catch(ex){
+                log(ex);
+            }//catch(ex) end
         }
     };
 
@@ -575,7 +631,7 @@ var userIndex   =   (function(){
             optIndex.clickSetArticleHot(_this);
         },
         tranlateArticle:function(_this){
-            //自己不能转发自己的文章直接屏蔽掉
+
         },
         imgOnmousemove:function(_this){
             optIndex.imgOnmousemove(_this);

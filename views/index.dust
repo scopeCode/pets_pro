@@ -83,7 +83,7 @@
                               </div>
 
                               <div class="content_bottom">
-                                  <a class="text-muted" href="javascript:;;" articleId="{id}" id="articleId{base.id}" cnt="{count}" onclick="userIndex.clickHotCnt(this)">{count}热度</a>
+                                  <a class="text-muted" href="javascript:;;" articleId="{id}" id="articleId{id}" cnt="{count}" onclick="userIndex.clickHotCnt(this)">{count}热度</a>
 
                                     <!--鼠标点击热度-->
                                     <div class="hot-info" id="articleHotInfo{id}">
@@ -96,12 +96,12 @@
                                     <!--end鼠标移上去显示个人信息的地方-->
 
                                 <div class="bottom_tool">
-                                    {?isTrans}
+                                    {?isShowReprint}
                                        <a class="fui-link mrm" href="javascript:;;" title="转发" onclick=""></a>
-                                    {/isTrans}
-                                    {?isHot}
-                                        <a class='fui-heart {?hot}active{/hot}' href="javascript:;;" title="喜欢" articleId='{base.id}' onclick="userIndex.clickSetArticleHot(this)"></a>
-                                    {/isHot}
+                                    {/isShowReprint}
+                                    {?isShowHot}
+                                        <a class='fui-heart {?isActiveHot}active{/isActiveHot}' href="javascript:;;" title="喜欢" articleId='{id}' onclick="userIndex.clickSetArticleHot(this)"></a>
+                                    {/isShowHot}
                                 </div>
                             </div>
                           </div>
