@@ -69,7 +69,7 @@
                               </div>
                               <div class="content_body" data-toggle="modal" data-target="#content_body_info">
                                   <h6>
-                                      {@OutTextOrLink value=./}
+                                      {title|s}
                                   </h6>
                                   {#files}
                                     <img src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
@@ -97,7 +97,7 @@
 
                                 <div class="bottom_tool">
                                     {?isShowReprint}
-                                       <a class="fui-link mrm" href="javascript:;;" title="转发" onclick=""></a>
+                                       <a class="fui-link mrm" href="javascript:;;" title="转发" articleId='{id}' onclick="userIndex.tranlateArticle(this)"></a>
                                     {/isShowReprint}
                                     {?isShowHot}
                                         <a class='fui-heart {?isActiveHot}active{/isActiveHot}' href="javascript:;;" title="喜欢" articleId='{id}' onclick="userIndex.clickSetArticleHot(this)"></a>
@@ -121,26 +121,28 @@
         <p class="mbn">热门博客</p>
         <div class="recommend－list">
             <ul>
-                {@getHotBlog petReq="http://localhost/user/getHotBlog"}
-                    <items>
-                        <li>
-                            <div class="media">
-                                <div class="media-left">
-                                    <a href="javascript:;;">
-                                      <img src="{?PHOTO}{PHOTO}{:else}/img/img_normal.png{/PHOTO}" width="36px" height="36px">
-                                     </a>
-                                </div>
-                                <div class="media-body">
-                                    <h4>{NICK}</h4>
-                                    <p>{?SIGN}{SIGN}{:else}这个家伙很懒,什么也没有留下.{/SIGN}</p>
-                                </div>
-                                <div class="media-right">
-                                    <a href="javascript:;;" class="btn-box" title="关注"><span class="fui-plus"></span></a>
-                                </div>
+                {#totalHotUser}
+                    <li>
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="javascript:;;">
+                                  <img src="{?info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{info.photo}{:else}/img/img_normal.png{/info.photo}" width="36px" height="36px">
+                                 </a>
                             </div>
-                        </li>
-                    </items>
-                {/getHotBlog}
+                            <div class="media-body">
+                                <h4>{info.userNick}</h4>
+                                <p>{?info.sign}{info.sign}{:else}这个家伙很懒,什么也没有留下.{/info.sign}</p>
+                            </div>
+                            <div class="media-right">
+                                {?info.isFollowed}
+                                    <div class="btn-box" style="width: 47px;">已关注</div>
+                                {:else}
+                                    <a href="javascript:;;" class="btn-box" title="关注"><span class="fui-plus"></span></a>
+                                {/info.isFollowed}
+                            </div>
+                        </div>
+                    </li>
+                {/totalHotUser}
                 <li class="bbn"> <a href="javascript:;;" class="">查看更多达人</a> </li>
             </ul>
         </div>
@@ -149,12 +151,21 @@
             <ul>
                 <li>
                     <div class="media">
-                        <div class="media-left"> <a href="#"> <img src="img/img_normal.png" width="36px" height="36px"> </a> </div>
+                        <div class="media-left">
+                            <a href="javascript;;">
+                                <img src="{?todayHotUser.info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{todayHotUser.info.photo}{:else}/img/img_normal.png{/todayHotUser.info.photo}" width="36px" height="36px"> </a>
+                            </div>
                         <div class="media-body">
-                            <h4>仰望明天</h4>
-                            <p>个人描述</p>
+                            <h4>{todayHotUser.info.userNick}</h4>
+                            <p>{?todayHotUser.info.sign}{todayHotUser.info.sign}{:else}这个家伙很懒,什么也没有留下.{/todayHotUser.info.sign}</p>
                         </div>
-                        <div class="media-right"> <a href="#" class="btn-box" title="关注"><span class="fui-plus"></span></a> </div>
+                        <div class="media-right">
+                            {?todayHotUser.info.isFollowed}
+                                <div class="btn-box" style="width: 47px;">已关注</div>
+                            {:else}
+                                <a href="javascript:;;" class="btn-box" title="关注"><span class="fui-plus"></span></a>
+                            {/todayHotUser.info.isFollowed}
+                         </div>
                     </div>
                 </li>
                 <li>

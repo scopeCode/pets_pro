@@ -10,7 +10,7 @@ var Article = mysqlCient.sequelize.define('article',
             comment:'文章的标题.'
         },
         content:{
-            type:mysqlCient.Sequelize.STRING,
+            type:mysqlCient.Sequelize.STRING(1024),
             field:"content",
             comment:'文章的内容'
         },

@@ -40,6 +40,18 @@ var Info = mysqlCient.sequelize.define('info',
             comment:'个性签名',
             defaultValue:''
         },
+        totalCnt:{
+            type:mysqlCient.Sequelize.INTEGER,
+            field:"totalCnt",
+            comment:'个人魅力总值',
+            defaultValue:0
+        },
+        todayCnt:{
+            type:mysqlCient.Sequelize.INTEGER,
+            field:"todayCnt",
+            comment:'今天魅力值',
+            defaultValue:0
+        },
         isPublishText:{
             type:mysqlCient.Sequelize.BOOLEAN,
             field:"isPublishText",

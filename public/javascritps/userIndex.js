@@ -29,10 +29,76 @@ var userIndex   =   (function(){
         bindEvent   :   function(){
 
 
+            //链接文章发布框的事件的绑定
+            $('#inputLinkArticleValue').bind('input propertychange', function() {
+                var _this = this;
+                var $parent = $(_this).parent();
+                var url = $(_this).val();
+                if(!url){
+                    return false;
+                }
+                //进行后台处理
+                try{
+
+                    var cfg = {
+                        url		    :	"/user/link/getTitle",
+                        data		:	[],
+                        method	    :	"POST",
+                        temp        :   '<a class="form-control input-lg" target="_blank" href="#{href}">#{content}</a>',
+                        start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                        end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                    };
+                    cfg.data.push('url=' +   url);
+                    //设定需要传递的参数
+                    cfg.start();
+                    $.ajax({
+                        url         :   cfg.url,
+                        method      :   cfg.method,
+                        data        :   cfg.data.join('&'),
+                        dataType    :   'json',
+                        success     :   function(json){
+                            try{
+                                if(json.result) {
+                                    var  title = json.data;
+                                    $('#inputLinkArticleValue').hide().val('');
+
+                                    $parent.prepend(cfg.temp.format({
+                                        'href':url,
+                                        'content':title
+                                    }));
+
+                                    $('#btnLinkArticlePublish').attr('urlTitle',title).attr('url',url);
+                                }else{
+                                    message.msg('操作失败,' +   json.msg);
+                                }
+                            }catch(ex){
+                                log(ex);
+                            }
+                            finally{
+                                cfg.end();
+                            }
+                        },
+                        error       :   function(xhr){
+                            try{
+                                ajaxFailure(xhr);
+                            }catch(ex){
+                                log(ex);
+                            }
+                            finally{
+                                cfg.end();
+                            }
+                        }
+                    });
+                }catch(ex){
+                    log(ex);
+                }//catch(ex) end
+
+            });
+
             //点击发布 链接的文章的处理
             $('#btnLinkArticlePublish').bind('click',function(){
 
-                var link = $.trim($('#inputLinkArticleValue').val());
+                var link = $.trim($('#btnLinkArticlePublish').attr('url'));
                 if(link == ''){
                     message.msg('链接地址不可为空.');
                     return false;
@@ -44,7 +110,7 @@ var userIndex   =   (function(){
                     return false;
                 }
 
-                var title   = link;
+                var title   = $('#btnLinkArticlePublish').attr('urlTitle');
                 var content = $('#textareaLinkArticleContent').val();
 
                 var  resTagList =       [];
@@ -63,27 +129,24 @@ var userIndex   =   (function(){
 
                 //进行后台处理
                 try{
-
                     var cfg = {
-                        url		    :	"/user/article/createTextArticle",
+                        url		    :	"/user/article/createLinkArticle",
                         data		:	[],
                         method	    :	"POST",
-
+                        tempLink    :   '<a title="#{data}" target="_blank" href="#{href}">#{content}</a>',
                         temp        :   '<li><div class="media"><div class="media-left"><a href="javascript:;;"><img src="#{img}" width="64px" height="64px"></a></div><div class="media-body"><div class="list_content"><div class="content_top">#{nick}<div class="pull-right text-muted">#{created}</div></div><div class="content_body" data-toggle="modal" data-target="#content_body_info"><h6>#{title}</h6><p>#{content}</p><p class="mbm" >#{tagList}</p></div><div class="content_bottom"><a class="text-muted" href="javascript:;;" cnt="0" onclick="userIndex.clickHotCnt(this)">0热度</a><div class="bottom_tool"></div></div></div></div></div></li>',
                         start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
                         end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
                     };
 
-
-
+                    var _title = cfg.tempLink.format({content:title, href:link,data:title});
                     //设定需要传递的参数
-                    cfg.data.push("title="		    +	title   );
+                    cfg.data.push("title="		    +	_title  );
                     cfg.data.push("content="		+	content );
                     cfg.data.push("type=3"                      );
                     cfg.data.push("tags="		    +	tag.join('$$$$$'));
 
                     cfg.start();
-
 
                     $.ajax({
                         url         :   cfg.url,
@@ -104,7 +167,7 @@ var userIndex   =   (function(){
                                     var str  = cfg.temp.format({
                                         img:$('#imgMyPhoto').attr('src'),
                                         nick:$("#aMyNick").text(),
-                                        title:title,
+                                        title:_title,
                                         content:content,
                                         created:'刚刚',
                                         tagList:resTagList.join('')
@@ -631,7 +694,7 @@ var userIndex   =   (function(){
             optIndex.clickSetArticleHot(_this);
         },
         tranlateArticle:function(_this){
-
+            optIndex.tranlateArticle(_this);
         },
         imgOnmousemove:function(_this){
             optIndex.imgOnmousemove(_this);

@@ -16,7 +16,7 @@ var SysLogger = mysqlCient.sequelize.define('sysLog',
             comment:'日志类型'
         },
         content:{
-            type:mysqlCient.Sequelize.STRING,
+            type:mysqlCient.Sequelize.STRING(1024),
             field:"content",
             comment:'日志内容'
         },

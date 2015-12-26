@@ -7,6 +7,7 @@ var login               =   require("./pcontrollers/login");
 var register            =   require("./pcontrollers/register");
 var auth                =   require("./pmiddlewares/auth");
 var article             =   require("./pcontrollers/article");
+var common              =   require("./pcontrollers/common");
 
 module.exports = function (app) {
 
@@ -25,6 +26,8 @@ module.exports = function (app) {
     //[文章处理 ]-----------------------------------------------------------------\\
     app.route('/user/article/createTextArticle').all(auth.loginRequired).
         post(article.createTextArticle);
+    app.route('/user/article/createLinkArticle').all(auth.loginRequired).
+        post(article.createLinkArticle);
 
     app.route('/user/article/articleAddHot').all(auth.loginRequired).
         post(article.articleAddHot);
@@ -32,6 +35,9 @@ module.exports = function (app) {
         post(article.articleDescHot);
     app.route('/user/article/articleReprint').all(auth.loginRequired).
         post(article.articleReprint);
+
+    app.route('/user/link/getTitle').all(auth.loginRequired).
+        post(common.getPageTitle);
 
     app.route('/user/article/queryArticleLogByArticleId').all(auth.loginRequired).
         post(article.queryArticleLogByArticleId);

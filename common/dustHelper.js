@@ -3,7 +3,7 @@
  * Created by WG on 2015/12/10.
  */
 var EventProxy      =   require('eventProxy');
-var articleProxy    =   require('../proxy/article');
+var userProxy       =   require('../proxy/user');
 
 
 module.exports = function(dust){
@@ -28,38 +28,30 @@ module.exports = function(dust){
 
         timestamp = new Date(value);
         month   =   timestamp.getMonth() + 1;
+        month   =   ("0"+month).slice(-2);
         date    =   timestamp.getDate();
+        date    =   ("0"+date).slice(-2);
         year    =   timestamp.getFullYear();
         hour    =   timestamp.getHours();
+        hour    =   ("0"+hour).slice(-2);
         min     =   timestamp.getMinutes();
+        min     =   ("0"+min).slice(-2);
         second  =   timestamp.getSeconds();
+        second  =   ("0"+second).slice(-2);
 
         return chunk.write(year + '/' + month + '/' + date +' ' + hour+':'+min+':'+second);
     };
 
+
     /**
-     *
+     * 显示 链接 的 帮助类
      * @param chunk
      * @param context
      * @param bodies
      * @param params
+     * @returns {*}
+     * @constructor
      */
-    dust.helpers.IsShowHot =    function (chunk, context, bodies, params) {
-        var _value  =   params.value;
-        var _uid    =   params.uid;
-        var _res    =   "";
-        var _len    =   _value.length;
-
-        for(var i=0;i<_len;i++){
-            var userId = _value[i].userId;
-            if(userId == _uid){
-                _res = "active";
-                break;
-            }
-        }
-        return chunk.write(_res);
-    };
-
     dust.helpers.OutTextOrLink =    function (chunk, context, bodies, params) {
         var _value  =   params.value;
         var _res    =   _value.title;

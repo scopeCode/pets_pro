@@ -154,9 +154,13 @@ exports.articleDescHot  =   function(articleId,userId,callback){
 exports.articleReprint  =   function(articleId,userId,callback){
     return sequelize.transaction(function (t) {
         return Article.findById(articleId,{transaction: t}).then(function(article){
-            return User.findById(userId,{transaction: t}).then(function(user){
-                return article.addUser(user,{transaction: t});
-            });
+            article.createUser({});
+            /*return User.findById(userId,{transaction: t}).then(function(user){
+                var _user = user;
+                return article.addUser(_user ,{transaction: t}).then(function(data){
+                    var d = data;
+                });
+            });*/
         });
     }).then(function (result) {
         callback(result);
@@ -281,7 +285,19 @@ exports.queryArticleList       =   function(userId,_offset,_limit,callback){
  * @param callback
  */
 exports.queryArticleLog     =   function(articleId,limit,pageSize,callback){
-    var sql = [];
+
+    return sequelize.transaction(function (t) {
+        return Article.findById(articleId,{
+
+        },{transaction: t}).then(function(article){
+
+        });
+    }).then(function (result) {
+        callback(result);
+    }).catch(function (err) {
+        console.error(err);
+    });
+    /*var sql = [];
     sql.push(' SELECT log.ARTICLE_ID,log.CONTENT,log.CREATED,log.USER_ID,ex.PHOTO,ex.BG_PHOTO,ex.NICK  ');
     sql.push(' FROM t_b_article_log log ');
     sql.push(' LEFT JOIN t_b_user_ex ex on ex.USER_ID = log.USER_ID ');
@@ -289,5 +305,5 @@ exports.queryArticleLog     =   function(articleId,limit,pageSize,callback){
     sql.push(' LIMIT '+ (parseInt(limit) * parseInt(pageSize)) +','+pageSize);
     models.sequelize.query(sql.join('')).spread(function(results, metadata) {
         callback(results, metadata);
-    });
+    });*/
 };
