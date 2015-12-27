@@ -146,22 +146,14 @@ exports.articleDescHot  =   function(articleId,userId,callback){
 };
 
 /**
- * 文章被转载了
+ * 文章被转载了  新建立一片文章  但是 要知道 这篇文章 的根是谁  包括 创建者 和  文章ID
  * @param userId
  * @param article
  * @param callback
  */
 exports.articleReprint  =   function(articleId,userId,callback){
     return sequelize.transaction(function (t) {
-        return Article.findById(articleId,{transaction: t}).then(function(article){
-            article.createUser({});
-            /*return User.findById(userId,{transaction: t}).then(function(user){
-                var _user = user;
-                return article.addUser(_user ,{transaction: t}).then(function(data){
-                    var d = data;
-                });
-            });*/
-        });
+
     }).then(function (result) {
         callback(result);
     }).catch(function (err) {
@@ -178,8 +170,6 @@ exports.articleReprint  =   function(articleId,userId,callback){
 exports.queryArticleList       =   function(userId,_offset,_limit,callback){
     _offset = _offset * _limit;
     var proxy = new EventProxy();
-
-
     Article.findAll({
         'include': [
             {

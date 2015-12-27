@@ -149,6 +149,7 @@
         <div class="mtl top-list">
             <p class="mbn">本日最高</p>
             <ul>
+                {?todayHotUser}
                 <li>
                     <div class="media">
                         <div class="media-left">
@@ -172,18 +173,29 @@
                     <div class="media">
                         <div class="media-body">
                             <div class="list_content ">
-                                <div class="content_body"> <img src="img/01.jpg" style="width:100%">
-                                    <p>For more cool UX stuff follow us on Behance:
-                                        http://bit.ly/UXstudioBehance</p>
-                                    <p class="mbm"><a href="#" class="mrm text-muted">#宠物</a><a href="#" class="mrm text-muted">#狗</a></p>
+                                <div class="content_body">
+                                    {#todayHotUser.article.files}
+                                        <img src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
+                                    {/todayHotUser.article.files}
+                                    <p>{todayHotUser.article.content}</p>
+                                    <p class="mbm">
+                                        {#todayHotUser.article.tags}
+                                            <a href="#" class="mrm text-muted">{tagName}</a>
+                                        {/todayHotUser.article.tags}
+                                    </p>
                                 </div>
-                                <div class="content_bottom"> <a class="text-muted" href="#">20热度</a>
-                                    <div class="bottom_tool"> <a class="fui-link mrm" href="#" title="转发"></a> <a class="fui-heart active" href="#" title="喜欢"></a> </div>
+                                <div class="content_bottom">
+                                    <a class="text-muted" href="#">{todayHotUser.article.count}热度</a>
+                                    <div class="bottom_tool">
+                                        <a class="fui-link mrm" href="#" title="转发"></a>
+                                        <a class="fui-heart active" href="#" title="喜欢"></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </li>
+                {/todayHotUser}
             </ul>
         </div>
     </div>
