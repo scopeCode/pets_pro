@@ -4,6 +4,8 @@
  */
 var models      =   require('../pmodels/models');
 var sequelize   =   require('../pmodels/index').sequelize;
+var EventProxy  =   require('eventproxy');
+var co          =   require('co');
 
 var Article         =   models.Article;
 var File            =   models.File;
@@ -86,7 +88,33 @@ exports.getTotalHotUser             =   function(userId,callback){
         'order':' totalCnt desc ',
         'limit':5
     }).then(function(data){
-        callback(data);
+
+        var dataLen     =   data.length;
+        if(dataLen>0){
+            var proxy = new EventProxy();
+            proxy.after('result', dataLen , function (totalUserCnts) {
+                callback(totalUserCnts);
+            });
+            User.findById(userId).then(function(user){
+                for(var i=0;i<dataLen;i++){
+                    var item = data[i];
+                    (function(item){
+                        user.getUserFollows({
+                            'where':{
+                                'followUserId':item.id   //当前用户的userID
+                            }
+                        }).then(function(userFollow){
+                            item.userFollow = userFollow && userFollow.length>0 ? true : false;
+                            proxy.emit('result',item);
+                        });
+
+                    })(item);
+                }
+            });
+
+        }else{
+            callback([]);
+        }
     });
 };
 
@@ -138,21 +166,28 @@ exports.getTodayHotUser             =   function(userId,callback){
                 if(articles && articles.length > 0){
                     result.article = articles[0];
 
-                    result.user.getUserFollows({
-                        'where':{
-                            'userId':_userId, //找到当日最高的人的ID
-                            'followUserId':userId   //当前用户的userID
-                        }
-                    }).then(function(userFollow){
-                        result.userFollow = userFollow && userFollow.length>0 ? true : false;
 
-                        result.article.getHots({
+                    UserFollow.find({
+
+                    });
+
+                    User.findById(userId).then(function(user){
+
+                        user.getUserFollows({
                             'where':{
-                                'userId':userId
+                                'followUserId':_userId
                             }
-                        }).then(function(articleHot){
-                            result.articleHot = articleHot&&articleHot.length>0 ? true : false;
-                            callback(result);
+                        }).then(function(userFollow){
+                            result.userFollow = userFollow && userFollow.length>0 ? true : false;
+
+                            result.article.getHots({
+                                'where':{
+                                    'userId':userId
+                                }
+                            }).then(function(articleHot){
+                                result.articleHot = articleHot&&articleHot.length>0 ? true : false;
+                                callback(result);
+                            });
                         });
 
                     });
