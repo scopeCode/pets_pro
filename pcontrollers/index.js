@@ -46,15 +46,6 @@ exports.show = function (req, res, next) {
 
                         })(total,m);
                     }
-
-                    for(var j=0;j<len;j++){
-                        //针对todayHotUser
-                        var item = data[j];
-                        if(todayHotUser && todayHotUser.info.userId == item.followUserId){
-                            todayHotUser.info.isFollowed = true;
-                            break;
-                        }
-                    }
                 }
 
                 res.render('index',{

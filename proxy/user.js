@@ -10,6 +10,7 @@ var File            =   models.File;
 var Tag             =   models.Tag;
 var Log             =   models.Log;
 var Hot             =   models.Hot;
+var ArticleHot      =   models.ArticleHot;
 
 var User        =   models.User;
 var UserFollow  =   models.UserFollow;
@@ -76,10 +77,6 @@ exports.getTotalHotUser             =   function(userId,callback){
             {
                 'model':Info
             }
-            /*,
-            {
-                'model':UserFollow
-            }*/
         ],
         where:{
             id:{
@@ -100,29 +97,10 @@ exports.getTotalHotUser             =   function(userId,callback){
  */
 exports.getTodayHotUser             =   function(userId,callback){
     try{
-
-        User.findOne({
+        User.find({
             include:[
                 {
                     'model' : Info
-                },
-                {
-                    'model' : Article,
-                    'order':' created desc ',
-                    'include': [
-                        {
-                            'model': Tag
-                        },
-                        {
-                            'model': File
-                        },
-                        {
-                            'model': Hot,
-                            'where':{
-
-                            }
-                        }
-                    ]
                 }
             ],
             where:{
@@ -130,60 +108,58 @@ exports.getTodayHotUser             =   function(userId,callback){
                     $ne : userId
                 }
             },
-            'order' :  ' todayCnt desc '
+            'order' :  ' todayCnt desc ',
+            'limit' : 1
         }).then(function(data){
 
-
-            //1: 是否已经加热过
-            //2：是否可以转载此篇文章
-            //3: 是否 关注过这个人
-
-
-
-
-            /*if(data.articles && data.articles.length>0){
-                data.article = data.articles[0];
-                data.articles = [];
-
-                //--处理界面的元素控制
-                data.article.isShowCancleFollow   =   false;     //是否显示取消关注的按钮
-                data.article.isShowReprint        =   false;     //是否显示 转发类的按钮
-                data.article.isShowHot            =   false;     //显示 已经有热度还是没有热度
-                data.article.isActiveHot          =   false;     //显示 已经有热度还是没有热度
-
-                if(data.article.articleUser.creator != data.article.articleUser.userId){
-                    //处理下是否显示 取消关注的按钮 条件是 type = 2    0:自创,1:转载,2:关注文章
-                    data.article.isShowReprint        =   true;
-
-                    if(data.article.articleUser.type +'' == '2'){
-                        data.article.isShowCancleFollow = true;
+            var result = {};
+            result.user =   data;
+            //获取当日最高的人的用户ID
+            var _userId = data.id;
+            Article.findAll({
+                'include': [
+                    {
+                        'model': Tag
+                    },
+                    {
+                        'model': File
+                    },
+                    {
+                        'model': User,
+                        'where':{
+                            'id' : _userId
+                        }
                     }
-                    if(data.article.articleUser.type +'' == '1'){
-                        data.article.isShowReprint = false;
-                    }
+                ],
+                offset: 0,
+                limit: 15,
+                order:' created desc '
+            }).then(function(articles){
+                if(articles && articles.length > 0){
+                    result.article = articles[0];
+
+                    result.user.getUserFollows({
+                        'where':{
+                            'userId':_userId, //找到当日最高的人的ID
+                            'followUserId':userId   //当前用户的userID
+                        }
+                    }).then(function(userFollow){
+                        result.userFollow = userFollow && userFollow.length>0 ? true : false;
+
+                        result.article.getHots({
+                            'where':{
+                                'userId':userId
+                            }
+                        }).then(function(articleHot){
+                            result.articleHot = articleHot&&articleHot.length>0 ? true : false;
+                            callback(result);
+                        });
+
+                    });
+                }else{//没有发布文章
+                    callback(result);
                 }
-
-                //查询这个人 是否 和 这篇文章 有关联
-                UserFollow.findAll({
-                    where:{
-                        userId      :   data.id,
-                        followUserId:   userId
-                    }
-                }).then(function(_data){
-
-                    if(_data){//有关联
-                        data.article.isShowCancleFollow   =   true;
-                    }else{
-
-                    }
-
-                    callback(data);
-                });
-            }else{
-                callback(data);
-            }*/
-
-           callback(data);
+            });
         });
     }catch(ex){
         console.error(ex);

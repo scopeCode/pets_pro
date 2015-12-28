@@ -154,18 +154,18 @@
                     <div class="media">
                         <div class="media-left">
                             <a href="javascript;;">
-                                <img src="{?todayHotUser.info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{todayHotUser.info.photo}{:else}/img/img_normal.png{/todayHotUser.info.photo}" width="36px" height="36px"> </a>
+                                <img src="{?todayHotUser.user.info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{todayHotUser.user.info.photo}{:else}/img/img_normal.png{/todayHotUser.user.info.photo}" width="36px" height="36px"> </a>
                             </div>
                         <div class="media-body">
-                            <h4>{todayHotUser.info.userNick}</h4>
-                            <p>{?todayHotUser.info.sign}{todayHotUser.info.sign}{:else}这个家伙很懒,什么也没有留下.{/todayHotUser.info.sign}</p>
+                            <h4>{todayHotUser.user.info.userNick}</h4>
+                            <p>{?todayHotUser.user.info.sign}{todayHotUser.user.info.sign}{:else}这个家伙很懒,什么也没有留下.{/todayHotUser.user.info.sign}</p>
                         </div>
                         <div class="media-right">
-                            {?todayHotUser.info.isFollowed}
+                            {?todayHotUser.userFollow}
                                 <div class="btn-box" style="width: 47px;">已关注</div>
                             {:else}
                                 <a href="javascript:;;" class="btn-box" title="关注"><span class="fui-plus"></span></a>
-                            {/todayHotUser.info.isFollowed}
+                            {/todayHotUser.userFollow}
                          </div>
                     </div>
                 </li>
@@ -188,7 +188,7 @@
                                     <a class="text-muted" href="#">{todayHotUser.article.count}热度</a>
                                     <div class="bottom_tool">
                                         <a class="fui-link mrm" href="#" title="转发"></a>
-                                        <a class="fui-heart active" href="#" title="喜欢"></a>
+                                        <a class="fui-heart {?todayHotUser.articleHot}active {/todayHotUser.articleHot}" href="#" title="喜欢"></a>
                                     </div>
                                 </div>
                             </div>
