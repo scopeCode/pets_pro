@@ -23,6 +23,8 @@ module.exports = function (app) {
     app.route('/user/login').post(login.login);
     app.route('/user/logout').get(login.logout);
 
+    app.route('/user/follow').all(auth.loginRequired).post(index.createFollowUser);
+
     //[文章处理 ]-----------------------------------------------------------------\\
     app.route('/user/article/createTextArticle').all(auth.loginRequired).
         post(article.createTextArticle);
@@ -35,10 +37,12 @@ module.exports = function (app) {
         post(article.articleDescHot);
     app.route('/user/article/articleReprint').all(auth.loginRequired).
         post(article.articleReprint);
+    app.route('/user/article/queryArticleLogByArticleId').all(auth.loginRequired).
+        post(article.queryArticleLogByArticleId);
 
+    //[common处理 ]-----------------------------------------------------------------\\
     app.route('/user/link/getTitle').all(auth.loginRequired).
         post(common.getPageTitle);
 
-    app.route('/user/article/queryArticleLogByArticleId').all(auth.loginRequired).
-        post(article.queryArticleLogByArticleId);
+
 };

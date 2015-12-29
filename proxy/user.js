@@ -164,32 +164,26 @@ exports.getTodayHotUser             =   function(userId,callback){
                 order:' created desc '
             }).then(function(articles){
                 if(articles && articles.length > 0){
+                    var articleObj = articles[0];
                     result.article = articles[0];
 
+                    UserFollow.find
+                    ({'where':{
+                            'userId':userId,
+                            'followUserId':_userId
+                    }}).then(function(userFollow){
+                        result.userFollow = userFollow ? true : false;
 
-                    UserFollow.find({
-
-                    });
-
-                    User.findById(userId).then(function(user){
-
-                        user.getUserFollows({
-                            'where':{
-                                'followUserId':_userId
-                            }
-                        }).then(function(userFollow){
-                            result.userFollow = userFollow && userFollow.length>0 ? true : false;
-
-                            result.article.getHots({
-                                'where':{
+                        articleObj.getHots(
+                            {
+                                'where':
+                                {
                                     'userId':userId
                                 }
-                            }).then(function(articleHot){
+                        }).then(function(articleHot){
                                 result.articleHot = articleHot&&articleHot.length>0 ? true : false;
                                 callback(result);
-                            });
                         });
-
                     });
                 }else{//没有发布文章
                     callback(result);
@@ -213,5 +207,50 @@ exports.getFollowUser   =   function(userId,callback){
         }
     }).then(function(data){
         callback(data);
+    });
+};
+
+/**
+ * 用户关注用户
+ * @param userId
+ * @param followUserId
+ * @param callback
+ * @returns {*}
+ */
+exports.createUserFollow   =   function(userId,followUserId,callback){
+
+    //TODO 需要处理是否已经关注过了的验证  留
+    return sequelize.transaction(function (t) {
+        return User.findById(userId, {transaction: t}).then(function(user){
+           return user.createUserFollow({
+               followUserId:followUserId
+           }, {transaction: t}).then(function(){
+               return User.findById(followUserId,{
+                   include:[
+                       {
+                           'model' : Info
+                       }
+                   ]
+               }, {transaction: t}).then(function(followUser){
+
+                    var totalCnt     = parseInt(followUser.info.totalCnt) + 1;
+                    var todayCnt     = parseInt(followUser.info.todayCnt) + 1;
+
+                    return Info.update({
+                        'totalCnt':totalCnt,
+                        'todayCnt':todayCnt
+                    },
+                    {
+                        'where':{
+                            'userId':followUserId
+                        }
+                    }, {transaction: t});
+               });
+           });
+        });
+    }).then(function (result) {
+        callback(null,result);
+    }).catch(function (err) {
+        callback(err,null);
     });
 };

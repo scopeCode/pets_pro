@@ -5,6 +5,7 @@
 var EventProxy      =   require('eventProxy');
 var articleProxy     =   require('../proxy/article');
 var userProxy       =   require('../proxy/user');
+var commonResponse  =   require('../common/commonResponse');
 
 /**
  * show index page
@@ -46,6 +47,30 @@ exports.show = function (req, res, next) {
             ep.emit('getTotalHotUser',data);
         });
      }catch(ex){
+        next(ex);
+    }
+};
+
+/**
+ *  建立关注的操作
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.createFollowUser    =   function(req,res,next){
+    try{
+        var userObj         =   req.session.user.user;
+        var followUserId    =   req.body.followUserId;
+
+        userProxy.createUserFollow(userObj.id,followUserId,function(error,data){
+            if(error){
+                res.json(commonResponse.fail('已关注过了.'));
+            }else{
+                res.json(commonResponse.success());
+            }
+        });
+
+    }catch(ex){
         next(ex);
     }
 };

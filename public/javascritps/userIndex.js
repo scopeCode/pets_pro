@@ -680,6 +680,65 @@ var userIndex   =   (function(){
             }catch(ex){
                 log(ex);
             }//catch(ex) end
+        },
+        followUser:function(_this){
+            var item            = $(_this);
+            var followUserId    =   item.attr('data');
+
+            //进行后台处理
+            try{
+
+                var cfg = {
+                    url		    :	'/user/follow',
+                    data		:	[],
+                    method	    :	"POST",
+                    temp        :   {
+                            'followed':'<div class="btn-box" style="width: 47px;">已关注</div>',
+                            'noFollow':''
+                    },
+                    start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                    end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                };
+
+                //设定需要传递的参数
+                cfg.data.push("followUserId="		    +	followUserId);
+
+                cfg.start();
+
+                $.ajax({
+                    url         :   cfg.url,
+                    method      :   cfg.method,
+                    data        :   cfg.data.join('&'),
+                    dataType    :   'json',
+                    success     :   function(json){//将关注的这条记录 变更转发
+                        try{
+                            if(json.result) {
+                                message.msg('操作成功.');
+                                $(item.parent()).html(cfg.temp.followed);
+                            }else{
+                                message.msg('操作失败:' +   json.msg);
+                            }
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    },
+                    error       :   function(xhr){
+                        try{
+                            ajaxFailure(xhr);
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    }
+                });
+            }catch(ex){
+                log(ex);
+            }//catch(ex) end
         }
     };
 
@@ -701,6 +760,9 @@ var userIndex   =   (function(){
         },
         imgOnmouseout:function(_this){
             optIndex.imgOnmouseout(_this);
+        },
+        followUser:function(_this){
+            optIndex.followUser(_this);
         }
     };
 })();
