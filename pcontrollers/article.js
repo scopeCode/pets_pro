@@ -162,4 +162,17 @@ exports.queryArticleLogByArticleId  =   function(req, res, next){
     articleProxy.queryArticleLog(articleId,limit,pageSize,function(data){
         res.json(commonResponse.success(data));
     });
+};
+
+/**
+ * 查询userId的用户的前3篇图片文章
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.queryTop3Article  =   function(req, res, next){
+    var userId      =   req.body.userId;
+    articleProxy.queryTop3Article(userId,function(data){
+        res.json(commonResponse.success(data));
+    });
 }

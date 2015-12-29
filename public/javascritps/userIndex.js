@@ -714,6 +714,7 @@ var userIndex   =   (function(){
                         try{
                             if(json.result) {
                                 message.msg('操作成功.');
+                                //处理所有的 需要关注的地方 及 头像处 取消关注的按钮
                                 $(item.parent()).html(cfg.temp.followed);
                             }else{
                                 message.msg('操作失败:' +   json.msg);
@@ -739,7 +740,130 @@ var userIndex   =   (function(){
             }catch(ex){
                 log(ex);
             }//catch(ex) end
-        }
+        },//end
+        cancelUserFollow:function(_this){
+            var item            = $(_this);
+            var followUserId    =   item.attr('data');
+
+            //进行后台处理
+            try{
+
+                var cfg = {
+                    url		    :	'/user/cancelFollow',
+                    data		:	[],
+                    method	    :	"POST",
+                    temp        :   {
+                        'followed':'<div class="btn-box" style="width: 47px;">已关注</div>',
+                        'noFollow':''
+                    },
+                    start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                    end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                };
+
+                //设定需要传递的参数
+                cfg.data.push("followUserId="		    +	followUserId);
+
+                cfg.start();
+
+                $.ajax({
+                    url         :   cfg.url,
+                    method      :   cfg.method,
+                    data        :   cfg.data.join('&'),
+                    dataType    :   'json',
+                    success     :   function(json){//将关注的这条记录 变更转发
+                        try{
+                            if(json.result) {
+                                message.msg('操作成功.');
+                                //这个时候  要还原 一下 点击 关注 的按钮 有 2 个地方需要注意的  1: 点击本身 2： 头像上面的按钮
+                            }else{
+                                message.msg('操作失败:' +   json.msg);
+                            }
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    },
+                    error       :   function(xhr){
+                        try{
+                            ajaxFailure(xhr);
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    }
+                });
+            }catch(ex){
+                log(ex);
+            }//catch(ex) end
+        },//end
+        queryTop3Article:function(_this){
+            var item      = $(_this);
+            var userId    =   item.attr('data');
+
+            //进行后台处理
+            try{
+
+                var cfg = {
+                    url		    :	'/user/getTop3ArticleFile',
+                    data		:	[],
+                    method	    :	"POST",
+                    temp        :   '<li><img src="#{imgUrl}"></li>',
+                    start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                    end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                };
+
+                //设定需要传递的参数
+                cfg.data.push("userId="		    +	userId);
+
+                cfg.start();
+
+                $.ajax({
+                    url         :   cfg.url,
+                    method      :   cfg.method,
+                    data        :   cfg.data.join('&'),
+                    dataType    :   'json',
+                    success     :   function(json){//将关注的这条记录 变更转发
+                        try{
+                            if(json.result) {
+                                var data = json.data;
+                                var len = data.length;
+                                if(len>0){
+                                    var a = [];
+                                    for(var i=0;i<len;i++){
+                                        var itme = data[i];
+                                        a.push(cfg.temp.format({i}))
+                                    }
+                                }
+
+                            }else{
+                                message.msg('操作失败:' +   json.msg);
+                            }
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    },
+                    error       :   function(xhr){
+                        try{
+                            ajaxFailure(xhr);
+                        }catch(ex){
+                            log(ex);
+                        }
+                        finally{
+                            cfg.end();
+                        }
+                    }
+                });
+            }catch(ex){
+                log(ex);
+            }//catch(ex) end
+        },//end
     };
 
     return {
@@ -763,6 +887,12 @@ var userIndex   =   (function(){
         },
         followUser:function(_this){
             optIndex.followUser(_this);
+        },
+        cancelUserFollow:function(_this){
+            optIndex.cancelUserFollow(_this);
+        },
+        queryTop3Article:function(){
+
         }
     };
 })();

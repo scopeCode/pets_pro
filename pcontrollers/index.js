@@ -74,3 +74,27 @@ exports.createFollowUser    =   function(req,res,next){
         next(ex);
     }
 };
+
+/**
+ * 取消关注
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.cancelFollowUser    =   function(req,res,next){
+    try{
+        var userObj         =   req.session.user.user;
+        var followUserId    =   req.body.followUserId;
+
+        userProxy.cancelFollowUser(userObj.id,followUserId,function(error,data){
+            if(error){
+                res.json(commonResponse.fail('已关注过了.'));
+            }else{
+                res.json(commonResponse.success());
+            }
+        });
+
+    }catch(ex){
+        next(ex);
+    }
+};

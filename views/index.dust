@@ -126,7 +126,25 @@
                         <div class="media">
                             <div class="media-left">
                                 <a href="javascript:;;">
-                                  <img src="{?info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{info.photo}{:else}/img/img_normal.png{/info.photo}" width="36px" height="36px">
+                                    <img src="{?info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{info.photo}{:else}/img/img_normal.png{/info.photo}" width="36px" height="36px">
+                                    <div class="person-info" style="display: none;">
+                                        <div class="person-inner">
+                                            <div class="person-inner-bg">
+                                                <img src="{?user.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{user.bgPhoto}{:else}/img/01.jpg{/user.bgPhoto}"> </div>
+                                            <div class="person-inner-top">
+                                                {?userFollow}
+                                                  <div class="pull-right btn btn-default btn-xs" data="{info.userId}" name="divUserFollow{info.userId}">取消关注</div>
+                                                {/userFollow}
+                                            </div>
+                                            <div class="person-inner-body"> {info.sign}
+                                                <div class="person-show">
+                                                    <ul>
+                                                        加载中...
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                  </a>
                             </div>
                             <div class="media-body">

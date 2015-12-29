@@ -24,6 +24,8 @@ module.exports = function (app) {
     app.route('/user/logout').get(login.logout);
 
     app.route('/user/follow').all(auth.loginRequired).post(index.createFollowUser);
+    app.route('/user/cancelFollow').all(auth.loginRequired).post(index.cancelFollowUser);
+    app.route('/user/getTop3ArticleFile').all(auth.loginRequired).post(article.queryTop3Article);
 
     //[文章处理 ]-----------------------------------------------------------------\\
     app.route('/user/article/createTextArticle').all(auth.loginRequired).

@@ -220,6 +220,7 @@ exports.getFollowUser   =   function(userId,callback){
 exports.createUserFollow   =   function(userId,followUserId,callback){
 
     //TODO 需要处理是否已经关注过了的验证  留
+    //TODO 没有加操作日志
     return sequelize.transaction(function (t) {
         return User.findById(userId, {transaction: t}).then(function(user){
            return user.createUserFollow({
@@ -247,6 +248,57 @@ exports.createUserFollow   =   function(userId,followUserId,callback){
                     }, {transaction: t});
                });
            });
+        });
+    }).then(function (result) {
+        callback(null,result);
+    }).catch(function (err) {
+        callback(err,null);
+    });
+};
+
+/**
+ * 取消关注
+ * @param userId
+ * @param followUserId
+ * @param callback
+ * @returns {*}
+ */
+exports.cancelFollowUser   =   function(userId,followUserId,callback){
+
+    //TODO 需要处理是否已经关注过了的验证  留
+    //TODO 没有加操作日志
+    return sequelize.transaction(function (t) {
+        return User.findById(userId, {transaction: t}).then(function(user){
+
+            return user.getUserFollows({
+                followUserId:followUserId
+            }, {transaction: t}).then(function(userFollow){
+
+                return user.removeUserFollow(userFollow,{transaction: t}).then(function(){
+
+                    return User.findById(followUserId,{
+                        include:[
+                            {
+                                'model' : Info
+                            }
+                        ]
+                    }, {transaction: t}).then(function(followUser){
+
+                        var totalCnt     = parseInt(followUser.info.totalCnt) - 1;
+                        var todayCnt     = parseInt(followUser.info.todayCnt) - 1;
+
+                        return Info.update({
+                                'totalCnt':totalCnt,
+                                'todayCnt':todayCnt
+                            },
+                            {
+                                'where':{
+                                    'userId':followUserId
+                                }
+                            }, {transaction: t});
+                    });
+                });
+            });
         });
     }).then(function (result) {
         callback(null,result);

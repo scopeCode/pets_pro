@@ -297,3 +297,46 @@ exports.queryArticleLog     =   function(articleId,limit,pageSize,callback){
         callback(results, metadata);
     });*/
 };
+
+/**
+ * 获取前3篇图片文章及对应图片信息
+ * @param userId
+ * @param callback
+ */
+exports.queryTop3Article    =   function(userId,callback){
+        var proxy = new EventProxy();
+        User.findById(userId).then(function(user){
+            user.getArticles({
+                'type':2,
+                'limit':3
+            }).then(function(articles){
+                var len = articles.length;
+                if(len>0){
+                    proxy.after('result', len , function (files) {
+                        callback(files);
+                    });
+                    for(var i=0;i<len;i++){
+                        var item = articles[i];
+                        (function(item,i){
+                            item.getFiles().then(function(files){
+                                if(files.length>0){
+
+                                    var result = {
+                                        article:item,
+                                        file:files[0]
+                                    };
+
+                                    if(len - 1 == i){
+                                        return proxy.emit('result',result);
+                                    }
+                                    proxy.emit('result',result);
+                                }
+                            });
+                        })(item,i);
+                    }
+                }else{
+                    callback([]);
+                }
+            });
+        });
+};
