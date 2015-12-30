@@ -543,14 +543,22 @@ var userIndex   =   (function(){
 
         },
         imgOnmousemove:function(_this){
-            var articleId   =   $(_this).attr('data');
-            var ele         =   $('#divArticleUserId'+articleId);
-            ele.show();
+            (function(_this){
+                var $this = $(_this);
+                var $ul = $($this.find('ul')[0]);
+                if($this.attr('data')!=''){
+                    if(!$(_this).hasClass('open') && $ul.attr('data')==0){
+                        $ul.attr('data')==1;
+                        optIndex.queryTop3Article(_this);
+                    }
+                }else{
+                    $ul.html('');
+                }
+            })(_this);
+            $(_this).addClass('open');
         },
-        imgOnmouseout:function(_this,e){
-            var articleId   =   $(_this).attr('data');
-            var ele         =   $('#divArticleUserId'+articleId);
-            ele.hide();
+        imgOnmouseout:function(_this){
+            $(_this).removeClass('open');
         },
         clickSetArticleHot:function(_this){
             var item  = $(_this);
@@ -811,7 +819,7 @@ var userIndex   =   (function(){
                     url		    :	'/user/getTop3ArticleFile',
                     data		:	[],
                     method	    :	"POST",
-                    temp        :   '<li><img src="#{imgUrl}"></li>',
+                    temp        :   '<li data="#{articleId}"><img src="http://7xjik2.com1.z0.glb.clouddn.com/#{imgUrl}"></li>',
                     start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
                     end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
                 };
@@ -831,14 +839,22 @@ var userIndex   =   (function(){
                             if(json.result) {
                                 var data = json.data;
                                 var len = data.length;
+
+                                var $thisUl = $($(_this).find('ul')[0]);
+
                                 if(len>0){
                                     var a = [];
                                     for(var i=0;i<len;i++){
-                                        var itme = data[i];
-                                        a.push(cfg.temp.format({i}))
+                                        var item = data[i];
+                                        if(item.file){
+                                            a.push(cfg.temp.format({imgUrl:item.file.fileHash,articleId:item.article.id}));
+                                        }
                                     }
+                                    $thisUl.html(a.join(''));
+                                }else{
+                                    $thisUl.html('');
                                 }
-
+                                $thisUl.attr('data','0');
                             }else{
                                 message.msg('操作失败:' +   json.msg);
                             }
@@ -891,8 +907,8 @@ var userIndex   =   (function(){
         cancelUserFollow:function(_this){
             optIndex.cancelUserFollow(_this);
         },
-        queryTop3Article:function(){
-
+        queryTop3Article:function(_this){
+            optIndex.queryTop3Article(_this);
         }
     };
 })();

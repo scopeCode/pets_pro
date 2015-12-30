@@ -38,21 +38,22 @@
                 {#data}
                     <li>
                        <div class="media">
-                          <div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="{id}" onmouseout="userIndex.imgOnmouseout(this)">
-                              <a href="javascript:;;"  >
+                          <div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="{users[0].info.userId}" onmouseout="userIndex.imgOnmouseout(this)">
+                              <a href="javascript:;;"  class="dropdown-toggle hover-initialized" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                   <img src="{?users[0].info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{users[0].info.photo}{:else}/img/img_normal.png{/users[0].info.photo}" width="64px" height="64px">
-                                      <div class="person-info" style="display: none;" id="divArticleUserId{id}">
+                                      <div class="person-info" >
                                           <div class="person-inner">
                                               <div class="person-inner-bg">
-                                                  <img src="{?user.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{user.bgPhoto}{:else}/img/01.jpg{/user.bgPhoto}"> </div>
-                                              <div class="person-inner-top">
+                                                  <img src="{?users[0].info.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{users[0].info.bgPhoto}{:else}/img/01.jpg{/users[0].info.bgPhoto}"> </div>
+                                              <div class="person-inner-top">{users[0].info.userNick}
                                                   {?isShowCancleFollow}
                                                     <div class="pull-right btn btn-default btn-xs" >取消关注</div>
                                                   {/isShowCancleFollow}
                                               </div>
-                                              <div class="person-inner-body"> {user.sign}
+                                              <div class="person-inner-body">
+                                                  {?user.info.sign}{user.info.sign}{:else}这个家伙很懒,什么也没有留下.{/user.info.sign}
                                                   <div class="person-show">
-                                                      <ul>
+                                                      <ul data="0">
                                                           加载中...
                                                       </ul>
                                                   </div>
@@ -124,21 +125,22 @@
                 {#totalHotUser}
                     <li>
                         <div class="media">
-                            <div class="media-left">
-                                <a href="javascript:;;">
+                            <div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="{info.userId}" onmouseout="userIndex.imgOnmouseout(this)">
+                                <a href="javascript:;;"  class="dropdown-toggle hover-initialized" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     <img src="{?info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{info.photo}{:else}/img/img_normal.png{/info.photo}" width="36px" height="36px">
-                                    <div class="person-info" style="display: none;">
+                                    <div class="person-info">
                                         <div class="person-inner">
                                             <div class="person-inner-bg">
-                                                <img src="{?user.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{user.bgPhoto}{:else}/img/01.jpg{/user.bgPhoto}"> </div>
-                                            <div class="person-inner-top">
+                                                <img src="{?info.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{info.bgPhoto}{:else}/img/01.jpg{/info.bgPhoto}"> </div>
+                                            <div class="person-inner-top">{info.userNick}
                                                 {?userFollow}
                                                   <div class="pull-right btn btn-default btn-xs" data="{info.userId}" name="divUserFollow{info.userId}">取消关注</div>
                                                 {/userFollow}
                                             </div>
-                                            <div class="person-inner-body"> {info.sign}
+                                            <div class="person-inner-body">
+                                                {?info.sign}{info.sign}{:else}这个家伙很懒,什么也没有留下.{/info.sign}
                                                 <div class="person-show">
-                                                    <ul>
+                                                    <ul data="0">
                                                         加载中...
                                                     </ul>
                                                 </div>
@@ -170,10 +172,31 @@
                 {?todayHotUser}
                 <li>
                     <div class="media">
-                        <div class="media-left">
-                            <a href="javascript;;">
-                                <img src="{?todayHotUser.user.info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{todayHotUser.user.info.photo}{:else}/img/img_normal.png{/todayHotUser.user.info.photo}" width="36px" height="36px"> </a>
-                            </div>
+                        <div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="{todayHotUser.user.info.userId}" onmouseout="userIndex.imgOnmouseout(this)">
+                            <a href="javascript;;" class="dropdown-toggle hover-initialized" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <img src="{?todayHotUser.user.info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{todayHotUser.user.info.photo}{:else}/img/img_normal.png{/todayHotUser.user.info.photo}" width="36px" height="36px">
+                                <div class="person-info" >
+                                    <div class="person-inner">
+                                        <div class="person-inner-bg">
+                                            <img src="{?todayHotUser.user.info.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{todayHotUser.user.info.bgPhoto}{:else}/img/01.jpg{/todayHotUser.user.info.bgPhoto}">
+                                        </div>
+                                        <div class="person-inner-top">{todayHotUser.user.info.userNick}
+                                            {?todayHotUser.userFollow}
+                                                <div class="pull-right btn btn-default btn-xs" >取消关注</div>
+                                            {/todayHotUser.userFollow}
+                                        </div>
+                                        <div class="person-inner-body"> {?todayHotUser.user.info.sign}{todayHotUser.user.info.sign}{:else}这个家伙很懒,什么也没有留下.{/todayHotUser.user.info.sign}
+                                            <div class="person-show">
+                                                <ul data="0">
+                                                    加载中...
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+
+                         </div>
                         <div class="media-body">
                             <h4>{todayHotUser.user.info.userNick}</h4>
                             <p>{?todayHotUser.user.info.sign}{todayHotUser.user.info.sign}{:else}这个家伙很懒,什么也没有留下.{/todayHotUser.user.info.sign}</p>

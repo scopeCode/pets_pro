@@ -319,18 +319,14 @@ exports.queryTop3Article    =   function(userId,callback){
                         var item = articles[i];
                         (function(item,i){
                             item.getFiles().then(function(files){
+                                var result = {article:item};
                                 if(files.length>0){
-
-                                    var result = {
-                                        article:item,
-                                        file:files[0]
-                                    };
-
-                                    if(len - 1 == i){
-                                        return proxy.emit('result',result);
-                                    }
-                                    proxy.emit('result',result);
+                                    result.file=files[0]
                                 }
+                                if(len - 1 == i){
+                                    return proxy.emit('result',result);
+                                }
+                                proxy.emit('result',result);
                             });
                         })(item,i);
                     }
