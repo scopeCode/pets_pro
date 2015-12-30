@@ -274,7 +274,7 @@ exports.cancelFollowUser   =   function(userId,followUserId,callback){
                 followUserId:followUserId
             }, {transaction: t}).then(function(userFollow){
 
-                return user.removeUserFollow(userFollow,{transaction: t}).then(function(){
+                return user.removeUserFollow(userFollow[0],{transaction: t}).then(function(resUserFollow){
 
                     return User.findById(followUserId,{
                         include:[

@@ -41,40 +41,60 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <div class="modal-title" id="myModalLabel"> 发布图片日志 </div>
+                <div class="modal-title"> 发布图片日志 </div>
             </div>
             <div class="modal-body">
-                <div class="upload-img brd"> <a class="upload-box" href="javascript:;">
+
+                <div id="divFileUpload">
+                    <div class="upload-img brd">
+                        <a class="upload-box" href="javascript:;">
+                            <input type="file" class="img-upload">
+                            <span class="fui-photo"></span>
+                            <p>上传照片</p>
+                        </a>
+                    </div>
+                    <div class="upload-img">
+                        <a class="upload-box" href="javascript:;"> <span class="fui-image"></span>
+                            <p>从网络添加图片</p>
+                        </a>
+                    </div>
+                </div>
+
+                <input class="form-control input-lg" placeholder="粘贴网址" style="height:200px;display: none;">
+
+                <div class="upload-img upload-sm" style="display: none;">
+                    <a class="upload-box" href="javascript:;">
                     <input type="file" class="img-upload">
-                    <span class="fui-photo"></span>
-                    <p>上传照片</p>
-                </a> </div>
-                <div class="upload-img"> <a class="upload-box" href="javascript:;"> <span class="fui-image"></span>
-                    <p>从网络添加图片</p>
-                </a> </div>
-                <input class="form-control input-lg" placeholder="粘贴网址" style="height:200px;">
-                <div class="upload-img upload-sm" ><a class="upload-box" href="javascript:;">
-                    <input type="file" class="img-upload">
-                    <span class="fui-photo mrm"></span>添加另外一张 </a> </div>
-                <div class="upload-img upload-sm" ><a class="upload-box" href="javascript:;"> <span class="fui-image mrm"></span>添加另外一张</a> </div>
-                <div class="delete"> <span class="fui-cross-circle"></span> </div>
-                <img src="img/01.jpg" style="width:100%">
-                <textarea class="form-control" rows="2" placeholder="愿意的话可以添加说明"></textarea>
-                <div class="bootstrap-tagsinput"><span class="tag label label-info">标签1<span data-role="remove"></span></span> <span class="tag label label-info"> 标签2<span data-role="remove"></span></span> <span class="tag label label-info"> 标签3<span data-role="remove"></span></span>
-                    <input type="text" placeholder="#标签" style="width: 3em !important;">
+                    <span class="fui-photo mrm"></span>添加另外一张 </a>
+                </div>
+                <div class="upload-img upload-sm" style="display: none;">
+                    <a class="upload-box" href="javascript:;"> <span class="fui-image mrm"></span>添加另外一张</a>
+                </div>
+                <div id="divImgArticleImgList" style="display: none;">
+                    <div id="divHashCode">
+                        <div class="delete" data="HashCode" onclick="close();"> <span class="fui-cross-circle"></span> </div>
+                        <img src="img/01.jpg" style="width:100%">
+                    </div>
+                </div>
+                <div style="display: none;" id="divImgArticleContent">
+                    <textarea class="form-control" rows="2" placeholder="愿意的话可以添加说明"></textarea>
+                    <div class="bootstrap-tagsinput"><span class="tag label label-info">标签1<span data-role="remove"></span></span> <span class="tag label label-info"> 标签2<span data-role="remove"></span></span> <span class="tag label label-info"> 标签3<span data-role="remove"></span></span>
+                        <input type="text" placeholder="#标签" style="width: 3em !important;">
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <div class="btn-group dropdown">
-                    <button type="button" class="btn btn-primary ">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-primary " style="display: none;" id="btnImgArticlePublish">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                <!--<div class="btn-group dropdown" style="display: none;">
+                    <button type="button" class="btn btn-primary " id="btnImgArticlePublish">&nbsp;&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;&nbsp;</button>
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a href="#">现在发布<span class="fui-check-circle pull-right"></span></a> </li>
                         <li><a href="#">保存为草稿</a></li>
                         <li><a href="#">发私密日志</a></li>
                     </ul>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>

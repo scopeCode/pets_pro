@@ -444,7 +444,7 @@ a.btn-box:hover {
 }
 .person-info{
 	position:absolute;
-	margin-top:10px;
+	margin-top:0px;/*10px*/
 	margin-left:-108px;
 	display:block;
 }

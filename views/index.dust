@@ -47,7 +47,7 @@
                                                   <img src="{?users[0].info.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{users[0].info.bgPhoto}{:else}/img/01.jpg{/users[0].info.bgPhoto}"> </div>
                                               <div class="person-inner-top">{users[0].info.userNick}
                                                   {?isShowCancleFollow}
-                                                    <div class="pull-right btn btn-default btn-xs" >取消关注</div>
+                                                    <div class="pull-right btn btn-default btn-xs" data="{users[0].info.userId}" onclick="userIndex.cancelUserFollow(this)">>取消关注</div>
                                                   {/isShowCancleFollow}
                                               </div>
                                               <div class="person-inner-body">
@@ -134,7 +134,7 @@
                                                 <img src="{?info.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{info.bgPhoto}{:else}/img/01.jpg{/info.bgPhoto}"> </div>
                                             <div class="person-inner-top">{info.userNick}
                                                 {?userFollow}
-                                                  <div class="pull-right btn btn-default btn-xs" data="{info.userId}" name="divUserFollow{info.userId}">取消关注</div>
+                                                  <div class="pull-right btn btn-default btn-xs" data="{info.userId}" name="divUserFollow{info.userId}" onclick="userIndex.cancelUserFollow(this)">取消关注</div>
                                                 {/userFollow}
                                             </div>
                                             <div class="person-inner-body">
@@ -182,7 +182,7 @@
                                         </div>
                                         <div class="person-inner-top">{todayHotUser.user.info.userNick}
                                             {?todayHotUser.userFollow}
-                                                <div class="pull-right btn btn-default btn-xs" >取消关注</div>
+                                                <div class="pull-right btn btn-default btn-xs" datat="{todayHotUser.user.info.userId}" name="divUserFollow{todayHotUser.user.info.userId}"  onclick="userIndex.cancelUserFollow(this)">取消关注</div>
                                             {/todayHotUser.userFollow}
                                         </div>
                                         <div class="person-inner-body"> {?todayHotUser.user.info.sign}{todayHotUser.user.info.sign}{:else}这个家伙很懒,什么也没有留下.{/todayHotUser.user.info.sign}
