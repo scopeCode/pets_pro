@@ -59,7 +59,7 @@ Hot.belongsToMany(Article, {'through': ArticleHot});
 Article.belongsToMany(User,{'through': ArticleUser});
 User.belongsToMany(Article,{'through': ArticleUser});
 
-
+/*
 User.sync({force: true}).then(function () {});
 Info.sync({force: true}).then(function () {});
 UserFollow.sync({force: true}).then(function () {});
@@ -75,4 +75,4 @@ ArticleFile.sync({force: true}).then(function () {});
 ArticleLog.sync({force: true}).then(function () {});
 ArticleHot.sync({force: true}).then(function () {});
 ArticleUser.sync({force: true}).then(function () {});
-logger.sync({force: true}).then(function () {});
+logger.sync({force: true}).then(function () {});*/

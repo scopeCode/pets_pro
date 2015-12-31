@@ -4,11 +4,11 @@
  */
 var Sequelize   =   require('sequelize');
 var config ={
-    database:'r3414lyt8a',
-    username:'r3414lyt8a',
-    password:'123456a',
+    database:'baby',
+    username:'root',
+    password:'root',
     options:{
-        host:'rdsmqqw8evvmt1e7n485.mysql.rds.aliyuncs.com',
+        host:'127.0.0.1',
         port:'3306',
         dialect : 'mysql',
         timezone:'+08:00',
