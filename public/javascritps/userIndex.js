@@ -18,8 +18,9 @@ var userIndex   =   (function(){
 
     //标签模板项
     var template    =   {
-        tagItem     :   '<span class="tag label label-info" data="#{name}">#{name}<span data-role="remove"></span></span>',
-        tagTemp     :   '<a href="#" class="mrm text-muted">#{tagName}</a>',
+        tagItem         :   '<span class="tag label label-info" data="#{name}">#{name}<span data-role="remove"></span></span>',
+        tagTemp         :   '<a href="#" class="mrm text-muted">#{tagName}</a>',
+        uploadImgTemp   :   '<div data="#{key}"><div class="delete" onclick="userIndex.removeImg(this)"> <span class="fui-cross-circle"></span> </div><img src="#{img}" style="width:100%"></div>'
     };
 
     var optIndex    =   {
@@ -28,6 +29,210 @@ var userIndex   =   (function(){
         },
         bindEvent   :   function(){
 
+
+            //提交上传图片文章的处理
+            $('#btnImgArticlePublish').on('click',function(){
+
+                //获取信息
+                var content =   $("#textareaContent").val();
+
+                var  resTagList =       [];
+                var  tag        =    [];
+
+                var  tagList    =   $('#divUploadImgTags .label-info');
+                var  tagListLen =   tagList.length;
+                for(var i=0;i<tagListLen;i++){
+                    var item = tagList[i];
+                    var _name   =   $(item).attr('data');
+                    resTagList.push(template.tagTemp.format({
+                        tagName:_name
+                    }));
+                    tag.push(_name);
+                }
+
+                var filesList   =   $('#divImgArticleImgList').children();
+                var filesLen    =   filesList.length;
+                var filesArr    =   [];
+                if(filesLen == 0){
+                    message.msg('没有图片上传啥啊.');
+                    return false;
+                }
+
+                for(var j=0;j<filesLen;j++){
+                    var code = $(filesList[j]).attr('data');
+                    filesArr.push(code);
+                }
+                //进行后台处理
+                try{
+                    var cfg = {
+                        url		    :	"/user/article/createImgArticle",
+                        data		:	[],
+                        method	    :	"POST",
+                        temp        :   '<li><div class="media">	<div class="media-left">		<a href="javascript:;;"><img src="#{img}" width="64px" height="64px"></a>	</div>	<div class="media-body">		<div class="list_content">			<div class="content_top">				#{nick}				<div class="pull-right text-muted">					#{created}				</div>			</div>			<div class="content_body" data-toggle="modal" data-target="#content_body_info">				<h6>#{title}</h6>				#{imgList}				<p>					#{content}				</p>				<p class="mbm">					#{tagList}				</p>			</div>			<div class="content_bottom">				<a class="text-muted" href="javascript:;;" cnt="0" onclick="userIndex.clickHotCnt(this)">0热度</a>				<div class="bottom_tool">				</div>			</div>		</div>	</div></div></li>			',
+                        start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                        end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                    };
+
+                    //设定需要传递的参数
+                    cfg.data.push("title="		    +	''      );
+                    cfg.data.push("content="		+	content );
+                    cfg.data.push("type=2"                      );
+                    cfg.data.push("tags="		    +	tag.join('$$$$$'));
+                    cfg.data.push("files="          +   filesArr.join('$$$$$'));
+
+                    cfg.start();
+
+                    $.ajax({
+                        url         :   cfg.url,
+                        method      :   cfg.method,
+                        data        :   cfg.data.join('&'),
+                        dataType    :   'json',
+                        success     :   function(json){
+                            try{
+                                if(json.result) {
+                                    message.msg('发布成功.');
+                                    //隐藏发布窗体,并清空发布窗体
+
+
+                                    var str  = cfg.temp.format({
+                                        img:$('#imgMyPhoto').attr('src'),
+                                        nick:$("#aMyNick").text(),
+                                        title:_title,
+                                        content:content,
+                                        created:'刚刚',
+                                        tagList:resTagList.join('')
+                                    });
+
+                                    $('#ulLeftContentLi').after(str);
+                                }else{
+                                    message.msg('发布失败,' +   json.msg);
+                                }
+                            }catch(ex){
+                                log(ex);
+                            }
+                            finally{
+                                cfg.end();
+                            }
+                        },
+                        error       :   function(xhr){
+                            try{
+                                ajaxFailure(xhr);
+                            }catch(ex){
+                                log(ex);
+                            }
+                            finally{
+                                cfg.end();
+                            }
+                        }
+                    });
+                }catch(ex){
+                    log(ex);
+                }//catch(ex) end
+
+            });
+
+            //上传图片的标签处理
+            $('#uploadImgTags').bind('keydown',function(event){
+                if(event.keyCode == '13'){
+                    event.preventDefault();
+
+                    var  tagVal    =    $('#uploadImgTags').val();
+                    var  tagLen    =    $('#divUploadImgTags .label-info').length;
+
+                    if(tagVal == ''){
+                        message.msg('标签不可为空.');
+                        return false;
+                    }
+
+                    if(tagLen < 3){
+                        var startChar   =   tagVal.substr(0,1);
+                        if(startChar!='#'){
+                            tagVal = '#' + tagVal;
+                        }
+                        var tagHtmlStr  =   template.tagItem.format({name:tagVal});
+
+                        $('#uploadImgTags').before($.trim(tagHtmlStr));
+                        $('#uploadImgTags').val('');
+
+                        tagLen    =    $('#divUploadImgTags .label-info').length;
+                        if(tagLen == 3){
+                            $('#uploadImgTags').hide();
+                        }
+
+                        $('#divUploadImgTags .label-info').bind('click',function(){
+                            var _this = $(this);
+                            _this.remove();
+                            $('#uploadImgTags').show();
+                        });
+
+                    }else{
+                        message.msg('暂时只能添加3个标签.');
+                    }
+                }
+            });
+            //[绑定input_file 的change事件 ]--------------------------//
+            $("#inputBtnUploadImgA").on("change",function(){//顶部的上传图片的change事件处理
+
+                var host = 'http://'+window.location.host;
+                $("#myFormUploadImgA").ajaxSubmit({
+                    url:host+'/upload',
+                    cache: false,
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success:function(json){
+                        try{
+                            if(json.result) {
+                                message.msg('上传成功.');
+                                $('#divFileUpload').hide();
+                                var htmlStr = template.uploadImgTemp.format({key:json.data.key,img:"http://7xjik2.com1.z0.glb.clouddn.com/"+json.data.key});
+                                $('#divImgArticleImgList').append(htmlStr).show();
+                                $('#uploadNextDiv').show();
+                                $('#divImgArticleContent').show();
+                                $('#btnImgArticlePublish').show();
+                            }else{
+                                message.msg('操作失败,' +   json.msg);
+                            }
+                        }catch(ex){
+                            log(ex);
+                        }
+                    },
+                    error:function(res){
+                        console.error(res);
+                    }
+                });
+            });
+
+            $("#inputBtnUploadImgB").on("change",function(){//顶部的上传图片的change事件处理
+                var host = 'http://'+window.location.host;
+                $("#myFormUploadImgB").ajaxSubmit({
+                    url:host+'/upload',
+                    cache: false,
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success:function(json){
+                        try{
+                            if(json.result) {
+                                message.msg('上传成功.');
+                                var htmlStr = template.uploadImgTemp.format({key:json.data.key,img:"http://7xjik2.com1.z0.glb.clouddn.com/"+json.data.key});
+                                $('#divImgArticleImgList').append(htmlStr).show();
+                                $('#uploadNextDiv').show();
+                            }else{
+                                message.msg('操作失败,' +   json.msg);
+                            }
+                        }catch(ex){
+                            log(ex);
+                        }
+                    },
+                    error:function(res){
+                        console.error(res);
+                    }
+                });
+            });
+            //--------------------------//
 
             //链接文章发布框的事件的绑定
             $('#inputLinkArticleValue').bind('input propertychange', function() {
@@ -880,6 +1085,21 @@ var userIndex   =   (function(){
                 log(ex);
             }//catch(ex) end
         },//end
+        removeImg:function(_this){
+            var parent = $(_this).parent();
+            $(parent).remove();
+
+            var len = $('#divImgArticleImgList').children().length;
+            if(len == 0){
+                $('#divFileUpload').show();
+                $('#uploadImgUrl').hide();
+                $('#uploadNextDiv').hide();
+                $('#uploadNextDivB').hide();
+                $('#divImgArticleImgList').hide();
+                $('#divImgArticleContent').hide();
+                $('#btnImgArticlePublish').hide();
+            }
+        }
     };
 
     return {
@@ -909,6 +1129,9 @@ var userIndex   =   (function(){
         },
         queryTop3Article:function(_this){
             optIndex.queryTop3Article(_this);
+        },
+        removeImg:function(_this){
+            optIndex.removeImg(_this);
         }
     };
 })();

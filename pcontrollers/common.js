@@ -2,9 +2,11 @@
  * 处理公共的请求的
  * Created by WG on 2015/12/26.
  */
-var superagent      = require('superagent');
-var cheerio         = require('cheerio');
-var commonResponse  = require('../common/commonResponse');
+var superagent      =   require('superagent');
+var cheerio         =   require('cheerio');
+var qn              =   require('../pmiddlewares/qnIndex');
+var formidable      =   require('formidable');
+var commonResponse  =   require('../common/commonResponse');
 
 /**
  * 根据网址获取 网站的 标题
@@ -43,9 +45,26 @@ exports.getPageTitle  =   function(req, res, next){
  * @param next
  */
 exports.upLoadFile  =   function(req,res,next){
-    try{
-
-    }catch(ex){
-        next(ex);
-    }
+        try{
+            var form = new formidable.IncomingForm();
+            form.encoding = 'utf-8';
+            form.keepExtensions = true;
+            form.parse(req, function(err, fields, files) {
+                var _path;
+                for(var key in files){
+                    _path = files[key].path;
+                }
+                if(_path==""){
+                    res.json(commonResponse.fail('没有发现要上传的文件.'));
+                }else{
+                    qn.putWithoutKey(_path,null,function(ret){
+                        res.json(commonResponse.success({key:ret.key,hash:ret.hash}));
+                    },function(err){
+                        res.json(commonResponse.fail(err.message));
+                    });
+                }
+            });
+        }catch(ex){
+            next(ex);
+        }
 };

@@ -88,6 +88,45 @@ exports.createLinkArticle = function (req, res, next) {
     }
 };
 
+exports.createImgArticle = function (req, res, next) {
+    try{
+
+        var ep  =   new EventProxy();
+        ep.fail(next);
+
+        ep.on('prop_err', function (msg) {
+            res.json(commonResponse.fail(msg));
+        });
+
+        //获取 当前用户的信息
+        var user = req.session.user.user;
+        var userId  =   user.id;
+        //获取页面提交的信息
+        var title   =   req.body.title;
+        var content =   req.body.content;
+        var tags    =   req.body.tags;
+        var type    =   req.body.type||'1';//默认是1 文字的处理
+        var files   =   req.body.files;
+        // END 验证信息的正确性
+
+        var tagsArr =   tags.split('$$$$$');
+        var filesArr=   files.split('$$$$$');
+
+        articleProxy.createArticle(
+            {
+                'title':title,
+                'content':content,
+                'type':type
+            },
+            tagsArr,filesArr,userId,function(data){
+                res.json(commonResponse.success());
+            });
+
+    }catch(ex){
+        next(ex);
+    }
+};
+
 
 /**
  * 文章增加热度

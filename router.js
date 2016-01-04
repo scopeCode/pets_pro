@@ -32,6 +32,8 @@ module.exports = function (app) {
         post(article.createTextArticle);
     app.route('/user/article/createLinkArticle').all(auth.loginRequired).
         post(article.createLinkArticle);
+    app.route('/user/article/createImgArticle').all(auth.loginRequired).
+        post(article.createImgArticle);
 
     app.route('/user/article/articleAddHot').all(auth.loginRequired).
         post(article.articleAddHot);
@@ -45,6 +47,9 @@ module.exports = function (app) {
     //[common处理 ]-----------------------------------------------------------------\\
     app.route('/user/link/getTitle').all(auth.loginRequired).
         post(common.getPageTitle);
+    app.route('/upload').all(auth.loginRequired).
+        post(common.upLoadFile);
 
-
+    //TODO 1: 取消关注时 的bug
+    //TODO 2: 有关 点赞 转发 评论 是否都需要加数量 啊 ??
 };

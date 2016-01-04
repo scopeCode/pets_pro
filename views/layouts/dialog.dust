@@ -48,9 +48,11 @@
                 <div id="divFileUpload">
                     <div class="upload-img brd">
                         <a class="upload-box" href="javascript:;">
-                            <input type="file" class="img-upload">
-                            <span class="fui-photo"></span>
-                            <p>上传照片</p>
+                            <form enctype="multipart/form-data" method="post" id="myFormUploadImgA">
+                                <input type="file" class="img-upload" id="inputBtnUploadImgA"  name="uploadImg" multiple="multiple">
+                                <span class="fui-photo"></span>
+                                <p>上传照片</p>
+                            </form>
                         </a>
                     </div>
                     <div class="upload-img">
@@ -60,26 +62,26 @@
                     </div>
                 </div>
 
-                <input class="form-control input-lg" placeholder="粘贴网址" style="height:200px;display: none;">
+                <input class="form-control input-lg" placeholder="粘贴网址" style="height:200px;display: none;" id="uploadImgUrl">
 
-                <div class="upload-img upload-sm" style="display: none;">
+                <div class="upload-img upload-sm" style="display: none;" id="uploadNextDiv">
                     <a class="upload-box" href="javascript:;">
-                    <input type="file" class="img-upload">
-                    <span class="fui-photo mrm"></span>添加另外一张 </a>
+                        <form action="/upload" enctype="multipart/form-data" method="post" id="myFormUploadImgB">
+                            <input type="file" class="img-upload" id="inputBtnUploadImgB" name="uploadImg" multiple="multiple">
+                            <span class="fui-photo mrm"></span>添加另外一张
+                        </form>
+                    </a>
                 </div>
-                <div class="upload-img upload-sm" style="display: none;">
+                <div class="upload-img upload-sm" style="display: none;" id="uploadNextDivB">
                     <a class="upload-box" href="javascript:;"> <span class="fui-image mrm"></span>添加另外一张</a>
                 </div>
-                <div id="divImgArticleImgList" style="display: none;">
-                    <div id="divHashCode">
-                        <div class="delete" data="HashCode" onclick="close();"> <span class="fui-cross-circle"></span> </div>
-                        <img src="img/01.jpg" style="width:100%">
-                    </div>
-                </div>
+
+                <div id="divImgArticleImgList" style="display: none;"></div>
+
                 <div style="display: none;" id="divImgArticleContent">
-                    <textarea class="form-control" rows="2" placeholder="愿意的话可以添加说明"></textarea>
-                    <div class="bootstrap-tagsinput"><span class="tag label label-info">标签1<span data-role="remove"></span></span> <span class="tag label label-info"> 标签2<span data-role="remove"></span></span> <span class="tag label label-info"> 标签3<span data-role="remove"></span></span>
-                        <input type="text" placeholder="#标签" style="width: 3em !important;">
+                    <textarea class="form-control" rows="2" placeholder="愿意的话可以添加说明" id="textareaContent"></textarea>
+                    <div class="bootstrap-tagsinput" id="divUploadImgTags">
+                        <input type="text" placeholder="#标签" style="width: 3em !important;" id="uploadImgTags">
                     </div>
                 </div>
             </div>
