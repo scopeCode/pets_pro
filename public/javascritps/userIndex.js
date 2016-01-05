@@ -29,6 +29,127 @@ var userIndex   =   (function(){
         },
         bindEvent   :   function(){
 
+            /*
+            * 下拉加载更多
+            * */
+            //滚动条在Y轴上的滚动距离
+            function getScrollTop(){
+                var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+                if(document.body){bodyScrollTop = document.body.scrollTop;}
+                if(document.documentElement){
+                    documentScrollTop = document.documentElement.scrollTop;
+                }scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;return scrollTop;
+            };
+            //文档的总高度
+            function getScrollHeight(){
+                var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
+                if(document.body){
+                    bodyScrollHeight = document.body.scrollHeight;
+                }
+                if(document.documentElement){
+                    documentScrollHeight = document.documentElement.scrollHeight;
+                }
+                scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+                return scrollHeight;
+            };
+            //浏览器视口的高度
+            function getWindowHeight(){
+                var windowHeight = 0;
+                if(document.compatMode == "CSS1Compat"){
+                    windowHeight = document.documentElement.clientHeight;
+                }else{
+                    windowHeight = document.body.clientHeight;
+                }
+                return windowHeight;
+            };
+
+            //TODO 下拉加载更多 未完成
+            window.onscroll = function(){
+                if(getScrollTop() + getWindowHeight() == getScrollHeight()){
+
+                    //进行后台处理
+                    try{
+                        var cfg = {
+                            url		    :	"/user/article/createImgArticle",
+                            data		:	[],
+                            method	    :	"POST",
+                            temp        :   '<li><div class="media">	<div class="media-left">		<a href="javascript:;;"><img src="#{img}" width="64px" height="64px"></a>	</div>	<div class="media-body">		<div class="list_content">			<div class="content_top">				#{nick}				<div class="pull-right text-muted">					#{created}				</div>			</div>			<div class="content_body" data-toggle="modal" data-target="#content_body_info">#{title}#{imgList}				<p>					#{content}				</p>				<p class="mbm">					#{tagList}				</p>			</div>			<div class="content_bottom">				<a class="text-muted" href="javascript:;;" cnt="0" onclick="userIndex.clickHotCnt(this)">0热度</a>				<div class="bottom_tool">				</div>			</div>		</div>	</div></div></li>			',
+                            start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
+                            end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
+                        };
+
+                        //设定需要传递的参数
+                        cfg.data.push("title="		    +	''      );
+                        cfg.data.push("content="		+	content );
+                        cfg.data.push("type=2"                      );
+                        cfg.data.push("tags="		    +	tag.join('$$$$$'));
+                        cfg.data.push("files="          +   filesArr.join('$$$$$'));
+
+                        cfg.start();
+
+                        $.ajax({
+                            url         :   cfg.url,
+                            method      :   cfg.method,
+                            data        :   cfg.data.join('&'),
+                            dataType    :   'json',
+                            success     :   function(json){
+                                try{
+                                    if(json.result) {
+                                        message.msg('发布成功.');
+                                        //隐藏发布窗体,并清空发布窗体
+
+                                        $('#release-photo').modal('hide');
+
+                                        $('#uploadImgUrl').hide();
+                                        $('#uploadNextDiv').hide();
+                                        $('#uploadNextDivB').hide();
+                                        $('#divImgArticleImgList').html('').hide();
+                                        $('#divImgArticleContent').hide();
+                                        $('#textareaContent').val('');
+                                        $('#uploadImgTags').val('').show();
+                                        $("#divUploadImgTags span").remove();
+                                        $("#btnImgArticlePublish").hide();
+
+                                        $('#divFileUpload').show();
+
+                                        var str  = cfg.temp.format({
+                                            img:$('#imgMyPhoto').attr('src'),
+                                            nick:$("#aMyNick").text(),
+                                            title:'',
+                                            imgList:fileView.join(''),
+                                            content:content,
+                                            created:'刚刚',
+                                            tagList:resTagList.join('')
+                                        });
+
+                                        $('#ulLeftContentLi').after(str);
+                                    }else{
+                                        message.msg('发布失败,' +   json.msg);
+                                    }
+                                }catch(ex){
+                                    log(ex);
+                                }
+                                finally{
+                                    cfg.end();
+                                }
+                            },
+                            error       :   function(xhr){
+                                try{
+                                    ajaxFailure(xhr);
+                                }catch(ex){
+                                    log(ex);
+                                }
+                                finally{
+                                    cfg.end();
+                                }
+                            }
+                        });
+                    }catch(ex){
+                        log(ex);
+                    }//catch(ex) end
+                }
+            };
+
             //网址图片的操作
             $('#uploadImgUrl').on('change',function(){
                 var v = $(this).val();
