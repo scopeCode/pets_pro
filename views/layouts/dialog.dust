@@ -55,14 +55,16 @@
                             </form>
                         </a>
                     </div>
-                    <div class="upload-img">
+                    <div class="upload-img" id="uploadImgFromNet">
                         <a class="upload-box" href="javascript:;"> <span class="fui-image"></span>
                             <p>从网络添加图片</p>
                         </a>
                     </div>
                 </div>
 
-                <input class="form-control input-lg" placeholder="粘贴网址" style="height:200px;display: none;" id="uploadImgUrl">
+                <form action="/upload" enctype="multipart/form-data" method="post" id="myFormUploadImgC">
+                    <input class="form-control input-lg" placeholder="粘贴网址" style="height:200px;display: none;" id="uploadImgUrl">
+                </form>
 
                 <div class="upload-img upload-sm" style="display: none;" id="uploadNextDiv">
                     <a class="upload-box" href="javascript:;">

@@ -29,6 +29,45 @@ var userIndex   =   (function(){
         },
         bindEvent   :   function(){
 
+            //网址图片的操作
+            $('#uploadImgUrl').on('change',function(){
+                var v = $(this).val();
+
+                var host = 'http://'+window.location.host;
+                $("#myFormUploadImgC").ajaxSubmit({
+                    url:host+'/upload',
+                    cache: false,
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success:function(json){
+                        try{
+                            if(json.result) {
+                                message.msg('上传成功.');
+                                var htmlStr = template.uploadImgTemp.format({key:json.data.key,img:"http://7xjik2.com1.z0.glb.clouddn.com/"+json.data.key});
+                                $('#divImgArticleImgList').append(htmlStr).show();
+                                $('#uploadNextDiv').show();
+                                $('#divImgArticleContent').show();
+                                $('#btnImgArticlePublish').show();
+                            }else{
+                                message.msg('操作失败,' +   json.msg);
+                            }
+                        }catch(ex){
+                            log(ex);
+                        }
+                    },
+                    error:function(res){
+                        console.error(res);
+                    }
+                });
+            });
+
+            //--上传 网络图片
+            $('#uploadImgFromNet').on('click',function(){
+                $('#divFileUpload').hide();
+                $('#uploadImgUrl').show();
+            });
 
             //提交上传图片文章的处理
             $('#btnImgArticlePublish').on('click',function(){
@@ -57,10 +96,11 @@ var userIndex   =   (function(){
                     message.msg('没有图片上传啥啊.');
                     return false;
                 }
-
+                var fileView =[];
                 for(var j=0;j<filesLen;j++){
                     var code = $(filesList[j]).attr('data');
                     filesArr.push(code);
+                    fileView.push('<img src="http://7xjik2.com1.z0.glb.clouddn.com/'+code+'" style="width:100%" />');
                 }
                 //进行后台处理
                 try{
@@ -68,7 +108,7 @@ var userIndex   =   (function(){
                         url		    :	"/user/article/createImgArticle",
                         data		:	[],
                         method	    :	"POST",
-                        temp        :   '<li><div class="media">	<div class="media-left">		<a href="javascript:;;"><img src="#{img}" width="64px" height="64px"></a>	</div>	<div class="media-body">		<div class="list_content">			<div class="content_top">				#{nick}				<div class="pull-right text-muted">					#{created}				</div>			</div>			<div class="content_body" data-toggle="modal" data-target="#content_body_info">				<h6>#{title}</h6>				#{imgList}				<p>					#{content}				</p>				<p class="mbm">					#{tagList}				</p>			</div>			<div class="content_bottom">				<a class="text-muted" href="javascript:;;" cnt="0" onclick="userIndex.clickHotCnt(this)">0热度</a>				<div class="bottom_tool">				</div>			</div>		</div>	</div></div></li>			',
+                        temp        :   '<li><div class="media">	<div class="media-left">		<a href="javascript:;;"><img src="#{img}" width="64px" height="64px"></a>	</div>	<div class="media-body">		<div class="list_content">			<div class="content_top">				#{nick}				<div class="pull-right text-muted">					#{created}				</div>			</div>			<div class="content_body" data-toggle="modal" data-target="#content_body_info">#{title}#{imgList}				<p>					#{content}				</p>				<p class="mbm">					#{tagList}				</p>			</div>			<div class="content_bottom">				<a class="text-muted" href="javascript:;;" cnt="0" onclick="userIndex.clickHotCnt(this)">0热度</a>				<div class="bottom_tool">				</div>			</div>		</div>	</div></div></li>			',
                         start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
                         end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
                     };
@@ -93,11 +133,25 @@ var userIndex   =   (function(){
                                     message.msg('发布成功.');
                                     //隐藏发布窗体,并清空发布窗体
 
+                                    $('#release-photo').modal('hide');
+
+                                    $('#uploadImgUrl').hide();
+                                    $('#uploadNextDiv').hide();
+                                    $('#uploadNextDivB').hide();
+                                    $('#divImgArticleImgList').html('').hide();
+                                    $('#divImgArticleContent').hide();
+                                    $('#textareaContent').val('');
+                                    $('#uploadImgTags').val('').show();
+                                    $("#divUploadImgTags span").remove();
+                                    $("#btnImgArticlePublish").hide();
+
+                                    $('#divFileUpload').show();
 
                                     var str  = cfg.temp.format({
                                         img:$('#imgMyPhoto').attr('src'),
                                         nick:$("#aMyNick").text(),
-                                        title:_title,
+                                        title:'',
+                                        imgList:fileView.join(''),
                                         content:content,
                                         created:'刚刚',
                                         tagList:resTagList.join('')

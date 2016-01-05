@@ -69,9 +69,12 @@
                                  <div class="pull-right text-muted">{@formatDate value=created /}</div>
                               </div>
                               <div class="content_body" data-toggle="modal" data-target="#content_body_info">
-                                  <h6>
-                                      {title|s}
-                                  </h6>
+                                  {?title}
+                                      <h6>
+                                          {title|s}
+                                      </h6>
+                                  {/title}
+
                                   {#files}
                                     <img src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
                                   {/files}
