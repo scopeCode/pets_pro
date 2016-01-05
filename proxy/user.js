@@ -265,16 +265,18 @@ exports.createUserFollow   =   function(userId,followUserId,callback){
  */
 exports.cancelFollowUser   =   function(userId,followUserId,callback){
 
-    //TODO 需要处理是否已经关注过了的验证  留
+    //TODO 需要处理是否已经关注过了的验证
     //TODO 没有加操作日志
     return sequelize.transaction(function (t) {
         return User.findById(userId, {transaction: t}).then(function(user){
 
             return user.getUserFollows({
-                followUserId:followUserId
+                'where':{
+                    followUserId:followUserId
+                }
             }, {transaction: t}).then(function(userFollow){
 
-                return user.removeUserFollow(userFollow[0],{transaction: t}).then(function(resUserFollow){
+                return userFollow[0].destroy({transaction: t}).then(function(resUserFollow){;
 
                     return User.findById(followUserId,{
                         include:[

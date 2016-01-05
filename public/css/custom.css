@@ -444,7 +444,7 @@ a.btn-box:hover {
 }
 .person-info{
 	position:absolute;
-	margin-top:0px;/*10px*/
+	margin-top:0px;
 	margin-left:-108px;
 	display:block;
 }
@@ -510,27 +510,24 @@ a.btn-box:hover {
 	float:left;
 	list-style:none;
 	margin-top:10px;
+	padding:0;
 	margin-bottom:10px;
 }
 .person-show ul li{
-	width:80px;
-	height:80px;
+	width:31%;
 	border-radius:5px;
 	float:left;
+	margin-left:2%;
 	cursor:pointer;
+	padding:0;
 }
 .person-show ul li:hover,.person-show ul li:focus{
 	opacity:.5;
 	}
-.person-show ul li:first-child{
-	margin-right:10px;
-}
-.person-show ul li:last-child{
-	margin-left:10px;
-}
+
 .person-show ul li img{
 	width:100%;
-	height:80px;
+	height:auto;
 	float:Left;
 	border-radius:5px;
 	background-size:contain;
@@ -675,7 +672,8 @@ a.btn-box:hover {
 }
 .set-user{
 	width:100%;
-	float:left;	
+	float:left;
+	
 }
 .set-user .person-info{
 	width:100%;
@@ -685,4 +683,69 @@ a.btn-box:hover {
 }
 .set-user .person-info .person-iner-bg{
 	height:inherit;	
+}
+.set-user .person-info .person-user-img{
+	width:96px;
+	height:96px;
+	margin:-60px auto 10px auto;	
+}
+.set-user .person-info .person-user-img img{
+	width:100%;
+	float:Left;
+	border:2px solid #fff;
+	border-radius:5px;	
+}
+.set-user .person-info .person-user-name{
+	width:100%;
+	padding:10px 20px;
+	font-size:22px;
+	text-align:center;
+	float:left;
+}
+.set-user .form-control{
+	border:none;	
+}
+.set-user .form-control:focus{
+	border:1px solid #d9d9d9;	
+}
+.set-user .form-horizontal{
+	text-align:left;	
+}
+.user-edit{
+	width:30px;
+	height:30px;
+	border-radius:3px;
+	background:rgba(0,0,0,.5);
+	font-size:20px;
+	color:#fff;
+	text-align:center;
+	line-height:30px;
+	cursor:pointer;
+}
+.user-edit:hover{
+	opacity:.5;	
+}
+.person-user-img .user-edit{
+	position:absolute;
+	margin-left:33px;
+	margin-top:33px;	
+}
+.person-inner-bg .user-edit{
+	    z-index: 10002;
+    position: absolute;
+    right: 10px;
+    top: 80px;	
+}
+.trending-content .person-info{
+	width:100%;
+	float:left;
+	display:block;
+	position:inherit;
+	margin:0;
+}
+.trending-content .person-info .person-inner{
+	width:100%;	
+}
+.trending-content .person-info  .person-inner-top{
+	width:91.228070%;
 }
