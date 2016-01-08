@@ -162,6 +162,150 @@ exports.articleReprint  =   function(articleId,userId,callback){
 };
 
 //------------------------------------------------------------------------------------//
+
+/**
+ * 改写 首页 读取信息的 查询方式
+ * @param userId
+ * @param _offset
+ * @param _limit
+ * @param callback
+ */
+exports.queryArticleListEx      =   function(userId,_offset,_limit,callback){
+
+    _offset = _offset * _limit;
+    var proxy = new EventProxy();
+
+    User.find({
+        include:[
+            {
+                'model' : Info
+            }
+        ],
+        where:{
+            id:userId
+        }
+    }).then(function(user){
+        user.getArticles({
+            'order' :  ' created desc ',
+            'limit':_limit,
+            'offset':_offset,
+        }).then(function(articles){
+
+            var len = articles.length;
+            if(len>0){
+
+                proxy.after('articleHots', len , function (articles) {
+                    callback(articles);
+                });
+
+                proxy.after('articleTags', len , function (articles) {
+                    for(var i=0;i<len;i++){
+                        var item = articles[i];
+                        (function(item,i){
+                            item.article.getHots({
+                                'where':{
+                                    'userId':userId
+                                }
+                            }).then(function(hots){
+                                if(hots&&hots.length>0){
+                                    item.article.isActiveHot  =   true;
+                                }
+                                if(len - 1 == i){
+                                    return proxy.emit('articleHots',item);
+                                }
+                                proxy.emit('articleHots',item);
+                            });
+                        })(item,i);
+                    }
+                });
+
+                proxy.after('articleFiles', len , function (articles) {
+                    for(var i=0;i<len;i++){
+                        var item = articles[i];
+                        (function(item,i){
+                            item.article.getTags().then(function(tags){
+                                var result = item;
+                                if(tags.length>0){
+                                    result.tags=tags;
+                                }
+                                if(len - 1 == i){
+                                    return proxy.emit('articleTags',result);
+                                }
+                                proxy.emit('articleTags',result);
+                            });
+                        })(item,i);
+                    }
+                });
+
+                proxy.after('result', len , function (articles) {
+                    for(var i=0;i<len;i++){
+                        var item = articles[i];
+                        (function(item,i){
+                            item.article.getFiles().then(function(files){
+                                var result = item;
+                                if(files.length>0){
+                                    result.files=files;
+                                }
+                                if(len - 1 == i){
+                                    return proxy.emit('articleFiles',result);
+                                }
+                                proxy.emit('articleFiles',result);
+                            });
+                        })(item,i);
+                    }
+                });
+
+                for(var i=0;i<len;i++){
+                    var item = articles[i];
+
+                    var articleUser = item.articleUser;
+
+                    item.isShowCancleFollow   =   false;     //是否显示取消关注的按钮
+                    item.isShowReprint        =   false;     //是否显示 转发类的按钮
+                    item.isShowHot            =   false;     //显示 已经有热度还是没有热度
+                    item.isActiveHot          =   false;     //显示 已经有热度还是没有热度
+
+                    if(articleUser.creator != articleUser.userId){
+                        //处理下是否显示 取消关注的按钮 条件是 type = 2    0:自创,1:转载,2:关注文章
+                        item.isShowReprint        =   true;
+                        if(articleUser.type +'' == '2'){
+                            item.isShowCancleFollow = true;
+                        }
+                        if(articleUser.type +'' == '1'){
+                            item.isShowReprint = false;
+                        }
+                        item.isShowHot       =   true;
+
+                        User.find({
+                            'include': [Info],
+                            'where': {
+                                'id':  articleUser.creator
+                            }
+                        }).then(function(data){
+                            var result = {article:item};
+                            result.user = data;
+                            if(len - 1 == j){
+                                return proxy.emit('result',result);
+                            }
+                            proxy.emit('result',result);
+                        });
+
+                    }else{
+                        var result = {article:item};
+                        result.user = user;
+                        proxy.emit('result',result);
+                    }
+                }
+            }else{
+                callback([]);
+            }
+        });
+    });
+
+
+};
+
+
 /**
  * 根据Uid查询属于他的文章信息
  * @param userId
@@ -287,15 +431,6 @@ exports.queryArticleLog     =   function(articleId,limit,pageSize,callback){
     }).catch(function (err) {
         console.error(err);
     });
-    /*var sql = [];
-    sql.push(' SELECT log.ARTICLE_ID,log.CONTENT,log.CREATED,log.USER_ID,ex.PHOTO,ex.BG_PHOTO,ex.NICK  ');
-    sql.push(' FROM t_b_article_log log ');
-    sql.push(' LEFT JOIN t_b_user_ex ex on ex.USER_ID = log.USER_ID ');
-    sql.push(' WHERE log.ARTICLE_ID = ' + articleId);
-    sql.push(' LIMIT '+ (parseInt(limit) * parseInt(pageSize)) +','+pageSize);
-    models.sequelize.query(sql.join('')).spread(function(results, metadata) {
-        callback(results, metadata);
-    });*/
 };
 
 /**
@@ -308,6 +443,7 @@ exports.queryTop3Article    =   function(userId,callback){
         User.findById(userId).then(function(user){
             user.getArticles({
                 'type':2,
+                'order':' created desc ',
                 'limit':3
             }).then(function(articles){
                 var len = articles.length;

@@ -43,7 +43,7 @@ exports.show = function (req, res, next) {
         });
 
         //请求获取文章列表
-        articleProxy.queryArticleList(userObj.id,0,15,function(data){
+        articleProxy.queryArticleListEx(userObj.id,0,15,function(data){
             ep.emit('getTotalHotUser',data);
         });
      }catch(ex){

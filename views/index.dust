@@ -38,17 +38,17 @@
                 {#data}
                     <li>
                        <div class="media">
-                          <div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="{users[0].info.userId}" onmouseout="userIndex.imgOnmouseout(this)">
+                          <div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="{user.info.userId}" onmouseout="userIndex.imgOnmouseout(this)">
                               <a href="javascript:;;"  class="dropdown-toggle hover-initialized" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                  <img src="{?users[0].info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{users[0].info.photo}{:else}/img/img_normal.png{/users[0].info.photo}" width="64px" height="64px">
+                                  <img src="{?user.info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{user.info.photo}{:else}/img/img_normal.png{/user.info.photo}" width="64px" height="64px">
                                       <div class="person-info" >
                                           <div class="person-inner">
                                               <div class="person-inner-bg">
-                                                  <img src="{?users[0].info.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{users[0].info.bgPhoto}{:else}/img/01.jpg{/users[0].info.bgPhoto}"> </div>
-                                              <div class="person-inner-top">{users[0].info.userNick}
-                                                  {?isShowCancleFollow}
-                                                    <div class="pull-right btn btn-default btn-xs" data="{users[0].info.userId}" onclick="userIndex.cancelUserFollow(this)">>取消关注</div>
-                                                  {/isShowCancleFollow}
+                                                  <img src="{?user.info.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{user.info.bgPhoto}{:else}/img/01.jpg{/user.info.bgPhoto}"> </div>
+                                              <div class="person-inner-top">{article.user.info.userNick}
+                                                  {?article.isShowCancleFollow}
+                                                    <div class="pull-right btn btn-default btn-xs" data="{article.user.info.userId}" onclick="userIndex.cancelUserFollow(this)">>取消关注</div>
+                                                  {/article.isShowCancleFollow}
                                               </div>
                                               <div class="person-inner-body">
                                                   {?user.info.sign}{user.info.sign}{:else}这个家伙很懒,什么也没有留下.{/user.info.sign}
@@ -65,15 +65,15 @@
                           <div class="media-body">
                             <div class="list_content ">
                               <div class="content_top">
-                                 {users[0].info.userNick}
-                                 <div class="pull-right text-muted">{@formatDate value=created /}</div>
+                                 {user.info.userNick}
+                                 <div class="pull-right text-muted">{@formatDate value=article.created /}</div>
                               </div>
                               <div class="content_body" data-toggle="modal" data-target="#content_body_info">
-                                  {?title}
+                                  {?article.title}
                                       <h6>
-                                          {title|s}
+                                          {article.title|s}
                                       </h6>
-                                  {/title}
+                                  {/article.title}
 
                                   {#files}
                                     <img src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
@@ -87,10 +87,10 @@
                               </div>
 
                               <div class="content_bottom">
-                                  <a class="text-muted" href="javascript:;;" articleId="{id}" id="articleId{id}" cnt="{count}" onclick="userIndex.clickHotCnt(this)">{count}热度</a>
+                                  <a class="text-muted" href="javascript:;;" articleId="{article.id}" id="articleId{article.id}" cnt="{article.count}" onclick="userIndex.clickHotCnt(this)">{article.count}热度</a>
 
                                     <!--鼠标点击热度-->
-                                    <div class="hot-info" id="articleHotInfo{id}">
+                                    <div class="hot-info" id="articleHotInfo{article.id}">
                                       <div class="hot-inner">
                                         <ul id="artileLogList{id}">
                                             加载中.....
@@ -100,16 +100,17 @@
                                     <!--end鼠标移上去显示个人信息的地方-->
 
                                 <div class="bottom_tool">
-                                    {?isShowReprint}
-                                       <a class="fui-link mrm" href="javascript:;;" title="转发" articleId='{id}' onclick="userIndex.tranlateArticle(this)"></a>
-                                    {/isShowReprint}
-                                    {?isShowHot}
-                                        <a class='fui-heart {?isActiveHot}active{/isActiveHot}' href="javascript:;;" title="喜欢" articleId='{id}' onclick="userIndex.clickSetArticleHot(this)"></a>
-                                    {/isShowHot}
+                                    {?article.isShowReprint}
+                                       <a class="fui-link mrm" href="javascript:;;" title="转发" articleId='{article.id}' onclick="userIndex.tranlateArticle(this)"></a>
+                                    {/article.isShowReprint}
+                                    {?article.isShowHot}
+                                        <a class='fui-heart {?article.isActiveHot}active{/article.isActiveHot}' href="javascript:;;" title="喜欢" articleId='{article.id}' onclick="userIndex.clickSetArticleHot(this)"></a>
+                                    {/article.isShowHot}
                                 </div>
                             </div>
                           </div>
                         </div>
+                       </div>
                     </li>
                 {/data}
                 <!-- 前15条的记录    结束-->

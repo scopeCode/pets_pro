@@ -4,7 +4,7 @@
  */
 
 exports.success         =   function(data){
-    var json    =   {'result':1,'data':{},'msg':''};
+    var json    =   {'result':1,'msg':''};
     if(data){
         json.data   =   data;
     }

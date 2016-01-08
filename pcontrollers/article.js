@@ -214,4 +214,22 @@ exports.queryTop3Article  =   function(req, res, next){
     articleProxy.queryTop3Article(userId,function(data){
         res.json(commonResponse.success(data));
     });
-}
+};
+
+/**
+ * 获取文章的信息
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.queryArticleList =      function(req,res,next){
+    var user        =   req.session.user;
+
+    var userId      =   user.user.id;
+    var pageNo      =   req.body.pageNo;
+    var limit       =   req.body.limit;
+
+    articleProxy.queryArticleListEx(userId,pageNo,limit,function(data){
+        res.json(commonResponse.success(data));
+    });
+};

@@ -12,9 +12,10 @@ $(document).ready(function(){
 
 //注册页面的对象
 var userIndex   =   (function(){
-
-    //将要新添加标签 数组
-    var  addTag     =   [];
+    var  page = {
+        currentPage :   0,
+        limit       :   15
+    };
 
     //标签模板项
     var template    =   {
@@ -25,6 +26,7 @@ var userIndex   =   (function(){
 
     var optIndex    =   {
         build       :   function(){
+            page.currentPage = page.currentPage + 1;
             optIndex.bindEvent();
         },
         bindEvent   :   function(){
@@ -70,20 +72,28 @@ var userIndex   =   (function(){
                     //进行后台处理
                     try{
                         var cfg = {
-                            url		    :	"/user/article/createImgArticle",
+                            url		    :	"/user/article/queryArticleList",
                             data		:	[],
                             method	    :	"POST",
-                            temp        :   '<li><div class="media">	<div class="media-left">		<a href="javascript:;;"><img src="#{img}" width="64px" height="64px"></a>	</div>	<div class="media-body">		<div class="list_content">			<div class="content_top">				#{nick}				<div class="pull-right text-muted">					#{created}				</div>			</div>			<div class="content_body" data-toggle="modal" data-target="#content_body_info">#{title}#{imgList}				<p>					#{content}				</p>				<p class="mbm">					#{tagList}				</p>			</div>			<div class="content_bottom">				<a class="text-muted" href="javascript:;;" cnt="0" onclick="userIndex.clickHotCnt(this)">0热度</a>				<div class="bottom_tool">				</div>			</div>		</div>	</div></div></li>			',
+                            other       :{
+                                            follow:'<div class="pull-right btn btn-default btn-xs" data="#{userId}" onclick="userIndex.cancelUserFollow(this)">>取消关注</div>'
+                            },
+                            temp        :   '<li><div class="media">'+
+                                '<div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="#{userId}" onmouseout="userIndex.imgOnmouseout(this)">'+
+                                '<a href="javascript:;;"  class="dropdown-toggle hover-initialized" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">'+
+                                '<img src="#{img}" width="64px" height="64px">'+
+                                '<div class="person-info" ><div class="person-inner"><div class="person-inner-bg">'+
+                                '<img src="#{bgPhoto}"> </div>'+
+                                    '<div class="person-inner-top">#{userNick}#{follow}</div><div class="person-inner-body">'+
+                                '#{sign}<div class="person-show"><ul data="0">加载中...</ul></div></div></div></div></a></div>'
+                            +'',
                             start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
                             end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
                         };
 
                         //设定需要传递的参数
-                        cfg.data.push("title="		    +	''      );
-                        cfg.data.push("content="		+	content );
-                        cfg.data.push("type=2"                      );
-                        cfg.data.push("tags="		    +	tag.join('$$$$$'));
-                        cfg.data.push("files="          +   filesArr.join('$$$$$'));
+                        cfg.data.push("pageNo="             +   page.currentPage);
+                        cfg.data.push("limit="              +   page.limit);
 
                         cfg.start();
 
@@ -95,34 +105,50 @@ var userIndex   =   (function(){
                             success     :   function(json){
                                 try{
                                     if(json.result) {
-                                        message.msg('发布成功.');
-                                        //隐藏发布窗体,并清空发布窗体
+                                        var a = [];
+                                        var data = json.data;
+                                        var len =   data.length;
 
-                                        $('#release-photo').modal('hide');
+                                        for(var i=0;i<len;i++){
+                                            var item = data[i];
 
-                                        $('#uploadImgUrl').hide();
-                                        $('#uploadNextDiv').hide();
-                                        $('#uploadNextDivB').hide();
-                                        $('#divImgArticleImgList').html('').hide();
-                                        $('#divImgArticleContent').hide();
-                                        $('#textareaContent').val('');
-                                        $('#uploadImgTags').val('').show();
-                                        $("#divUploadImgTags span").remove();
-                                        $("#btnImgArticlePublish").hide();
+                                            var imgList = [];
+                                            var imgListData = item.files;
+                                            var imgListDataLen = imgListData.length;
+                                            for(var j=0;j<imgListDataLen;j++){
+                                                imgList.push('<img src="http://7xjik2.com1.z0.glb.clouddn.com/'+imgListData[j].fileHash+'" style="width:100%" />');
+                                            }
 
-                                        $('#divFileUpload').show();
+                                            var tagList = [];
+                                            var tagListData =   item.tags;
+                                            var taggListDataLen = tagListData.length;
+                                            for(var j=0;j<taggListDataLen;j++){
+                                                var tagItme = tagListData[j];
+                                                var _str = template.tagTemp.format({
+                                                    tagName:tagItme.tagName
+                                                })
+                                                tagList.push(_str);
+                                            }
 
-                                        var str  = cfg.temp.format({
-                                            img:$('#imgMyPhoto').attr('src'),
-                                            nick:$("#aMyNick").text(),
-                                            title:'',
-                                            imgList:fileView.join(''),
-                                            content:content,
-                                            created:'刚刚',
-                                            tagList:resTagList.join('')
-                                        });
+                                            var img = item.user.info.photo?("http://7xjik2.com1.z0.glb.clouddn.com/" + item.user.info.photo):
+                                                '/img/img_normal.png';
 
-                                        $('#ulLeftContentLi').after(str);
+                                            var str  = cfg.temp.format({
+                                                img:img,
+                                                nick:item.user.info.nick,
+                                                title:item.article.title,
+                                                imgList:imgList.join(''),
+                                                content:item.article.content,
+                                                created: item.article.created,
+                                                tagList:tagList.join('')
+                                            });
+
+                                            a.join(str);
+                                        }
+                                        $('#ulLeftContentLi').append(str);
+
+                                        page.currentPage = page.currentPage + 1;
+
                                     }else{
                                         message.msg('发布失败,' +   json.msg);
                                     }

@@ -43,6 +43,8 @@ module.exports = function (app) {
         post(article.articleReprint);
     app.route('/user/article/queryArticleLogByArticleId').all(auth.loginRequired).
         post(article.queryArticleLogByArticleId);
+    app.route('/user/article/queryArticleList').all(auth.loginRequired).
+        post(article.queryArticleList);
 
     //[common处理 ]-----------------------------------------------------------------\\
     app.route('/user/link/getTitle').all(auth.loginRequired).
