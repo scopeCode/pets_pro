@@ -16,11 +16,11 @@ var ArticleUser = mysqlCient.sequelize.define('articleUser',
             field:"type",
             comment:'文章类型 0：自创 1:转载 2:关注'
         },
-        /*fromArticleId:{
+        fromArticleId:{
             type:mysqlCient.Sequelize.INTEGER,
             field:"fromArticleId",
             comment:'文章的根ID'
-        },*/
+        },
         status:
         {
             type:mysqlCient.Sequelize.BOOLEAN,

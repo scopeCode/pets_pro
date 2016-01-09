@@ -1104,7 +1104,6 @@ var userIndex   =   (function(){
                     end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
                 };
 
-
                 //设定需要传递的参数
                 cfg.data.push("articleId="		    +	articleId);
 
@@ -1119,7 +1118,6 @@ var userIndex   =   (function(){
                         try{
                             if(json.result) {
                                 message.msg('操作成功.');
-
                             }else{
                                 message.msg('操作失败:' +   json.msg);
                             }

@@ -232,7 +232,7 @@
                                 <div class="content_bottom">
                                     <a class="text-muted" href="javascript:;;" articleId="{todayHotUser.article.id}" id="articleId{todayHotUser.article.id}" cnt="{todayHotUser.article.count}" onclick="userIndex.clickHotCnt(this)">{todayHotUser.article.count}热度</a>
                                     <div class="bottom_tool">
-                                        <a class="fui-link mrm" href="#" title="转发"></a>
+                                        <a class="fui-link mrm" href="#" title="转发" articleId='{todayHotUser.article.id}' onclick="userIndex.tranlateArticle(this)"></a>
                                         <a class="fui-heart {?todayHotUser.articleHot}active {/todayHotUser.articleHot}" href="javascript:;;"  articleId='{todayHotUser.article.id}' onclick="userIndex.clickSetArticleHot(this)" title="喜欢"></a>
                                     </div>
                                 </div>

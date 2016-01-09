@@ -154,6 +154,63 @@ exports.articleDescHot  =   function(articleId,userId,callback){
 exports.articleReprint  =   function(articleId,userId,callback){
     return sequelize.transaction(function (t) {
 
+       return Article.findAll({
+            'include': [
+                {
+                    'model': Tag
+                },
+                {
+                    'model': File
+                },
+                {
+                    'model': Hot
+                }
+            ],
+            'where':{
+                id:articleId
+            }
+        },{transaction: t}).then(function(artiles){
+            var article = artiles[0];
+
+            return User.findById(userId,{transaction: t}).then(function(user){
+
+                return user.createArticle({
+                    'title' : article.title,
+                    'content':article.content,
+                    'type'  : article.type
+                },{
+                    'creator':userId,
+                    'type':1,
+                    'fromArticleId':articleId
+                },{transaction: t}).then(function (_article) {
+                    //文章的tags处理
+                    var tagsLen = article.tags.length;
+                    if(tagsLen > 0){
+                        for(var i=0;i<tagsLen;i++){
+                            var item = article.tags[i].tagName;
+                            (function(item){
+                                _article.createTag({
+                                    'tagName':item
+                                });
+                            })(item);
+                        }
+                    }
+                    //文章files的处理
+                    var filesLen = article.files.length;
+                    if(filesLen > 0){
+                        for(var i=0;i<filesLen;i++){
+                            var item = article.files[i];
+                            (function(item){
+                                _article.createFile({
+                                    'fileHash':item.fileHash
+                                });
+                            })(item);
+                        }
+                    }
+
+                });
+            });
+        });
     }).then(function (result) {
         callback(result);
     }).catch(function (err) {
