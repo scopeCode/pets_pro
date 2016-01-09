@@ -76,7 +76,9 @@ var userIndex   =   (function(){
                             data		:	[],
                             method	    :	"POST",
                             other       :{
-                                            follow:'<div class="pull-right btn btn-default btn-xs" data="#{userId}" onclick="userIndex.cancelUserFollow(this)">>取消关注</div>'
+                                            follow:'<div class="pull-right btn btn-default btn-xs" data="#{userId}" onclick="userIndex.cancelUserFollow(this)">>取消关注</div>',
+                                            isShowReprint:'<a class="fui-link mrm" href="#" title="转发"></a>',
+                                            isShowHot:'<a class="fui-heart #{isActive} " href="javascript:;;" articleid="#{articleId}" onclick="userIndex.clickSetArticleHot(this)" title="喜欢"></a>',
                             },
                             temp        :   '<li><div class="media">'+
                                 '<div class="media-left" onmousemove="userIndex.imgOnmousemove(this)" data="#{userId}" onmouseout="userIndex.imgOnmouseout(this)">'+
@@ -85,14 +87,34 @@ var userIndex   =   (function(){
                                 '<div class="person-info" ><div class="person-inner"><div class="person-inner-bg">'+
                                 '<img src="#{bgPhoto}"> </div>'+
                                     '<div class="person-inner-top">#{userNick}#{follow}</div><div class="person-inner-body">'+
-                                '#{sign}<div class="person-show"><ul data="0">加载中...</ul></div></div></div></div></a></div>'
-                            +'',
+                                '#{sign}<div class="person-show"><ul data="0">加载中...</ul></div></div></div></div></a></div>'+
+
+                            '<div class="media-body">'+
+                                '<div class="list_content ">'+
+                            '<div class="content_top">'+
+                            '#{userNick}'+
+                            '<div class="pull-right text-muted">#{created}</div>'+
+                            '</div>'+
+                            '<div class="content_body" data-toggle="modal" data-target="#content_body_info">'+
+                                '#{title}'+
+                            '#{files}'+
+                            '<p>#{content}</p>'+
+                            '<p class="mbm">'+
+                            '#{tags}'+
+                            '</p>'+
+                            '</div>'+
+                            '<div class="content_bottom">'+
+                            '<a class="text-muted" href="javascript:;;" articleId="#{articleId}" id="articleId#{articleId}" cnt="#{articleCount}" '+
+                            'onclick="userIndex.clickHotCnt(this)">#{articleCount}热度</a>'+
+                            '<div class="hot-info" id="articleHotInfo#{articleId}">'+
+                            '<div class="hot-inner">'+
+                            '<ul id="artileLogList#{articleId}">加载中.....</ul></div></div><div class="bottom_tool">#{isShowReprint}#{isShowHot}</div></div></div></div>',
                             start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
                             end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
                         };
 
                         //设定需要传递的参数
-                        cfg.data.push("pageNo="             +   page.currentPage);
+                        cfg.data.push("pageNo="             +   0);
                         cfg.data.push("limit="              +   page.limit);
 
                         cfg.start();
@@ -112,6 +134,9 @@ var userIndex   =   (function(){
                                         for(var i=0;i<len;i++){
                                             var item = data[i];
 
+                                            var user  = item.user;
+                                            var article = item.article;
+
                                             var imgList = [];
                                             var imgListData = item.files;
                                             var imgListDataLen = imgListData.length;
@@ -130,25 +155,50 @@ var userIndex   =   (function(){
                                                 tagList.push(_str);
                                             }
 
-                                            var img = item.user.info.photo?("http://7xjik2.com1.z0.glb.clouddn.com/" + item.user.info.photo):
+                                            var img = user.info.photo?("http://7xjik2.com1.z0.glb.clouddn.com/" + user.info.photo):
                                                 '/img/img_normal.png';
 
+                                            var bgImg   =   user.info.bgPhoto?('http://7xjik2.com1.z0.glb.clouddn.com/'+user.info.bgPhoto):'/img/01.jpg';
+                                            var sign    =   user.info.sign ? user.info.sign:'这个家伙很懒,没有东西.';
+
+                                            var title   =  article.title?  '<h6>'+article.title+'</h6>':'';
+
+
+                                            var isShowReprint = item.isShowReprint?cfg.other.isShowReprint:'';
+                                            var isHot       =   item.isShowHot?(cfg.other.isShowHot.format({
+                                                articleId:article.id,
+                                                isActive:(item.isActiveHot?'active':'')
+                                            })):'';
+
+                                            var follow = "";
+                                            if(item.isShowCancleFollow){
+                                                follow = cfg.other.follow.format({'userId':user.id});
+                                            }
+
                                             var str  = cfg.temp.format({
+                                                userId:user.id,
                                                 img:img,
-                                                nick:item.user.info.nick,
-                                                title:item.article.title,
-                                                imgList:imgList.join(''),
-                                                content:item.article.content,
-                                                created: item.article.created,
-                                                tagList:tagList.join('')
+                                                bgPhoto:bgImg,
+                                                userNick:user.info.userNick,
+                                                follow:follow,
+                                                sign:sign,
+                                                title:title,
+                                                files:imgList.join(''),
+                                                content:article.content,
+                                                created: article.created.substr(0,10),
+                                                articleId:article.id,
+                                                articleCount:article.count,
+                                                isShowReprint:isShowReprint,
+                                                isHot:isHot,
+                                                tags:tagList.join('')
                                             });
-
-                                            a.join(str);
+                                            a.push(str);
                                         }
-                                        $('#ulLeftContentLi').append(str);
 
-                                        page.currentPage = page.currentPage + 1;
-
+                                        if(a.length > 0){
+                                            $('#ulLeftContent').append(a.join(''));
+                                            page.currentPage = page.currentPage + 1;
+                                        }
                                     }else{
                                         message.msg('发布失败,' +   json.msg);
                                     }

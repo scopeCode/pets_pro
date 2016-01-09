@@ -258,23 +258,25 @@ exports.queryArticleListEx      =   function(userId,_offset,_limit,callback){
                 for(var i=0;i<len;i++){
                     var item = articles[i];
 
+                    var result = {article:item};
+
                     var articleUser = item.articleUser;
 
-                    item.isShowCancleFollow   =   false;     //是否显示取消关注的按钮
-                    item.isShowReprint        =   false;     //是否显示 转发类的按钮
-                    item.isShowHot            =   false;     //显示 已经有热度还是没有热度
-                    item.isActiveHot          =   false;     //显示 已经有热度还是没有热度
+                    result.isShowCancleFollow   =   false;     //是否显示取消关注的按钮
+                    result.isShowReprint        =   false;     //是否显示 转发类的按钮
+                    result.isShowHot            =   false;     //显示 已经有热度还是没有热度
+                    result.isActiveHot          =   false;     //显示 已经有热度还是没有热度
 
                     if(articleUser.creator != articleUser.userId){
                         //处理下是否显示 取消关注的按钮 条件是 type = 2    0:自创,1:转载,2:关注文章
                         item.isShowReprint        =   true;
                         if(articleUser.type +'' == '2'){
-                            item.isShowCancleFollow = true;
+                            result.isShowCancleFollow = true;
                         }
                         if(articleUser.type +'' == '1'){
-                            item.isShowReprint = false;
+                            result.isShowReprint = false;
                         }
-                        item.isShowHot       =   true;
+                        result.isShowHot       =   true;
 
                         User.find({
                             'include': [Info],
@@ -282,7 +284,7 @@ exports.queryArticleListEx      =   function(userId,_offset,_limit,callback){
                                 'id':  articleUser.creator
                             }
                         }).then(function(data){
-                            var result = {article:item};
+
                             result.user = data;
                             if(len - 1 == j){
                                 return proxy.emit('result',result);
@@ -291,7 +293,6 @@ exports.queryArticleListEx      =   function(userId,_offset,_limit,callback){
                         });
 
                     }else{
-                        var result = {article:item};
                         result.user = user;
                         proxy.emit('result',result);
                     }
