@@ -530,3 +530,92 @@ exports.queryTop3Article    =   function(userId,callback){
             });
         });
 };
+
+
+/**
+ * 获取单篇 文章的信息
+ * @param userId
+ * @param _offset
+ * @param _limit
+ * @param callback
+ */
+exports.queryArticleById      =   function(articleId,userId,callback){
+
+    var proxy = new EventProxy();
+
+    Article.findById(articleId,{
+        'include': [{
+            'model': User,
+            'include': [ {'model': Info}]
+        }]
+    }).then(function(article){
+
+        var result = {article:article};
+
+        var articleUser = article.users[0].articleUser;
+        var user       =  article.users[0];
+
+        result.isShowCancleFollow   =   false;     //是否显示取消关注的按钮
+        result.isShowReprint        =   false;     //是否显示 转发类的按钮
+        result.isShowHot            =   false;     //显示 已经有热度还是没有热度
+        result.isActiveHot          =   false;     //显示 已经有热度还是没有热度
+
+
+        proxy.after('articleHots', 1 , function (result) {
+            callback(result[0]);
+        });
+
+        proxy.after('articleTags', 1 , function (result) {
+            result[0].article.getHots({
+                'where':{
+                    'userId':user.id
+                }
+            }).then(function(hots){
+                if(hots&&hots.length>0){
+                    result[0].isActiveHot  =   true;
+                }
+                return proxy.emit('articleHots',result[0]);
+            });
+
+        });
+
+        proxy.after('articleFiles', 1 , function (result) {
+            result[0].article.getTags().then(function(tags){
+                if(tags.length>0){
+                    result[0].tags=tags;
+                }
+                return proxy.emit('articleTags',result[0]);
+            });
+
+        });
+
+
+        proxy.after('result', 1 , function (result) {
+            result[0].article.getFiles().then(function(files){
+                if(files.length>0){
+                    result[0].files=files;
+                }
+                return proxy.emit('articleFiles',result[0]);
+            });
+        });
+
+        if(articleUser.creator != articleUser.userId){
+            //处理下是否显示 取消关注的按钮 条件是 type = 2    0:自创,1:转载,2:关注文章
+            item.isShowReprint        =   true;
+            if(articleUser.type +'' == '2'){
+                result.isShowCancleFollow = true;
+            }
+            if(articleUser.type +'' == '1'){
+                result.isShowReprint = false;
+            }
+            result.isShowHot       =   true;
+            result.user = user;
+
+            return proxy.emit('result',result);
+        }else{
+            result.user = user;
+            proxy.emit('result',result);
+        }
+    });
+
+};

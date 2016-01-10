@@ -233,3 +233,12 @@ exports.queryArticleList =      function(req,res,next){
         res.json(commonResponse.success(data));
     });
 };
+
+exports.queryArticleId =      function(req,res,next){
+    var userId      =   req.body.userId;
+    var articleId       =   req.body.articleId;
+
+    articleProxy.queryArticleById(userId,articleId,function(data){
+        res.json(commonResponse.success(data));
+    });
+};

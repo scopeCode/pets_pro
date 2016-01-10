@@ -18,6 +18,13 @@ exports.show = function (req, res, next) {
     try{
         var userObj =   req.session.user.user;
 
+
+        //articleProxy.queryArticleById(1,1,function(data){
+        //    var data = data;
+        //});
+
+
+
         var ep  = new EventProxy();
         ep.fail(next);
 
