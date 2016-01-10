@@ -175,9 +175,7 @@ exports.articleDescHot  =   function(req,res,next){
 exports.articleReprint  =   function(req,res,next){
     try{
         var articleId   =   req.body.articleId;
-        var user        =   req.session.user;
-        var userId      =   user.user.id;
-
+        var userId        =   req.body.userId;
         articleProxy.articleReprint(articleId,userId,function(data){
             res.json(commonResponse.success());
         });

@@ -77,7 +77,7 @@ var userIndex   =   (function(){
                             method	    :	"POST",
                             other       :{
                                             follow:'<div class="pull-right btn btn-default btn-xs" data="#{userId}" onclick="userIndex.cancelUserFollow(this)">>取消关注</div>',
-                                            isShowReprint:'<a class="fui-link mrm" href="#" title="转发"></a>',
+                                            isShowReprint:'<a class="fui-link mrm" href="#" title="转发" articleId="#{articleId}"  userId="#{userId}" onclick="userIndex.tranlateArticle(this)" ></a>',
                                             isShowHot:'<a class="fui-heart #{isActive} " href="javascript:;;" articleid="#{articleId}" onclick="userIndex.clickSetArticleHot(this)" title="喜欢"></a>',
                             },
                             temp        :   '<li><div class="media">'+
@@ -1092,6 +1092,7 @@ var userIndex   =   (function(){
         tranlateArticle:function(_this){
             var item  = $(_this);
             var articleId   =   item.attr('articleId');
+            var userId      =   item.attr('userId');
 
             //进行后台处理
             try{
@@ -1106,6 +1107,7 @@ var userIndex   =   (function(){
 
                 //设定需要传递的参数
                 cfg.data.push("articleId="		    +	articleId);
+                cfg.data.push("userId="		        +	userId);
 
                 cfg.start();
 

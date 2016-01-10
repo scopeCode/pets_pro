@@ -19,9 +19,9 @@ exports.show = function (req, res, next) {
         var userObj =   req.session.user.user;
 
 
-        //articleProxy.queryArticleById(1,1,function(data){
-        //    var data = data;
-        //});
+        articleProxy.queryArticleById(1,1,function(data){
+            var data = data;
+        });
 
 
 

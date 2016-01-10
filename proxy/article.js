@@ -91,7 +91,7 @@ exports.articleAddHot   =   function(articleId,userId,nick,callback){
                     return article.createLog({
                             type:1,
                             userId:userId,
-                            content:nick+'点赞咯.'
+                            content:nick+'点赞咯.' //TODO 文字需要处理下
                     },{transaction: t})
                 });
             });
@@ -151,35 +151,38 @@ exports.articleDescHot  =   function(articleId,userId,callback){
  * @param article
  * @param callback
  */
-exports.articleReprint  =   function(articleId,userId,callback){
+exports.articleReprint  =   function(articleId,userId,curUserId,callback){
     return sequelize.transaction(function (t) {
 
-       return Article.findAll({
-            'include': [
-                {
-                    'model': Tag
-                },
-                {
-                    'model': File
-                },
-                {
-                    'model': Hot
-                }
-            ],
-            'where':{
-                id:articleId
-            }
-        },{transaction: t}).then(function(artiles){
-            var article = artiles[0];
+       return Article.findById(articleId,
+           {
+                'include': [
+                    {
+                        'model': Tag
+                    },
+                    {
+                        'model': File
+                    },
+                    {
+                        'model': Hot
+                    }
+                ]
+            },{transaction: t}).then(function(article){
 
-            return User.findById(userId,{transaction: t}).then(function(user){
+            return User.findById(curUserId,{
+                'include': [
+                    {
+                        'model': Info
+                    }
+                ]
+            },{transaction: t}).then(function(user){
 
                 return user.createArticle({
                     'title' : article.title,
                     'content':article.content,
                     'type'  : article.type
                 },{
-                    'creator':userId,
+                    'creator':curUserId,
                     'type':1,
                     'fromArticleId':articleId
                 },{transaction: t}).then(function (_article) {
@@ -207,6 +210,12 @@ exports.articleReprint  =   function(articleId,userId,callback){
                             })(item);
                         }
                     }
+                    //---操作日志的 处理
+                    article.createLog({
+                        type:3,
+                        userId:userId,
+                        content:user.info.userNick+'转载了你的日志.' //TODO 文字需要处理下
+                    },{transaction: t})
 
                 });
             });
@@ -217,7 +226,6 @@ exports.articleReprint  =   function(articleId,userId,callback){
         console.error(err);
     });
 };
-
 //------------------------------------------------------------------------------------//
 
 /**
