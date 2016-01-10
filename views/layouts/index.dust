@@ -51,7 +51,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="#"><span class="fui-heart mrm"></span>喜欢</a></li>
                             <li><a href="#"><span class="fui-plus mrm"></span>关注</a></li>
-                            <li><a href="#"><span class="fui-gear mrm"></span>设置</a></li>
+                            <li><a href="/user/setting"><span class="fui-gear mrm"></span>设置</a></li>
                             <li role="separator" class="divider"></li>
 
                             <li>

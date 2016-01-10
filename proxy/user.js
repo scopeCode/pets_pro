@@ -5,7 +5,6 @@
 var models      =   require('../pmodels/models');
 var sequelize   =   require('../pmodels/index').sequelize;
 var EventProxy  =   require('eventproxy');
-var co          =   require('co');
 
 var Article         =   models.Article;
 var File            =   models.File;
@@ -299,6 +298,41 @@ exports.cancelFollowUser   =   function(userId,followUserId,callback){
                                 }
                             }, {transaction: t});
                     });
+                });
+            });
+        });
+    }).then(function (result) {
+        callback(null,result);
+    }).catch(function (err) {
+        callback(err,null);
+    });
+};
+
+/**
+ *
+ * 用户的信息 修改
+ * @param bgPhoto
+ * @param photo
+ * @param nick
+ * @param sign
+ * @param oldpwd
+ * @param newpwd
+ */
+exports.saveSetting     =   function(userId,bgPhoto,photo,nick,sign,pwd,callback){
+    return sequelize.transaction(function (t) {
+        return  Info.findOne({
+            where: {
+                'id': userId
+            }
+        },{transaction: t}).then(function(info){
+            info.bgPhoto = bgPhoto;
+            info.photo = photo;
+            info.userNick   =   nick;;
+            info.sign   =   sign;
+            return info.save({transaction: t}).then(function(){
+                return User.findById(userId,{transaction: t}).then(function(user){
+                    user.userPwd =pwd;
+                    return user.save({transaction: t});
                 });
             });
         });

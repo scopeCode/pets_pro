@@ -20,6 +20,11 @@ var Log = mysqlCient.sequelize.define('log',
             field:"userId",
             comment:'用户ID'
         },
+        fromUseId:{
+            type:mysqlCient.Sequelize.INTEGER,
+            field:"fromUseId",
+            comment:'用户ID' //TODO 为了可以删除 对应的日志 而进行 增加的
+        },
         status:
         {
             type:mysqlCient.Sequelize.BOOLEAN,

@@ -3,6 +3,7 @@
  * Created by WG on 2015/12/5.
  */
 var index               =   require("./pcontrollers/index");
+var setting             =   require("./pcontrollers/setting");
 var login               =   require("./pcontrollers/login");
 var register            =   require("./pcontrollers/register");
 var auth                =   require("./pmiddlewares/auth");
@@ -26,6 +27,9 @@ module.exports = function (app) {
     app.route('/user/follow').all(auth.loginRequired).post(index.createFollowUser);
     app.route('/user/cancelFollow').all(auth.loginRequired).post(index.cancelFollowUser);
     app.route('/user/getTop3ArticleFile').all(auth.loginRequired).post(article.queryTop3Article);
+    //用户设置
+    app.route('/user/setting').all(auth.loginRequired).get(setting.show);
+    app.route('/user/savesetting').all(auth.loginRequired).post(setting.saveSetting);
 
     //[文章处理 ]-----------------------------------------------------------------\\
     app.route('/user/article/createTextArticle').all(auth.loginRequired).

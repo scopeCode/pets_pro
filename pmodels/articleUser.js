@@ -21,6 +21,11 @@ var ArticleUser = mysqlCient.sequelize.define('articleUser',
             field:"fromArticleId",
             comment:'文章的根ID'
         },
+        fromUserId:{
+            type:mysqlCient.Sequelize.INTEGER,//TODO 这个位置 需要 在存储 的时候 进行 设定下  [未完成]
+            field:"fromUserId",
+            comment:'文章的根ID'
+        },
         status:
         {
             type:mysqlCient.Sequelize.BOOLEAN,
