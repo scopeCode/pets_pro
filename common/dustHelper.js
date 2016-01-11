@@ -61,5 +61,4 @@ module.exports = function(dust){
         }
         return chunk.write(_res);
     };
-
 };

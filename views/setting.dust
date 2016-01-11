@@ -6,9 +6,13 @@
         <div class="set-user">
             <div class="person-info ">
                 <div class="person-inner">
-                    <div class="person-inner-bg"><img src="{?info.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{info.bgPhoto}{:else}/img/01.jpg{/info.bgPhoto}">
+                    <div class="person-inner-bg">
+                        <img id="imgBgPhoto" src="{?info.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{info.bgPhoto}{:else}/img/01.jpg{/info.bgPhoto}">
                         <div class="user-edit"  style="display: none;" id="divBgPhotoUpload">
-                            <span class="glyphicon glyphicon-pencil"></span>
+                            <form enctype="multipart/form-data" method="post" id="uploadBgPhoto">
+                                <input type="file" class="img-upload" id="inputUploadBgPhoto"  name="uploadImg" multiple="multiple">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </form>
                         </div>
                     </div>
                     <div class="person-inner-top"> {info.userNick}
@@ -16,23 +20,27 @@
                     </div>
                     <div class="person-inner-body">
                         <div class="person-user-img">
-                            <img src="{?info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{info.photo}{:else}/img/img_normal.png{/info.photo}">
+                            <img id="imgPhoto" src="{?info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{info.photo}{:else}/img/img_normal.png{/info.photo}">
                             <div class="user-edit" style="display: none;" id="divPhotoUpload">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                                <form enctype="multipart/form-data" method="post" id="uploadPhoto">
+                                    <input type="file" class="img-upload" id="inputUploadPhoto"  name="uploadImg" multiple="multiple">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </form>
                             </div>
                         </div>
                         <div class="person-user-name">
-                            {?info.sign}{info.sign}{:else}这个家伙很懒,什么也没有留下.{/info.sign}
-                        </div>
+                            <p id="pOldSign">{?info.sign}{info.sign}{:else}这个家伙很懒,什么也没有留下.{/info.sign} </p>
+                            <textarea class="form-control" placeholder="个性签名" id="inputNewSign" style="display: none;">
+                                    {?info.sign}{info.sign}{:else}这个家伙很懒,什么也没有留下.{/info.sign}
+                            </textarea>
+                        </p>
                         <form class="form-horizontal">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">昵称</label>
                                 <div class="col-sm-8">
-                                    <p class="form-control-static">{info.userNick}</p>
-                                    <!--点击编辑后显示
-                                    <input type="text" class="form-control" placeholder="用户名" value="仰望明天">-->
+                                    <p class="form-control-static" id="pOldNick">{info.userNick}</p>
+                                    <input type="text" class="form-control" placeholder="用户昵称" id="inputNewNick" value="{info.userNick}" style="display: none;">
                                 </div>
-
                             </div>
                             <div class="form-group">
                                 <label  class="col-sm-2 control-label">手机号</label>
@@ -40,19 +48,12 @@
                                     <p class="form-control-static">{user.userName}</p>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">密码</label>
-                                <div class="col-sm-10">
-                                    <p class="form-control-static">******</p>
-                                    <!--点击编辑后显 <input type="password" class="form-control" id="inputPassword3" placeholder="密码" value="*******">-->
+                            <div class="form-group" id="divOpt" style="display: none;">
+                                <div class="col-sm-12 text-right">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                    <button class="btn btn-primary" id="btnSaveInfo">保存</button>
                                 </div>
-                            </div>  <!--点击编辑外观后显
-            <div class="form-group">
-            	<div class="col-sm-12 text-right">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                	<button class="btn btn-primary">保存</button>
-                </div>
-            </div>-->
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -61,7 +62,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="content-right">
+        <div class="content-right" style="display: none;">
             <div class="recommend－list mtm">
                 <ul><!--弄成tab点击切换的就可以了-->
                     <li><a href="javascript:;;">

@@ -65,7 +65,7 @@ var userIndex   =   (function(){
                 return windowHeight;
             };
 
-            //TODO 下拉加载更多 未完成
+            //TODO 下拉加载更多 需要测试
             window.onscroll = function(){
                 if(getScrollTop() + getWindowHeight() == getScrollHeight()){
 
@@ -162,7 +162,6 @@ var userIndex   =   (function(){
                                             var sign    =   user.info.sign ? user.info.sign:'这个家伙很懒,没有东西.';
 
                                             var title   =  article.title?  '<h6>'+article.title+'</h6>':'';
-
 
                                             var isShowReprint = item.isShowReprint?cfg.other.isShowReprint:'';
                                             var isHot       =   item.isShowHot?(cfg.other.isShowHot.format({
