@@ -89,24 +89,104 @@ var userSetting   =   (function(){
                 });
             });
 
+            //保存按钮 点击事件
+
+            $("#btnSaveInfo").on("click",function(){
+                var $this       =   $(this);
+                var bgPhoto     =   $this.attr("imgbgphoto");
+                var photo       =   $this.attr('imgphoto');
+
+                var sign        =   $("#inputNewSign").val();
+                var nick        =   $("#inputNewNick").val();
+
+
+                if(optIndex.validate(sign,nick)){
+                    //进行后台处理
+                    try{
+                        var cfg = {
+                            url		    :	"/user/savesetting",
+                            data		:	[],
+                            method	    :	"POST",
+                            start		:	function(){ $("#divLoad").show();$("#btnSaveInfo").addClass('disabled');},
+                            end		    :	function(){ $("#divLoad").hide();$("#btnSaveInfo").removeClass('disabled');}
+                        };
+
+                        //设定需要传递的参数
+                        cfg.data.push("bgPhoto="		+	bgPhoto);
+                        cfg.data.push("photo="		    +	photo);
+                        cfg.data.push("sign="		    +	sign);
+                        cfg.data.push("nick="		    +	nick);
+
+                        cfg.start();
+
+                        $.ajax({
+                            url         :   cfg.url,
+                            method      :   cfg.method,
+                            data        :   cfg.data.join('&'),
+                            dataType    :   'json',
+                            success     :   function(json){
+                                try{
+                                    if(json.result) {
+                                        //--界面赋值
+                                        $("#pOldNick").html(nick);
+                                        $("#pOldSign").html(sign);
+
+                                        $("#divBgPhotoUpload").hide();
+                                        $("#divPhotoUpload").hide();
+                                        $("#inputNewNick").hide();
+                                        $("#divOpt").hide();
+                                        $("#inputNewSign").hide();
+
+                                        $("#pOldSign").show();
+                                        $("#pOldNick").show();
+
+                                        message.msg('操作成功.');
+                                    }else{
+                                        message.msg('操作失败,' +   json.msg);
+                                    }
+                                }catch(ex){
+                                    log(ex);
+                                }
+                                finally{
+                                    cfg.end();
+                                }
+                            },
+                            error       :   function(xhr){
+                                try{
+                                    ajaxFailure(xhr);
+                                }catch(ex){
+                                    log(ex);
+                                }
+                                finally{
+                                    cfg.end();
+                                }
+                            }
+                        });
+                    }catch(ex){
+                        log(ex);
+                    }//catch(ex) end
+                };
+
+            });
+
         },
         //验证数据的有效性
-        validate      :   function(userName,pwd,repwd){
-            if(''   == userName){
-                message.msg('请填写用户名.');
+        validate      :   function(sign,nick){
+            if(''   == sign){
+                message.msg('请填写签名.');
                 return false;
             }
-            if(!mobileRule.test(userName)){
-                message.msg('手机号格式不正确.');
+            if(''   == nick){
+                message.msg('请填写昵称.');
                 return false;
             }
-            if(''   == pwd){
-                message.msg('请填写密码.');
+            var nickLen  =   nick.length;
+            if(nickLen>10){
+                message.msg('昵称的长度过长.最大长度10.');
                 return false;
             }
-            var pwdLen  =   pwd.length;
-            if(pwdLen<6){
-                message.msg('密码的长度过短.最小长度6.');
+            if(sign.length > 140){
+                message.msg('签名的长度过长.最大长度140.');
                 return false;
             }
             return true;

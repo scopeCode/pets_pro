@@ -318,23 +318,20 @@ exports.cancelFollowUser   =   function(userId,followUserId,callback){
  * @param oldpwd
  * @param newpwd
  */
-exports.saveSetting     =   function(userId,bgPhoto,photo,nick,sign,pwd,callback){
+exports.saveSetting     =   function(userId,bgPhoto,photo,nick,sign,callback){
     return sequelize.transaction(function (t) {
         return  Info.findOne({
             where: {
                 'id': userId
             }
         },{transaction: t}).then(function(info){
-            info.bgPhoto = bgPhoto;
-            info.photo = photo;
+
+            info.bgPhoto    = bgPhoto;
+            info.photo      = photo;
             info.userNick   =   nick;;
-            info.sign   =   sign;
-            return info.save({transaction: t}).then(function(){
-                return User.findById(userId,{transaction: t}).then(function(user){
-                    user.userPwd =pwd;
-                    return user.save({transaction: t});
-                });
-            });
+            info.sign       =   sign;
+
+            return info.save({transaction: t});
         });
     }).then(function (result) {
         callback(null,result);

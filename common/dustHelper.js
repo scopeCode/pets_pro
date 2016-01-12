@@ -2,9 +2,6 @@
  * dustJs 公共类的处理
  * Created by WG on 2015/12/10.
  */
-var EventProxy      =   require('eventProxy');
-var userProxy       =   require('../proxy/user');
-
 
 module.exports = function(dust){
 
@@ -60,5 +57,73 @@ module.exports = function(dust){
             _res = '<a target="_blank" href="'+_res+'">'+_value.title+'</a>';
         }
         return chunk.write(_res);
+    };
+
+    //七牛图片的处理  //TODO 需要对应到界面上 的IMG元素上 , 是否再在找个位置上 处理一下 图片的加载??? 暂时未处理页面
+    /**
+     * 头像的地址处理
+     * @param chunk
+     * @param context
+     * @param bodies
+     * @param params
+     * @returns {*}
+     * @constructor
+     */
+    dust.helpers.ImgPhotoFormat   =   function (chunk, context, bodies, params) {
+        var url  =   params.value;
+        if(url ==""){
+            url = "img_normal.png";
+        }
+        return chunk.write('http://7xjik2.com1.z0.glb.clouddn.com/'+url);
+    };
+    /**
+     * 用户背景图片的处理
+     * @param chunk
+     * @param context
+     * @param bodies
+     * @param params
+     * @returns {*}
+     * @constructor
+     */
+    dust.helpers.ImgBgPhotoFormat   =   function (chunk, context, bodies, params) {
+        var url  =   params.value;
+        if(url ==""){
+            url = "01.jpg";
+        }
+        return chunk.write('http://7xjik2.com1.z0.glb.clouddn.com/'+url);
+    };
+    /**
+     * 没有默认图片的图片信息
+     * @param chunk
+     * @param context
+     * @param bodies
+     * @param params
+     * @returns {*}
+     * @constructor
+     */
+    dust.helpers.ImgCommonFormat   =   function (chunk, context, bodies, params) {
+        var url  =   params.value;
+        if(url ==""){
+            url = "";
+        }else{
+            url = 'http://7xjik2.com1.z0.glb.clouddn.com/'+url;
+        }
+        return chunk.write(url);
+    };
+    /**
+     * 签名的公共处理
+     * @param chunk
+     * @param context
+     * @param bodies
+     * @param params
+     * @returns {*}
+     * @constructor
+     */
+    dust.helpers.SignCommonFormat   =   function (chunk, context, bodies, params) {
+        var sign  =   params.value;
+        if(sign ==""){
+            sign = "这个家伙很懒,什么也没有留下.";
+        }
+        return chunk.write(sign);
     };
 };

@@ -7,7 +7,7 @@
             <div class="person-info ">
                 <div class="person-inner">
                     <div class="person-inner-bg">
-                        <img id="imgBgPhoto" src="{?info.bgPhoto}http://7xjik2.com1.z0.glb.clouddn.com/{info.bgPhoto}{:else}/img/01.jpg{/info.bgPhoto}">
+                        <img id="imgBgPhoto" src="{@ImgBgPhotoFormat value=info.bgPhoto /}">
                         <div class="user-edit"  style="display: none;" id="divBgPhotoUpload">
                             <form enctype="multipart/form-data" method="post" id="uploadBgPhoto">
                                 <input type="file" class="img-upload" id="inputUploadBgPhoto"  name="uploadImg" multiple="multiple">
@@ -15,12 +15,12 @@
                             </form>
                         </div>
                     </div>
-                    <div class="person-inner-top"> {info.userNick}
+                    <div class="person-inner-top">
                         <div class="pull-right btn btn-default " id="divUserInfoEdit">编辑</div>
                     </div>
                     <div class="person-inner-body">
                         <div class="person-user-img">
-                            <img id="imgPhoto" src="{?info.photo}http://7xjik2.com1.z0.glb.clouddn.com/{info.photo}{:else}/img/img_normal.png{/info.photo}">
+                            <img id="imgPhoto" src="{@ImgPhotoFormat value=info.photo /}">
                             <div class="user-edit" style="display: none;" id="divPhotoUpload">
                                 <form enctype="multipart/form-data" method="post" id="uploadPhoto">
                                     <input type="file" class="img-upload" id="inputUploadPhoto"  name="uploadImg" multiple="multiple">
@@ -29,12 +29,12 @@
                             </div>
                         </div>
                         <div class="person-user-name">
-                            <p id="pOldSign">{?info.sign}{info.sign}{:else}这个家伙很懒,什么也没有留下.{/info.sign} </p>
+                            <p id="pOldSign">{@SignCommonFormat  value=info.sign  /} </p>
                             <textarea class="form-control" placeholder="个性签名" id="inputNewSign" style="display: none;">
-                                    {?info.sign}{info.sign}{:else}这个家伙很懒,什么也没有留下.{/info.sign}
+                                    {@SignCommonFormat  value=info.sign  /}
                             </textarea>
                         </p>
-                        <form class="form-horizontal">
+                        <div class="form-horizontal">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">昵称</label>
                                 <div class="col-sm-8">
@@ -51,10 +51,10 @@
                             <div class="form-group" id="divOpt" style="display: none;">
                                 <div class="col-sm-12 text-right">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                                    <button class="btn btn-primary" id="btnSaveInfo">保存</button>
+                                    <button class="btn btn-primary" id="btnSaveInfo" imgBgPhoto="{info.bgPhoto}"  imgPhoto="{info.photo}">保存</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
