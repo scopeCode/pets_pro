@@ -19,6 +19,8 @@ var userMessage   =   (function(){
     var optIndex    =   {
         build       :   function(){
             optIndex.bindEvent();
+            $("#topUl li").removeClass('active');
+            $($("#topUl li")[2]).addClass('active');
             optIndex.msg.query();
         },
         bindEvent   :   function(){

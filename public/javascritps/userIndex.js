@@ -26,6 +26,8 @@ var userIndex   =   (function(){
 
     var optIndex    =   {
         build       :   function(){
+            $("#topUl li").removeClass('active');
+            $($("#topUl li")[0]).addClass('active');
             page.currentPage = page.currentPage + 1;
             optIndex.bindEvent();
         },
