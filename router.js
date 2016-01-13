@@ -4,6 +4,7 @@
  */
 var index               =   require("./pcontrollers/index");
 var setting             =   require("./pcontrollers/setting");
+var log                 =   require("./pcontrollers/log");
 var login               =   require("./pcontrollers/login");
 var register            =   require("./pcontrollers/register");
 var auth                =   require("./pmiddlewares/auth");
@@ -49,6 +50,10 @@ module.exports = function (app) {
         post(article.queryArticleLogByArticleId);
     app.route('/user/article/queryArticleList').all(auth.loginRequired).
         post(article.queryArticleList);
+
+    //[message处理 ]-----------------------------------------------------------------\\
+    app.route('/user/message/v_show').all(auth.loginRequired).get(log.show);
+    app.route('/user/message/query').all(auth.loginRequired).post(log.queryLog);
 
     //[common处理 ]-----------------------------------------------------------------\\
     app.route('/user/link/getTitle').all(auth.loginRequired).

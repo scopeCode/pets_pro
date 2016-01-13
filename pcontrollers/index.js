@@ -22,7 +22,9 @@ exports.show = function (req, res, next) {
         /*articleProxy.queryArticleById(1,1,function(data){
             var data = data;
         });*/
-
+        /*require('../proxy/log').queryLogByUserId(1,2,0,15,function(err,data){
+                var d = data;
+        });*/
 
         var ep  = new EventProxy();
         ep.fail(next);

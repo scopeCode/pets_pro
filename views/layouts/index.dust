@@ -33,7 +33,7 @@
                     <li class="active"><a href="/">首页 </a></li>
                     <li><a href="/v_show">发现</a></li>
                     <li><a href="/v_box">收件箱</a></li>
-                    <li><a href="/v_note">通知</a></li>
+                    <li><a href="/user/message/v_show">通知</a></li>
                 </ul>
 
                 <form class="navbar-form navbar-left" role="search">
@@ -66,7 +66,7 @@
                             <li><a href="#"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>粉丝</a></li>
                             <li><a href="#"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>编辑外观</a></li> -->
 
-                            <li><a href="user/logout"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 退出</a></li>
+                            <li><a href="/user/logout"><span class="mrl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 退出</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -1,0 +1,39 @@
+{>"layouts/index"/}
+{<title}萌宠日记{/title}
+
+{<bodyContentLeft}
+
+<div class="inbox-bg" data-example-id="togglable-tabs">
+    <ul id="myTabs" class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active" id="msg-tab" >
+            <a href="#msg" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">消息</a>
+        </li>
+        <li role="presentation" id="profile-tab" >
+            <a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">动态</a>
+        </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div role="tabpanel" class="tab-pane fade active in" id="msg" aria-labelledby="home-tab">
+            <div class="msg-box">
+                <ul id="ulMessageList"></ul>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+            <div class="msg-box">
+                <ul id="ulProfileList"></ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{/bodyContentLeft}
+
+{<bodyContentRight}
+{/bodyContentRight}
+
+{>"layouts/dialog"/}
+{>"layouts/common"/}
+
+<script src="/js/jquery.form.js" type="text/javascript"></script>
+<script src="/javascritps/userMessage.js"></script>

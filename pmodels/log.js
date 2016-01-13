@@ -15,15 +15,20 @@ var Log = mysqlCient.sequelize.define('log',
             field:"content",
             comment:'文章日志的内容'
         },
+        commitContent:{
+            type:mysqlCient.Sequelize.STRING,
+            field:"commitContent",
+            comment:'评论的内容'
+        },
         userId:{
             type:mysqlCient.Sequelize.INTEGER,
             field:"userId",
             comment:'用户ID'
         },
-        fromUseId:{
+        fromUserId:{
             type:mysqlCient.Sequelize.INTEGER,
-            field:"fromUseId",
-            comment:'用户ID' //TODO 为了可以删除 对应的日志 而进行 增加的
+            field:"fromUserId",
+            comment:'用户ID'
         },
         status:
         {
