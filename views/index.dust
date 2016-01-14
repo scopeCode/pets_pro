@@ -68,20 +68,20 @@
                                  {user.info.userNick}
                                  <div class="pull-right text-muted">{@formatDate value=article.created /}</div>
                               </div>
-                              <div class="content_body" data-toggle="modal" data-target="#content_body_info">
+                              <div class="content_body" data-toggle="modal" data-target="#content_body_info" nick="{user.info.userNick}" onclick="userIndex.showCommentModal(this)">
                                   {?article.title}
-                                      <h6>
+                                      <h6 class="f_title">
                                           {article.title|s}
                                       </h6>
                                   {/article.title}
 
                                   {#files}
-                                    <img src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
+                                    <img class="f_img" src="http://7xjik2.com1.z0.glb.clouddn.com/{fileHash}" style="width:100%" />
                                   {/files}
-                                  <p>{content}</p>
+                                  <p class="f_content">{article.content}</p>
                                 <p class="mbm">
                                     {#tags}
-                                        <a href="#" class="mrm text-muted">{tagName}</a>
+                                        <a href="#" class="mrm text-muted f_tags">{tagName}</a>
                                     {/tags}
                                 </p>
                               </div>
@@ -101,10 +101,10 @@
 
                                 <div class="bottom_tool">
                                     {?article.isShowReprint}
-                                       <a class="fui-link mrm" href="javascript:;;" title="转发" articleId='{article.id}' userId="{user.info.userId}" onclick="userIndex.tranlateArticle(this)"></a>
+                                       <a class="fui-link mrm f_opt" href="javascript:;;" title="转发" articleId='{article.id}' userId="{user.info.userId}" onclick="userIndex.tranlateArticle(this)"></a>
                                     {/article.isShowReprint}
                                     {?article.isShowHot}
-                                        <a class='fui-heart {?article.isActiveHot}active{/article.isActiveHot}' href="javascript:;;" title="喜欢" articleId='{article.id}' onclick="userIndex.clickSetArticleHot(this)"></a>
+                                        <a class='f_opt fui-heart {?article.isActiveHot}active{/article.isActiveHot}' href="javascript:;;" title="喜欢" articleId='{article.id}' onclick="userIndex.clickSetArticleHot(this)"></a>
                                     {/article.isShowHot}
                                 </div>
                             </div>

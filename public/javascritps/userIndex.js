@@ -1351,6 +1351,56 @@ var userIndex   =   (function(){
                 $('#divImgArticleContent').hide();
                 $('#btnImgArticlePublish').hide();
             }
+        },
+        showCommentModal:function(_this){
+            var ele = $(_this);
+            var nick = ele.attr("nick");
+            $("#divUserNick").html(nick);
+
+            var opt     =   ele.find('a.f_opt');
+            var optLen  =   opt.length;
+            if(optLen > 0){
+                var str = [];
+                for(var i=0;i<optLen;i++){
+                    var item = opt[i].outerHTML;
+                    str.push(item);
+                }
+                $("#divUserInfoOpt").html(str.join(''));
+            }
+
+            var tags    =   ele.find("a.f_tags");
+            var tagsLen =   tags.length;
+            if(tagsLen>0){
+                var str = [];
+                for(var i=0;i<tagsLen;i++){
+                    var item = tags[i].outerHTML;
+                    str.push(item);
+                }
+                $("#pTags").html(str.join(''));
+            }
+
+            var imgs    =   ele.find("img.f_img");
+            var imgsLen =   imgs.length;
+            if(imgsLen>0){
+                var str = [];
+                for(var i=0;i<imgsLen;i++){
+                    var item = imgs[i].outerHTML;
+                    str.push(item);
+                }
+                $("#divImgList").html(str.join(''));
+            }
+
+            var content = ele.find("p.f_content");
+            if(content.length>0){
+                $("#pContent").html(content[0].innerHTML);
+            }
+
+            var title   =   ele.find('h6.f_title');
+            if(title.length>0){
+                $("#divTitle").html(title[0].outerHTML);
+            }
+
+            $("#content_body_info_modal").modal("show");
         }
     };
 
@@ -1384,6 +1434,9 @@ var userIndex   =   (function(){
         },
         removeImg:function(_this){
             optIndex.removeImg(_this);
+        },
+        showCommentModal:function(_this){
+            optIndex.showCommentModal(_this);
         }
     };
 })();
