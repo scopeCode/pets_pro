@@ -3,7 +3,7 @@
  * Created by WG on 2015/12/5.
  */
 var EventProxy      =   require('eventProxy');
-var articleProxy     =   require('../proxy/article');
+var articleProxy    =   require('../proxy/article');
 var userProxy       =   require('../proxy/user');
 var commonResponse  =   require('../common/commonResponse');
 

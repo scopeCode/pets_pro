@@ -105,6 +105,12 @@ var Info = mysqlCient.sequelize.define('info',
             field:"created",
             defaultValue:mysqlCient.Sequelize.NOW,
             comment:'创建时间.'
+        },
+        nearUpdateDateTime:{
+            type:mysqlCient.Sequelize.DATE,
+            field:"nearUpdateDateTime",
+            defaultValue:mysqlCient.Sequelize.NOW,
+            comment:'最近一次更新时间.'
         }
     },
     {

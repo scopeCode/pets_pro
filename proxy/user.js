@@ -339,3 +339,63 @@ exports.saveSetting     =   function(userId,bgPhoto,photo,nick,sign,callback){
         callback(err,null);
     });
 };
+
+/**
+ * 读取我关注的人的信息
+ * @param userId
+ * @param callback
+ */
+exports.queryFollowUserInfo =   function(userId,pageno,pagesize,callback){
+    var offset  =   pageno * pagesize;
+    try{
+            UserFollow.findAll({
+                include:[
+                    {
+                        'model' : User,
+                        include:[Info]
+                    }
+                ],
+                where:{
+                    userId:userId
+                },
+                limit:pagesize,
+                offset:offset,
+                order:' created desc '
+            }).then(function(userFollow){
+                callback(null,userFollow);
+            });
+    }catch(ex){
+        callback(ex,null);
+    }
+};
+
+/**
+ * 我被关注的用户信息
+ * @param userId
+ * @param pageno
+ * @param pagesize
+ * @param callback
+ */
+exports.queryFollowedUserInfo =   function(userId,pageno,pagesize,callback){
+    var offset  =   pageno * pagesize;
+    try{
+        UserFollow.findAll({
+            include:[
+                {
+                    'model' : User,
+                    include:[Info]
+                }
+            ],
+            where:{
+                followUserId:userId
+            },
+            limit:pagesize,
+            offset:offset,
+            order:' created desc '
+        }).then(function(userFollow){
+            callback(null,userFollow);
+        });
+    }catch(ex){
+        callback(ex,null);
+    }
+};

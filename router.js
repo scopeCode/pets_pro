@@ -3,6 +3,7 @@
  * Created by WG on 2015/12/5.
  */
 var index               =   require("./pcontrollers/index");
+var user                =   require("./pcontrollers/user");
 var setting             =   require("./pcontrollers/setting");
 var log                 =   require("./pcontrollers/log");
 var login               =   require("./pcontrollers/login");
@@ -31,6 +32,9 @@ module.exports = function (app) {
     //用户设置
     app.route('/user/setting').all(auth.loginRequired).get(setting.show);
     app.route('/user/savesetting').all(auth.loginRequired).post(setting.saveSetting);
+
+    app.route('/user/queryFollowUserInfo').all(auth.loginRequired).post(user.queryFollowUserInfo);
+    app.route('/user/queryFollowedUserInfo').all(auth.loginRequired).post(user.queryFollowedUserInfo);
 
     //[文章处理 ]-----------------------------------------------------------------\\
     app.route('/user/article/createTextArticle').all(auth.loginRequired).
