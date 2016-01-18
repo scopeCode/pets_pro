@@ -68,7 +68,7 @@
                                  {user.info.userNick}
                                  <div class="pull-right text-muted">{@formatDate value=article.created /}</div>
                               </div>
-                              <div class="content_body" data-toggle="modal" data-target="#content_body_info" nick="{user.info.userNick}" onclick="userIndex.showCommentModal(this)">
+                              <div class="content_body" data-toggle="modal" data-target="#content_body_info" articleId="{article.id}" userId="{user.info.userId}" nick="{user.info.userNick}" onclick="userIndex.showCommentModal(this)">
                                   {?article.title}
                                       <h6 class="f_title">
                                           {article.title|s}

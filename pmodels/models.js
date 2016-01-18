@@ -19,6 +19,7 @@ var ArticleFile     =   require('./articleFile').ArticleFile;
 var ArticleLog      =   require('./articleLog').ArticleLog;
 var ArticleHot      =   require('./articleHot').ArticleHot;
 var ArticleUser     =   require('./articleUser').ArticleUser;
+var ArticleComment  =   require('./articleComment').ArticleComment;
 
 
 exports.User        =  User;
@@ -36,6 +37,7 @@ exports.ArticleFile     =  ArticleFile;
 exports.ArticleLog      =  ArticleLog;
 exports.ArticleHot      =  ArticleHot;
 exports.ArticleUser     =  ArticleUser;
+exports.ArticleComment  =  ArticleComment;
 
 User.hasOne(Info);
 Info.belongsTo(User);
@@ -59,6 +61,9 @@ Hot.belongsToMany(Article, {'through': ArticleHot});
 Article.belongsToMany(User,{'through': ArticleUser});
 User.belongsToMany(Article,{'through': ArticleUser});
 
+Article.hasMany(ArticleComment);
+ArticleComment.belongsTo(Article);
+
 /*
 User.sync({force: true}).then(function () {});
 Info.sync({force: true}).then(function () {});
@@ -75,4 +80,5 @@ ArticleFile.sync({force: true}).then(function () {});
 ArticleLog.sync({force: true}).then(function () {});
 ArticleHot.sync({force: true}).then(function () {});
 ArticleUser.sync({force: true}).then(function () {});
+ArticleComment.sync({force: true}).then(function () {});
 logger.sync({force: true}).then(function () {});*/

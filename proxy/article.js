@@ -215,6 +215,7 @@ exports.articleReprint  =   function(articleId,userId,curUserId,callback){
                         type:3,
                         userId:userId,
                         content:user.info.userNick+'转载了你的日志.' //TODO 文字需要处理下
+
                     },{transaction: t})
 
                 });
@@ -627,3 +628,28 @@ exports.queryArticleById      =   function(articleId,userId,callback){
     });
 
 };
+
+exports.addComment =   function(currentUserId,fromUserId,articleId,comment,nick,callback){
+    return sequelize.transaction(function (t) {
+        return Article.findById(articleId,{transaction: t}).then(function(article){
+               return article.createArticleComment({
+                    userId:fromUserId,
+                    comment:comment
+                },{transaction: t}).then(function(){
+                    //进行日志保存
+                    return article.createLog({
+                        type:2,
+                        fromUserId      :   fromUserId,
+                        userId          :   currentUserId,
+                        commitContent   :   comment,
+                        content         :   nick+'评论了你的日志.'
+                    },{transaction: t});
+                });
+        });
+    }).then(function (result) {
+        callback(null,result);
+    }).catch(function (err) {
+        console.error(err);
+        callback(err,null);
+    });
+}

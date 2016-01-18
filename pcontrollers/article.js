@@ -240,3 +240,18 @@ exports.queryArticleId =      function(req,res,next){
         res.json(commonResponse.success(data));
     });
 };
+
+exports.addComment  =   function(req,res,next){
+    var user        =   req.session.user;
+    var fromUserId  =   user.user.id;
+    var userId      =   req.body.userId;
+    var articleId   =   req.body.articleId;
+    var comment     =   req.body.comment;
+
+    articleProxy.addComment(userId,fromUserId,articleId,comment,user.user.info.userNick,function(err,data){
+        if(err){
+            res.json(commonResponse.fail(err.message));
+        }
+        res.json(commonResponse.success(data));
+    })
+};

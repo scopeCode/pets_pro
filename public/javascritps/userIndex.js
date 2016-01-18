@@ -33,6 +33,74 @@ var userIndex   =   (function(){
         },
         bindEvent   :   function(){
 
+            $("#btnCommentSubmit").on("click",function(){
+                var $this = $(this);
+                var articleId   =   $this.attr("articleId");
+                var comment     =   $.trim($("#textCommentContent").val());
+                if(comment===""){
+                    message.msg("评论不可为空.");
+                    return false;
+                }
+                if(comment.length>140){
+                    message.msg("评论的长度不可超过140个字符.");
+                    return false;
+                }
+                var userId  =   $.trim($this.attr("userId"));
+
+                //进行后台处理
+                try{
+                    var cfg = {
+                        url		    :	"/user/article/addComment",
+                        data		:	[],
+                        method	    :	"POST",
+                        start		:	function(){ $("#divLoad").show();$("#btnCommentSubmit").addClass('disabled');},
+                        end		    :	function(){ $("#divLoad").hide();$("#btnCommentSubmit").removeClass('disabled');}
+                    };
+
+                    //设定需要传递的参数
+                    cfg.data.push("articleId="		+	articleId);
+                    cfg.data.push("comment="		+	comment );
+                    cfg.data.push("userId="		    +	userId );
+
+                    cfg.start();
+
+                    $.ajax({
+                        url         :   cfg.url,
+                        method      :   cfg.method,
+                        data        :   cfg.data.join('&'),
+                        dataType    :   'json',
+                        success     :   function(json){
+                            try{
+                                if(json.result) {
+                                    message.msg('评论成功.');
+                                    $("#textCommentContent").val('');
+                                    $("#content_body_info_modal").modal("hide");
+                                }else{
+                                    message.msg('评论失败,' +   json.msg);
+                                }
+                            }catch(ex){
+                                log(ex);
+                            }
+                            finally{
+                                cfg.end();
+                            }
+                        },
+                        error       :   function(xhr){
+                            try{
+                                ajaxFailure(xhr);
+                            }catch(ex){
+                                log(ex);
+                            }
+                            finally{
+                                cfg.end();
+                            }
+                        }
+                    });
+                }catch(ex){
+                    log(ex);
+                }//catch(ex) end
+
+            });
             /*
             * 下拉加载更多
             * */
@@ -97,7 +165,7 @@ var userIndex   =   (function(){
                             '#{userNick}'+
                             '<div class="pull-right text-muted">#{created}</div>'+
                             '</div>'+
-                            '<div class="content_body" data-toggle="modal" data-target="#content_body_info">'+
+                            '<div class="content_body" data-toggle="modal" data-target="#content_body_info" userId="#{userId}"  articleId="#{articleId}" nick="#{userNick}" onclick="userIndex.showCommentModal(this)">  '+
                                 '#{title}'+
                             '#{files}'+
                             '<p>#{content}</p>'+
@@ -1399,6 +1467,9 @@ var userIndex   =   (function(){
             if(title.length>0){
                 $("#divTitle").html(title[0].outerHTML);
             }
+
+            $("#btnCommentSubmit").attr("userId",ele.attr("userId"));
+            $("#btnCommentSubmit").attr("articleId",ele.attr("articleId"));
 
             $("#content_body_info_modal").modal("show");
         }

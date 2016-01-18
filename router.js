@@ -55,6 +55,9 @@ module.exports = function (app) {
     app.route('/user/article/queryArticleList').all(auth.loginRequired).
         post(article.queryArticleList);
 
+    app.route('/user/article/addComment').all(auth.loginRequired).
+        post(article.addComment);
+
     //[message处理 ]-----------------------------------------------------------------\\
     app.route('/user/message/v_show').all(auth.loginRequired).get(log.show);
     app.route('/user/message/query').all(auth.loginRequired).post(log.queryLog);
