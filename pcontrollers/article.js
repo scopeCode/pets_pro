@@ -196,7 +196,10 @@ exports.queryArticleLogByArticleId  =   function(req, res, next){
     var limit     =   req.body.limit;
     var pageSize  =   req.body.pageSize;
 
-    articleProxy.queryArticleLog(articleId,limit,pageSize,function(data){
+    var user = req.session.user.user;
+    var userId  =   user.id;
+
+    articleProxy.queryArticleLog(articleId,userId,limit,pageSize,function(data){
         res.json(commonResponse.success(data));
     });
 };

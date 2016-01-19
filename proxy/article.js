@@ -13,6 +13,7 @@ var Log             =   models.Log;
 var Hot             =   models.Hot;
 var User            =   models.User;
 var Info            =   models.Info;
+var UserFollow      =   models.UserFollow;
 
 /**
  * 创建文章表
@@ -485,19 +486,68 @@ exports.queryArticleList       =   function(userId,_offset,_limit,callback){
  * @param articleId
  * @param callback
  */
-exports.queryArticleLog     =   function(articleId,limit,pageSize,callback){
+exports.queryArticleLog     =   function(articleId,currentUserId,limit,pageSize,callback){
+    var proxy = new EventProxy();
+    Article.findById(articleId,{
+            'include': [{
+                'model': Log
+            }],
+            'limit':pageSize,
+            'offset':limit*pageSize
+        }).then(function(articles){
+            if(articles){
+                var len =   articles.logs.length;
+                if(len>0){
+                        proxy.after('result', len , function (data) {
+                            callback(data);
+                        });
+                        //--循环处理  用户信息 及对应是否已经被关注
+                        proxy.after('info', len , function (data) {
+                            for(var i=0;i<len;i++){
+                                var item = data[i];
+                                (function(item,i){
+                                    var followUserId = item.followUserId;
+                                    User.findById(followUserId,{
+                                            'include':[
+                                            {
+                                                'model': Info
+                                            }]}).then(function(user){
+                                                    var result  =    item;
+                                                    result.user =   user;
+                                                    result.info =   user.info;
+                                                    if(len - 1 == i){
+                                                        return proxy.emit('result',result);
+                                                    }
+                                                    proxy.emit('result',result);
+                                            });
+                                })(item,i);
+                            }
+                        });
 
-    return sequelize.transaction(function (t) {
-        return Article.findById(articleId,{
+                        for(var i=0;i<len;i++){
+                            var item = articles.logs[i];
+                            (function(item,i){
+                                var fromUserId  =   item.fromUserId;
+                                UserFollow.findAll({
+                                    where:{
+                                        followUserId:fromUserId,
+                                        userId:currentUserId
+                                    }
+                                }).then(function(data){
+                                    var result  =   {};
+                                    result.isFollow = data.length>0?true:false;
+                                    result.followUserId =   fromUserId;
+                                    if(len - 1 == i){
+                                        return proxy.emit('info',result);
+                                    }
+                                    proxy.emit('info',result);
+                                });
 
-        },{transaction: t}).then(function(article){
-
+                            })(item,i);
+                        }
+                    }
+            }
         });
-    }).then(function (result) {
-        callback(result);
-    }).catch(function (err) {
-        console.error(err);
-    });
 };
 
 /**

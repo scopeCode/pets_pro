@@ -51,7 +51,6 @@ File.belongsToMany(Article, {'through': ArticleFile});
 Article.belongsToMany(Tag, {'through': ArticleTag});
 Tag.belongsToMany(Article, {'through': ArticleTag});
 
-
 Article.belongsToMany(Log, {'through': ArticleLog});
 Log.belongsToMany(Article, {'through': ArticleLog});
 
