@@ -199,7 +199,10 @@ exports.queryArticleLogByArticleId  =   function(req, res, next){
     var user = req.session.user.user;
     var userId  =   user.id;
 
-    articleProxy.queryArticleLog(articleId,userId,limit,pageSize,function(data){
+    articleProxy.queryArticleLog(articleId,userId,limit,pageSize,function(err,data){
+        if(err){
+            next(err);
+        }
         res.json(commonResponse.success(data));
     });
 };

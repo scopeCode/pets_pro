@@ -1,0 +1,7 @@
+.pagination{PADDING-RIGHT:3px;PADDING-LEFT:3px;PADDING-BOTTOM:3px;MARGIN:3px;PADDING-TOP:0;TEXT-ALIGN:center}
+.pagination a{BORDER-RIGHT:#9aafe5 1px solid;PADDING-RIGHT:5px;BORDER-TOP:#9aafe5 1px solid;PADDING-LEFT:5px;PADDING-BOTTOM:2px;BORDER-LEFT:#9aafe5 1px solid;COLOR:#2e6ab1;MARGIN-RIGHT:2px;PADDING-TOP:2px;BORDER-BOTTOM:#9aafe5 1px solid;TEXT-DECORATION:none}
+.pagination a,.pagination span{display:block;float:left;margin-right:5px;margin-bottom:5px;min-width:1em;text-align:center}
+.pagination .current{BORDER-RIGHT:navy 1px solid;PADDING-RIGHT:5px;BORDER-TOP:navy 1px solid;PADDING-LEFT:5px;FONT-WEIGHT:bold;PADDING-BOTTOM:2px;BORDER-LEFT:navy 1px solid;COLOR:#fff;MARGIN-RIGHT:2px;PADDING-TOP:2px;BORDER-BOTTOM:navy 1px solid;BACKGROUND-COLOR:#d2eaf6}
+.pagination .current.prev,.pagination .current.next{color:#999;border-color:#999;background:#fff}
+.pagination A:hover{BORDER-RIGHT:#2b66a5 1px solid;BORDER-TOP:#2b66a5 1px solid;BORDER-LEFT:#2b66a5 1px solid;COLOR:#000;BORDER-BOTTOM:#2b66a5 1px solid;BACKGROUND-COLOR:lightyellow}
+.pagination A:active{BORDER-RIGHT:#2b66a5 1px solid;BORDER-TOP:#2b66a5 1px solid;BORDER-LEFT:#2b66a5 1px solid;COLOR:#000;BORDER-BOTTOM:#2b66a5 1px solid;BACKGROUND-COLOR:lightyellow}

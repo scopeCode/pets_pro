@@ -12,6 +12,10 @@ $(document).ready(function(){
 
 //注册页面的对象
 var userIndex   =   (function(){
+    var  logPage    =   {
+        pageNo          :   1,
+        pageSize        :   15
+    };
     var  page = {
         currentPage :   0,
         limit       :   15
@@ -967,40 +971,24 @@ var userIndex   =   (function(){
                 log(ex);
             }//catch(ex) end
         },
-        clickHotCnt:function(_this){
-            var item = $(_this);
-            var articleId = item.attr('articleId');
-            var cnt = item.attr('cnt');
-
-            //--远程读取数据信息 倒叙排列
-            if(cnt == '0'){
-                message.msg('0数你还点个啥?');
-                return false;
-            }
-
-            $('#articleHotInfo'+articleId).show();
-            $('body').addClass('modal-open');
-
+        query:function(){
             //进行后台处理
             try{
                 //TODO 这个位置怎么分页
+                $("#Pagination").hide();
                 var cfg = {
                     url		    :	"/user/article/queryArticleLogByArticleId",
-                    page        :{
-                        limit   :   0,
-                        pageSize:   15
-                    },
                     data		:	[],
                     method	    :	"POST",
-                    temp        :  '<li><div class="media"><div class="media-left"> <a href="javascript:;;"> <img src="#{img}" width="36px" height="36px"> </a> </div><div class="media-body"> #{content} </div><div class="media-right"> <a href="javascript:;;" data="#{userId}" class="btn-box-green" title="关注"><span class="fui-plus"></span></a> </div></div></li>',
+                    temp        :  '<tr><td><div class="media"><div class="media-left"><a href="javascript:void(0);"> <img src="#{img}" width="36px" height="36px"></a></div><div class="media-body">#{content}</div><div class="media-right"><a href="javascript:void(0);" class="btn-box-green" title="关注"><span class="fui-plus"></span></a></div></div></td></tr>',
                     start		:	function(){ $("#divLoad").show();$("#divBtnSubmit").addClass('disabled');},
                     end		    :	function(){ $("#divLoad").hide();$("#divBtnSubmit").removeClass('disabled');}
                 };
 
                 //设定需要传递的参数
-                cfg.data.push("articleId="+	articleId);
-                cfg.data.push("limit="+	cfg.page.limit);
-                cfg.data.push("pageSize="+	cfg.page.pageSize);
+                cfg.data.push("articleId="  +	$("#dataList").attr('data'));
+                cfg.data.push("pageNo="      +	logPage.pageNo - 1);
+                cfg.data.push("pageSize="   +	logPage.pageSize);
 
                 cfg.start();
 
@@ -1014,33 +1002,41 @@ var userIndex   =   (function(){
                             if(json.result) {
                                 console.log(json.data);
 
-                                var len = json.data.length;
+                                var len         = json.data.list.length;
+                                var totalCnt    = json.data.totalCnt;
                                 var a = [];
                                 for(var i=0;i<len;i++){
-                                    var item = json.data[i];
+                                    var item    = json.data.list[i].logs;
+                                    var info    = json.data.list[i].info;
 
-                                    var articleId   =   item.ARTICLE_ID,
-                                        bgPhoto     =   item.BG_PHOTO,
-                                        content     =   item.CONTENT,
-                                        created     =   item.CREATED,
-                                        nick        =   item.NICK,
-                                        userId      =   item.USER_ID,
-                                        photo       =   '/img/img_normal.png';
-
-                                    if(item.PHOTO){
-                                        photo = 'http://7xjik2.com1.z0.glb.clouddn.com/'+item.PHOTO;
-                                    }
+                                    /*commitContent: null
+                                     content: "dq_as点赞咯."
+                                     created: "2016-01-19T13:47:21.000Z"
+                                     fromUserId: 1
+                                     id: 8
+                                     status: true
+                                     type: 1
+                                     userId: 1*/
 
                                     var str = cfg.temp.format({
-                                                    img:photo,
-                                                    content:content,
-                                                    userId:userId
-                                                });
-
+                                        'img':'http://7xjik2.com1.z0.glb.clouddn.com/'+info.photo,
+                                        "content":item.content
+                                    });
                                     a.push(str);
                                 }
+                                $("#dataList").html(a.join(''));
 
-                                $('#artileLogList2').append(str);
+                                $("#Pagination").show();
+                                $("#Pagination").pagination(totalCnt, {
+                                    callback :  optIndex.pageSelectCallBack,
+                                    prev_text : "上一页",
+                                    next_text : "下一页",
+                                    items_per_page : logPage.pageSize,
+                                    num_display_entries : 6,
+                                    current_page : logPage.pageNo - 1,
+                                    num_edge_entries : 2
+                                });
+                                $("#user_hot_modal").modal("show");
                             }else{
                                 message.msg('操作失败,' +   json.msg);
                             }
@@ -1065,8 +1061,23 @@ var userIndex   =   (function(){
             }catch(ex){
                 log(ex);
             }//catch(ex) end
-
         },
+        clickHotCnt:function(_this){
+            var item = $(_this);
+            var articleId = item.attr('articleId');
+            var cnt = item.attr('cnt');
+            //--远程读取数据信息 倒叙排列
+            if(cnt == '0'){
+                message.msg('0数你还点个啥?');
+                return false;
+            }
+            $("#dataList").attr('data',articleId);
+            optIndex.query();
+        },
+        pageSelectCallBack:function(pageNo, jq){
+            logPage.currentPage = pageNo + 1;
+            optIndex.query();
+        },//pageSelectCallBack end
         imgOnmousemove:function(_this){
             (function(_this){
                 var $this = $(_this);

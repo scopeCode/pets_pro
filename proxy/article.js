@@ -7,6 +7,7 @@ var models      =   require('../pmodels/models');
 var sequelize   =   require('../pmodels/index').sequelize;
 
 var Article         =   models.Article;
+var ArticleLog      =   models.ArticleLog;
 var File            =   models.File;
 var Tag             =   models.Tag;
 var Log             =   models.Log;
@@ -488,66 +489,89 @@ exports.queryArticleList       =   function(userId,_offset,_limit,callback){
  */
 exports.queryArticleLog     =   function(articleId,currentUserId,limit,pageSize,callback){
     var proxy = new EventProxy();
-    Article.findById(articleId,{
-            'include': [{
-                'model': Log
-            }],
-            'limit':pageSize,
-            'offset':limit*pageSize
-        }).then(function(articles){
-            if(articles){
-                var len =   articles.logs.length;
-                if(len>0){
-                        proxy.after('result', len , function (data) {
-                            callback(data);
-                        });
-                        //--循环处理  用户信息 及对应是否已经被关注
-                        proxy.after('info', len , function (data) {
-                            for(var i=0;i<len;i++){
-                                var item = data[i];
-                                (function(item,i){
-                                    var followUserId = item.followUserId;
-                                    User.findById(followUserId,{
-                                            'include':[
-                                            {
-                                                'model': Info
-                                            }]}).then(function(user){
-                                                    var result  =    item;
-                                                    result.user =   user;
-                                                    result.info =   user.info;
-                                                    if(len - 1 == i){
-                                                        return proxy.emit('result',result);
-                                                    }
-                                                    proxy.emit('result',result);
-                                            });
-                                })(item,i);
-                            }
-                        });
 
-                        for(var i=0;i<len;i++){
-                            var item = articles.logs[i];
-                            (function(item,i){
-                                var fromUserId  =   item.fromUserId;
-                                UserFollow.findAll({
-                                    where:{
-                                        followUserId:fromUserId,
-                                        userId:currentUserId
-                                    }
-                                }).then(function(data){
-                                    var result  =   {};
-                                    result.isFollow = data.length>0?true:false;
-                                    result.followUserId =   fromUserId;
-                                    if(len - 1 == i){
-                                        return proxy.emit('info',result);
-                                    }
-                                    proxy.emit('info',result);
-                                });
+    ArticleLog.findAndCountAll({
+        'where':{
+            'articleId':articleId
+        },
+        'limit':pageSize,
+        'offset':limit*pageSize
+    }).then(function(data){
+        if(data){
+            var totalCnt    =   data.count;
+            var LogList     =   data.rows;
 
-                            })(item,i);
-                        }
+            var len = LogList.length;
+            if(len >0){
+                proxy.after('result', len , function (data) {
+                    var result = {};
+                    result.list = data;
+                    result.totalCnt = totalCnt;
+                    callback(null,result);
+                });
+
+                proxy.after('info', len , function (data) {
+                    for(var i=0;i<len;i++){
+                        var item = data[i];
+                        (function(item,i){
+                            var followUserId = item.followUserId;
+                            User.findById(followUserId,{
+                                'include':[
+                                    {
+                                        'model': Info
+                                    }]}).then(function(user){
+                                var result  =    item;
+                                result.user =   user;
+                                result.info =   user.info;
+                                if(len - 1 == i){
+                                    return proxy.emit('result',result);
+                                }
+                                proxy.emit('result',result);
+                            });
+                        })(item,i);
                     }
+                });
+
+                proxy.after('Log', len , function (data) {
+                    for(var i=0;i<len;i++){
+                        var item = data[i];
+                        (function(item,i){
+                            var fromUserId  =   item.fromUserId;
+                            UserFollow.findAll({
+                                where:{
+                                    followUserId:fromUserId,
+                                    userId:currentUserId
+                                }
+                            }).then(function(data){
+                                var result  =   {};
+                                result.logs = item;
+                                result.isFollow = data.length>0?true:false;
+                                result.followUserId =   fromUserId;
+                                if(len - 1 == i){
+                                    return proxy.emit('info',result);
+                                }
+                                proxy.emit('info',result);
+                            });
+
+                        })(item,i);
+                    }
+                });
+
+                for(var i=0;i<len;i++){
+                    var logId = LogList[i].logId;
+                    (function(logId){
+                        Log.findById(logId).then(function(logData){
+                            return proxy.emit('Log',logData);
+                        });
+                    })(logId);
+                }
+            }else{
+                callback(null,[]);
             }
-        });
+        }else{
+            callback(null,[]);
+        }
+    });
 };
 
 /**

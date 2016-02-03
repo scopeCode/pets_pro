@@ -186,3 +186,37 @@
         </div>
     </div>
 </div>
+<!-- 发布视频日志end -->
+<div class="modal fade in" id="user_hot_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">查看热度</div>
+            <div class="modal-body">
+                <!-- 内容由此开始-->
+                <table>
+                    <tbody id="dataList" data="">
+                        <tr>
+                            <td colspan="13"><div class="media">
+                                <div class="media-left"><a href="#"> <img src="img/img_normal.png" width="36px" height="36px">
+                                </a></div>
+                                <div class="media-body"> 仰望明天 转载此贴</div>
+                                <div class="media-right"><a href="#" class="btn-box-green" title="关注"><span class="fui-plus"></span></a></div>
+                            </div></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="13">
+                                <div id="Pagination" style="display:none;"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <!-- 内容由此结束-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
